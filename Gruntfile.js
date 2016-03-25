@@ -48,7 +48,7 @@ module.exports = function(grunt) {
         sass: {
             dist: {
                 options: {
-                    loadPath: [ 'bower_components/nreactjs/sass/' ],
+                    loadPath: [ 'bower_components/nreactjs/sass/','sass/icons/' ],
                     style: 'expanded'
                 },
                 files: {
