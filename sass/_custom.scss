@@ -1,3 +1,49 @@
+$color1-malo: #ffd8ec;
+$color2-malo: #ffdbe0;
+$color3-malo: #ffe3d1;
+$color-texto-malo: black;
+$color1-malo-resaltado: #ff92d1;
+$color2-malo-resaltado: #ff9092;
+$color3-malo-resaltado: #ffca95;
+$color-texto-malo-resaltado: black;
+
 #pedidos {
   min-width: 525px;
 }
+
+.tabla-cont {
+
+  .tabla-div {
+
+    .tabla {
+
+      tr {
+
+        &:not(.header) {
+
+          &:nth-child(odd) {
+
+            &.malo {
+              @include color-degradado2($color1-malo, $color2-malo, $color3-malo, $color-texto-malo);
+              &:hover {
+                @include color-degradado2($color1-malo-resaltado, $color2-malo-resaltado, $color3-malo-resaltado, $color-texto-malo-resaltado);
+              }
+            }
+          }
+          &:nth-child(even) {
+            &.malo {
+              @include color-degradado2($color3-malo, $color2-malo, $color1-malo, $color-texto-malo);
+              &:hover {
+                @include color-degradado2($color3-malo-resaltado, $color2-malo-resaltado, $color1-malo-resaltado, $color-texto-malo-resaltado);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include velo();
+}
+
+

@@ -110,6 +110,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('jsx', ['bower','babel','concat','clean']);
+    grunt.registerTask('jsx2', ['babel','concat','clean']);
     grunt.registerTask('fonts', ['webfont']);
     grunt.registerTask('css', ['sass']);
     grunt.registerTask('release', ['jsx','fonts','sass']);

@@ -154,7 +154,7 @@
   ],
   "pedidos": [
     {
-      "procesadopedidos": 0,
+      "procesadopedidos": true,
       "tipopedidos": 2,
       "materialpedidos": 1,
       "cantidadpedidos": 10,
@@ -165,7 +165,7 @@
       "tipopedidos": 2,
       "materialpedidos": 2,
       "cantidadpedidos": 10,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 2
     },
@@ -173,7 +173,7 @@
       "tipopedidos": 2,
       "materialpedidos": 7,
       "cantidadpedidos": 10,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 3
     },
@@ -181,7 +181,7 @@
       "tipopedidos": 2,
       "materialpedidos": 8,
       "cantidadpedidos": 10,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 4
     },
@@ -189,7 +189,7 @@
       "tipopedidos": 2,
       "materialpedidos": 4,
       "cantidadpedidos": 10,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 5
     },
@@ -197,7 +197,7 @@
       "tipopedidos": 2,
       "materialpedidos": 6,
       "cantidadpedidos": 10,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 6
     },
@@ -205,7 +205,7 @@
       "tipopedidos": 2,
       "materialpedidos": 5,
       "cantidadpedidos": 10,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 7
     },
@@ -213,7 +213,7 @@
       "tipopedidos": 2,
       "materialpedidos": 3,
       "cantidadpedidos": 10,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 8
     },
@@ -221,7 +221,7 @@
       "tipopedidos": 2,
       "materialpedidos": 9,
       "cantidadpedidos": 4,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 9
     },
@@ -229,7 +229,7 @@
       "tipopedidos": 2,
       "materialpedidos": 12,
       "cantidadpedidos": 4,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 10
     },
@@ -237,7 +237,7 @@
       "tipopedidos": 2,
       "materialpedidos": 13,
       "cantidadpedidos": 4,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 11
     },
@@ -245,7 +245,7 @@
       "tipopedidos": 2,
       "materialpedidos": 14,
       "cantidadpedidos": 4,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 12
     },
@@ -253,7 +253,7 @@
       "tipopedidos": 2,
       "materialpedidos": 11,
       "cantidadpedidos": 4,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 13
     },
@@ -261,7 +261,7 @@
       "tipopedidos": 2,
       "materialpedidos": 10,
       "cantidadpedidos": 4,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 14
     },
@@ -269,7 +269,7 @@
       "tipopedidos": 2,
       "materialpedidos": 16,
       "cantidadpedidos": 4,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 15
     },
@@ -277,7 +277,7 @@
       "tipopedidos": 2,
       "materialpedidos": 15,
       "cantidadpedidos": 4,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 16
     }

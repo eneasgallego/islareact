@@ -193,21 +193,18 @@ window.App = React.createClass({
 			}
 		};
 	},
+	componentDidMount: function() {
+		this.dimensionar();
+		window.onresize = function (e) {
+			this.dimensionar();
+		}.bind(this);
+
+	},
 	parseDataPedidos: function (data, tabla, panel) {
 
 		var ret = [];
 		var map = {};
 		var mapas = {};
-
-		var getMapa = function (mapa, id) {
-			var ret = mapas[mapa];
-
-			if (!ret) {
-				ret = data[mapa].crearMapa(id);
-			}
-
-			return ret;
-		};
 
 		for (var i = 0 ; i < data.pedidos.length ; i++) {
 			var pedido = data.pedidos[i];
@@ -223,11 +220,11 @@ window.App = React.createClass({
 				ret.push(obj);
 			}
 
-			var tipos_pedido = getMapa('tipos_pedido', 'id');
+			var tipos_pedido = this.getMapa('tipos_pedido', 'id', mapas, data.tipos_pedido);
 			var tipo_pedido = tipos_pedido[idtipos_pedido];
 			obj.nombretipos_pedido = tipo_pedido.nombretipos_pedido;
 
-			var materiales = getMapa('materiales', 'id');
+			var materiales = this.getMapa('materiales', 'id', mapas, data.materiales);
 			var material = materiales[pedido.materialpedidos];
 			obj.stockmateriales = material.stockmateriales;
 			obj.haciendomateriales = material.haciendomateriales;
@@ -248,7 +245,7 @@ window.App = React.createClass({
 
 		return ret;
 	},
-	colsNecesitaMateriales: function colsNecesitaMateriales() {
+	colsNecesitaMateriales: function () {
 		return [{
 			texto: 'PROF',
 			campo: 'profundidadpedidos'
@@ -263,7 +260,7 @@ window.App = React.createClass({
 			campo: 'nombrefabricas'
 		}];
 	},
-	colsNecesita: function colsNecesita() {
+	colsNecesita: function () {
 		return [{
 			texto: 'PROF',
 			campo: 'profundidadpedidos'
@@ -278,7 +275,7 @@ window.App = React.createClass({
 			campo: 'nombrefabricas'
 		}];
 	},
-	colsPedidos: function colsPedidos() {
+	colsPedidos: function () {
 		return [{
 			texto: 'PEDIDO',
 			campo: 'nombretipos_pedido'
@@ -293,7 +290,7 @@ window.App = React.createClass({
 			campo: 'haciendomateriales'
 		}];
 	},
-	colsPedido: function colsPedido() {
+	colsPedido: function () {
 		return [{
 			texto: 'MATERIAL',
 			campo: 'nombremateriales'
@@ -308,7 +305,7 @@ window.App = React.createClass({
 			campo: 'haciendomateriales'
 		}];
 	},
-	accionesNecesitaHuerto: function accionesNecesitaHuerto() {
+	accionesNecesitaHuerto: function () {
 		return [{
 			texto: 'X1',
 			tag: 'hacerMaterial'
@@ -320,31 +317,31 @@ window.App = React.createClass({
 			tag: 'hacerMaterial6'
 		}];
 	},
-	accionesNecesitaMateriales: function accionesNecesitaMateriales() {
+	accionesNecesitaMateriales: function () {
 		return [{
 			texto: 'hacer',
 			tag: 'hacerMaterial'
 		}];
 	},
-	accionesNecesita: function accionesNecesita() {
+	accionesNecesita: function () {
 		return [{
 			texto: 'recoger',
 			tag: 'recogerMaterial'
 		}];
 	},
-	accionesPedidos: function accionesPedidos() {
+	accionesPedidos: function () {
 		return [{
 			texto: 'ver',
 			tag: 'verPedido'
 		}, {
 			texto: 'procesar',
-			tag: 'procesarPedidos'
+			tag: 'accionProcesarPedidos'
 		}, {
 			texto: 'cerrar',
 			tag: 'cerrarPedido'
 		}];
 	},
-	accionesPedido: function accionesPedido() {
+	accionesPedido: function () {
 		return [{
 			texto: 'hacer',
 			tag: 'hacerMaterial'
@@ -355,6 +352,257 @@ window.App = React.createClass({
 			texto: 'procesar',
 			tag: 'procesarPedido'
 		}];
+	},
+	cargarBD: function (callback) {
+		ajax({
+			metodo: 'get',
+			url: 'http://localhost:3000/db',
+			success: callback
+		});
+	},
+	calcularTotales: function (par) {
+		var ret = {};
+
+		for (var i in par) {
+			ret[i] = this.calcularTotal(par[i]);
+			if (par.item) {
+				par.item[i] = ret[i];
+			}
+		}
+
+		return ret;
+	},
+	calcularTotal: function (par) {
+		var ret;
+
+
+		for (var i = 0 ; i < par.lista.length ; i++) {
+			var item = par.lista[i];
+
+			var valor;
+			if (typeof(par.valor) === 'string') {
+				valor = item[par.valor];
+			} else if (typeof(par.valor) === 'function') {
+				valor = par.valor(item);
+			}
+
+			if (par.tipo == 'SUM') {
+				if (!ret) {
+					ret = 0
+				}
+
+				ret += valor;
+			}
+		}
+
+		return ret;
+	},
+	getVistaMaterialesProcesar: function (data) {
+		var ret = [];
+		var map = {};
+		var mapas = {};
+
+		for (var i = 0 ; i < data.materiales.length ; i++) {
+			var material = data.materiales[i];
+
+			var idmaterial = material.id;
+
+			var obj = map[idmaterial];
+			if (!obj) {
+				obj = {
+					materialpedidos: idmaterial,
+					nombremateriales: material.nombremateriales,
+					stockmateriales: material.stockmateriales,
+					haciendomateriales: material.haciendomateriales,
+					hacemateriales: material.hacemateriales
+				};
+				ret.push(obj);
+			}
+
+			var pedidos = data.pedidos.filter(function (item) {
+				return item.procesadopedidos && idmaterial == item.materialpedidos;
+			});
+
+			var totales = this.calcularTotales({
+				cantidadpedidos: {
+					tipo: 'SUM',
+					lista: pedidos,
+					valor: 'cantidadpedidos'
+				}
+			});
+			for (var key in totales) {
+				obj[key] = totales[key];
+			}
+
+			obj.faltamateriales = obj.cantidadpedidos - material.stockmateriales - material.haciendomateriales;
+
+			map[idmaterial] = obj;
+		}
+
+		return ret;
+	},
+	getMapa: function (mapa, id, mapas, lista) {
+		var ret = mapas[mapa];
+
+		if (!ret) {
+			ret = lista.crearMapa(id);
+		}
+
+		return ret;
+	},
+	insertar: function(tabla, par, callback) {
+		var url = 'http://localhost:3000/' + tabla;
+		ajax({
+			metodo: 'POST',
+			url: url,
+			params: par,
+			success: callback
+		});
+	},
+	editar: function (tabla, par, id_campo, id, callback) {
+		var url = 'http://localhost:3000/' + tabla + '/' + id;
+
+		ajax({
+			metodo: 'PUT',
+			url: url,
+			params: par,
+			success: callback
+		});
+	},
+	guardarPedidos: function (id, cantidad, padrepedidos, hacemateriales, profundidad, callback) {
+//		$retInsertar = insertar($_SESSION['tabla_pedidos'], array("cantidadpedidos"=>$cantidad, "materialpedidos"=>$id, "padrepedidos"=>$padrepedidos, "tipopedidos"=>13, "procesadopedidos"=>1, "profundidadpedidos"=>$profundidad));
+		this.insertar('pedidos', {
+				cantidadpedidos: cantidad,
+				materialpedidos: id,
+				padrepedidos: padrepedidos,
+				tipopedidos: 13,
+				procesadopedidos: 1,
+				profundidadpedidos: profundidad
+		}, function (res) {
+			var idpedidos = res.id;
+
+			//$material = getArraySQL("SELECT * FROM vistaMaterialesProcesar WHERE materialpedidos=$id")[0];
+			var vistaMaterialesProcesar = this.getVistaMaterialesProcesar(bd);
+			var mapVistaMaterialesProcesar = this.getMapa('vistaMaterialesProcesar', 'materialpedidos', mapas, vistaMaterialesProcesar);
+			var material = mapVistaMaterialesProcesar[id];
+
+			var cantidad2 = material.faltamateriales;
+
+			if (cantidad2 > 0) {
+				if (cantidad2 > cantidad) {
+					cantidad2 = cantidad;
+				}
+//				$materiales_necesita = getArraySQL("SELECT * FROM materiales_necesita WHERE materialmateriales_necesita=$id");
+				var materiales_necesita = bd.materiales_necesita.filter(function (item) {
+					return item.materialmateriales_necesita == id;
+				});
+
+				//$num = count($materiales_necesita);
+				for (var i = 0 ; i < materiales_necesita.length ; i++) {
+					var material_necesita = materiales_necesita[i];
+
+					//array_push($ret, guardarPedidos($material_necesita->materialnecesitamateriales_necesita,ceil($material_necesita->cantidadmateriales_necesita * $cantidad2 / $material->hacemateriales),$idpedidos, $material->hacemateriales,$profundidad+1));
+					this.guardarPedidos(material_necesita.materialnecesitamateriales_necesita,
+										Math.ceil(material_necesita.cantidadmateriales_necesita * cantidad2 / material.hacemateriales),
+										idpedidos,
+										material.hacemateriales,
+										profundidad+1);
+				}
+
+				if (typeof(callback) === 'function') {
+					callback();
+				}
+			}
+		}.bind(this));
+	},
+	procesarPedido: function (pedido, bd) {
+
+		if (bd) {
+			var ret = {
+				sql: []
+			};
+
+			if (pedido.procesadopedidos) {
+				ret.msg = 'Ya está procesado';
+			} else {
+				var mapas = {};
+
+				//array_push($ret['sql'], editar($_SESSION['tabla_pedidos'], array("procesadopedidos"=>1), "idpedidos", $pedido->idpedidos));
+				pedido.procesadopedidos = true;
+				this.editar('pedidos',pedido,'id',pedido.id, function () {
+					var vistaMaterialesProcesar = this.getVistaMaterialesProcesar(bd);
+					var mapVistaMaterialesProcesar = this.getMapa('vistaMaterialesProcesar', 'materialpedidos', mapas, vistaMaterialesProcesar);
+	//				$material = getArraySQL("SELECT * FROM vistaMaterialesProcesar WHERE materialpedidos=$pedido->materialpedidos")[0];
+					var material = mapVistaMaterialesProcesar[pedido.materialpedidos];
+
+					if (material.cantidadpedidos > material.stockmateriales + material.haciendomateriales) {
+						//$materiales_necesita = getArraySQL("SELECT * FROM materiales_necesita WHERE materialmateriales_necesita=$pedido->materialpedidos");
+						var materiales_necesita = bd.materiales_necesita.filter(function (item) {
+							return item.materialmateriales_necesita == pedido.materialpedidos;
+						});
+
+//						$num = count($materiales_necesita);
+						for (var i = 0 ; i < materiales_necesita.length ; i++) {
+							material_necesita = materiales_necesita[i];
+
+							ret.material = material;
+							ret.material_necesita = material_necesita;
+
+							var cantidad2 = material.faltamateriales;
+
+							if (cantidad2 > 0) {
+								if (cantidad2 > pedido.cantidadpedidos) {
+									cantidad2 = pedido.cantidadpedidos;
+								}
+		//						array_push($ret['sql'], guardarPedidos($material_necesita->materialnecesitamateriales_necesita,ceil($material_necesita->cantidadmateriales_necesita * $cantidad2 / $material->hacemateriales), $pedido->idpedidos, $material->hacemateriales, 1));
+								this.guardarPedidos(material_necesita.materialnecesitamateriales_necesita,
+													Math.ceil(material_necesita.cantidadmateriales_necesita * cantidad2 / material.hacemateriales),
+													pedido.idpedidos,
+													material.hacemateriales,
+													1);
+							}
+						}
+					}
+				}.bind(this));
+			}
+		} else {
+			this.cargarBD(function (data) {
+				this.procesarPedido(pedido, data);
+			}.bind(this));
+		}
+	},
+	accionProcesarPedidos: function (tag, fila, tabla, panel) {
+
+		this.cargarBD(function (data) {
+			var idtipos_pedido = fila.props.datos.idtipos_pedido;
+			var mapas = {};
+			var pedidos_filtrados = data.pedidos.filter(function (item) {
+				return item.tipopedidos == idtipos_pedido;
+			});
+
+			for (var i = 0 ; i < pedidos_filtrados.length ; i++) {
+				var pedido = pedidos_filtrados[i];
+
+				this.procesarPedido(pedido, data);
+			}
+		}.bind(this));
+
+/*
+		ajax({
+			metodo: 'post',
+			url: 'procesarPedidos.php',
+			params: {
+				id: fila.props.datos.idtipos_pedido
+			},
+			success: function (response) {
+				if (response.success) {
+					this.refrescarInicio();
+				} else {
+					alert(response.msg);
+				}
+			}.bind(this)
+		}, tabla);
+		*/
 	},
 	claseFilaNecesita: function claseFilaNecesita(datos) {
 		var clase;
@@ -378,8 +626,8 @@ window.App = React.createClass({
 	},
 	claseFilaPedidos: function claseFilaPedidos(datos) {
 		var clase;
-		if (parseInt(datos.procesadopedidos)) {
-			if (parseInt(datos.faltapedidos)) {
+		if (datos.procesadopedidos) {
+			if (datos.faltapedidos) {
 				clase = 'malo';
 			} else {
 				clase = 'bueno';
@@ -407,12 +655,6 @@ window.App = React.createClass({
 		}
 
 		return clase;
-	},
-	componentDidMount: function() {
-		this.dimensionar();
-		window.onresize = function (e) {
-			this.dimensionar();
-		}.bind(this);
 	},
 	dimensionar: function () {
 		var altoPadre = window.innerHeight;
