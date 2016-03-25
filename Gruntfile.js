@@ -8,7 +8,7 @@ module.exports = function(grunt) {
                 files: ['jsx/**/*.jsx','sass/**/*.scss'],
                 tasks: ['release'],
                 options: {
-                    interrupt: true,
+                    interrupt: true
                 }
             }
         },
@@ -20,8 +20,8 @@ module.exports = function(grunt) {
             jsx: {
                 files: [{
                     expand: true,
-                    cwd: 'jsx/',
-                    src: ['*.jsx'],
+                    cwd: './',
+                    src: ['jsx/*.jsx','bower_components/nreactjs/jsx/*.jsx'],
                     dest: 'js/tmp/',
                     ext: '.js'
                 }]
@@ -29,14 +29,14 @@ module.exports = function(grunt) {
         },
         webfont: {
             icons: {
-                src: 'icons/*.svg',
+                src: ['icons/*.svg','bower_components/nreactjs/icons/*.svg'],
                 dest: 'fonts',
                 destCss: 'sass/icons',          //Ruta de destino donde se creará la hoja de estilos css y un html ejemplo
                 options: {
                     stylesheet: 'scss',      //Extensión de la hoja de estilos, css
                     relativeFontPath: '../fonts',    //La ruta del src - font-family que se imprime dentro de la hoja de estilos
                     syntax: 'bem',
-                    template: 'icons/templates/icons.scss'/*,
+                    template: 'bower_components/nreactjs/icons/templates/icons.scss'/*,
                     templateOptions: {
                         baseClass: 'icon',
                         classPrefix: 'icon-',
@@ -48,6 +48,7 @@ module.exports = function(grunt) {
         sass: {
             dist: {
                 options: {
+                    loadPath: [ 'bower_components/nreactjs/sass/' ],
                     style: 'expanded'
                 },
                 files: {
@@ -62,27 +63,27 @@ module.exports = function(grunt) {
                 banner: '/*! <%= grunt.template.today("yyyy-mm-dd") %> */'
             },
             dist: {
-                src: [  'js/tmp/boton.js',
-                        'js/tmp/menu_item.js',
-                        'js/tmp/menu.js',
+                src: [  'js/tmp/bower_components/nreactjs/jsx/boton.js',
+                        'js/tmp/bower_components/nreactjs/jsx/menu_item.js',
+                        'js/tmp/bower_components/nreactjs/jsx/menu.js',
 
-                        'js/tmp/dialogo.js',
+                        'js/tmp/bower_components/nreactjs/jsx/dialogo.js',
                         
-                        'js/tmp/combo.js',
-                        'js/tmp/checkbox.js',
-                        'js/tmp/textfield.js',
+                        'js/tmp/bower_components/nreactjs/jsx/combo.js',
+                        'js/tmp/bower_components/nreactjs/jsx/checkbox.js',
+                        'js/tmp/bower_components/nreactjs/jsx/textfield.js',
                         
-                        'js/tmp/celda.js',
-                        'js/tmp/fila.js',
-                        'js/tmp/tabla.js',
+                        'js/tmp/bower_components/nreactjs/jsx/celda.js',
+                        'js/tmp/bower_components/nreactjs/jsx/fila.js',
+                        'js/tmp/bower_components/nreactjs/jsx/tabla.js',
                         
-                        'js/tmp/lista_tabla.js',
-                        'js/tmp/panel_tabla.js',
+                        'js/tmp/bower_components/nreactjs/jsx/lista_tabla.js',
+                        'js/tmp/bower_components/nreactjs/jsx/panel_tabla.js',
                         
-                        'js/tmp/app.js',
+                        'js/tmp/jsx/app.js',
                         
-                        'js/tmp/base.js'],
-                dest: 'js/app.js',
+                        'js/tmp/bower_components/nreactjs/jsx/base.js'],
+                dest: 'js/app.js'
             }
         }
     });

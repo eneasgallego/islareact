@@ -1,6 +1,6 @@
 {
   "name": "isla",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "authors": [
     "Eneas <eneasgallego@gmail.com>"
   ],
@@ -16,6 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "react": "~0.14.7"
+    "react": "~0.14.7",
+    "nreactjs": "https://github.com/eneasgallego/reactjs.git"
   }
 }

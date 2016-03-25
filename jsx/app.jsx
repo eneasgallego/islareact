@@ -59,7 +59,7 @@ window.App = React.createClass({
 							tipo: 'object',
 							url: 'http://localhost:3000/fabricas',
 							id: 'id',
-							texto: 'nombrefabricas',
+							texto: 'nombrefabricas'
 						}
 					},{
 						texto: 'HACE',
@@ -86,7 +86,7 @@ window.App = React.createClass({
 							tipo: 'object',
 							url: 'http://localhost:3000/materiales',
 							id: 'id',
-							texto: 'nombremateriales',
+							texto: 'nombremateriales'
 						}
 					},{
 						texto: 'NECESITA',
@@ -95,7 +95,7 @@ window.App = React.createClass({
 							tipo: 'object',
 							url: 'http://localhost:3000/materiales',
 							id: 'id',
-							texto: 'nombremateriales',
+							texto: 'nombremateriales'
 						}
 					},{
 						texto: 'CANTIDAD',
@@ -123,7 +123,7 @@ window.App = React.createClass({
 							tipo: 'object',
 							url: 'http://localhost:3000/tipos_pedido',
 							id: 'id',
-							texto: 'nombretipos_pedido',
+							texto: 'nombretipos_pedido'
 						}
 					},{
 						texto: 'MATERIAL',
@@ -132,7 +132,7 @@ window.App = React.createClass({
 							tipo: 'object',
 							url: 'http://localhost:3000/materiales',
 							id: 'id',
-							texto: 'nombremateriales',
+							texto: 'nombremateriales'
 						}
 					},{
 						texto: 'CANTIDAD',
