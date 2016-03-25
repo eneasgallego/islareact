@@ -127,7 +127,7 @@ window.Tabla = React.createClass({
 	nuevaFila: function () {
 		var filas = this.state.filas.slice();
 		var obj = {};
-		for (var i = 0 ; this.props.cols.length ; i++) {
+		for (var i = 0 ; i < this.props.cols.length ; i++) {
 			var col = this.props.cols[i];
 
 			obj[col.campo] = this.getValorDefecto(col.tipo.tipo);
