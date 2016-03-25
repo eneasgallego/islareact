@@ -322,3 +322,8 @@ window.App = React.createClass({
 		);
     }
 });
+
+ReactDOM.render(
+	<App/>,
+	document.getElementById('react-container')
+);

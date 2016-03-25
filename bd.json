@@ -13,43 +13,32 @@
   ],
   "materiales": [
     {
-      "stockmateriales": 0,
-      "nombremateriales": "Zumo Piña",
-      "fabricamateriales": "Bar",
-      "hacemateriales": 1,
       "haciendomateriales": 0,
-      "id": 1
-    },
-    {
-      "haciendomateriales": 0,
-      "nombremateriales": "Piña",
-      "fabricamateriales": "Huerto",
+      "nombremateriales": "Algodón",
+      "fabricamateriales": 2,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "id": 2
-    }
-  ],
-  "materiales_necesita": [
-    {
-      "cantidadmateriales_necesita": 1,
-      "materialmateriales_necesita": "Zumo Piña",
-      "materialnecesitamateriales_necesita": "Piña",
       "id": 1
     }
   ],
+  "materiales_necesita": [],
   "tipos_pedido": [
     {
       "nombretipos_pedido": "Pedido 1",
       "id": 1
+    },
+    {
+      "nombretipos_pedido": "Colchón",
+      "id": 2
     }
   ],
   "pedidos": [
     {
-      "profundidadpedidos": 0,
-      "tipopedidos": 1,
+      "cantidadpedidos": 10,
+      "tipopedidos": 2,
       "materialpedidos": 1,
-      "cantidadpedidos": 3,
-      "procesadopedidos": 0,
+      "procesadopedidos": "undefined",
+      "profundidadpedidos": "undefined",
       "id": 1
     }
   ]
