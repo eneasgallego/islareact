@@ -117,7 +117,7 @@ window.App = React.createClass({
 					url: 'http://localhost:3000/pedidos',
 					eliminar: true,
 					cols: [{
-						texto: 'TIPO',
+						texto: 'TIPOS',
 						campo: 'tipopedidos',
 						tipo: {
 							tipo: 'object',
