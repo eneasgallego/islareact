@@ -1,0 +1,72 @@
+$profundidad: 1;
+
+@mixin menu-hijo($prof) {
+	@if $prof <= $profundidad {
+		.menu {
+			z-index: $prof+1;
+			@include color-fondo();
+				
+			@if $prof == 1 {
+			
+				margin-top: 2px;
+				position: absolute;
+			
+				@include borde();
+			
+				.menu-item {
+					display: block;
+					&:hover {
+						a {
+							color: $color-fondo-texto-inv;
+						}
+					}
+					a {
+						color: $color-fondo-texto;
+					}
+				}
+			}
+			.menu-item {
+				@include menu-hijo($prof+1);
+			}
+		}
+	}
+}
+
+.menu {
+	margin: 0;
+	padding: 4px 0;
+	font-family: Arial;
+	@include color-cabecera();
+	
+	.menu-item {
+		display: inline-block;
+		padding: 2px 8px;
+		margin: 2px;
+		cursor: pointer;
+		//@include borde();
+		//@include color-fondo();
+
+		&:hover {
+			@include color-cabecera-hover();
+			a {
+				color: $color-fondo-texto-inv;
+			}
+		}
+
+		a {
+			color: $color-fondo-texto;
+			text-decoration: none;
+		}
+		
+		.child {
+			z-index: 2;
+			
+			&.hidden {
+				display: none;
+			}
+
+			@include menu-hijo(1);
+		}
+	}
+}
+

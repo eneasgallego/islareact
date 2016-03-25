@@ -1,0 +1,145 @@
+$color1: #DDDDFF;
+$color2: #DCEAE9;
+$color3: #DBFFDB;
+$color-texto: black;
+$color1-resaltado: #3F3FFF;
+$color2-resaltado: #44EAB8;
+$color3-resaltado: #38FF38;
+$color-texto-resaltado: black;
+
+.tabla-cont {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+
+	//@include flex();
+
+	.menu-tabla {
+	//	@include flex-grow(1);
+//		text-align: right;
+		overflow: hidden;
+	}
+
+	.tabla-div {
+		overflow: hidden;
+		display: inline-block;
+		height: 100%;
+		width: 100%;
+
+		//@include flex-grow(4);
+
+		.tabla {
+			overflow: hidden;
+			font-family: Verdana;
+			font-size: 8pt;
+			margin-right: 2%;
+			border-spacing: 0;
+			border-collapse: collapse;
+			width: 100%;
+			max-height: 100%;
+			display: block;
+			@include borde();
+
+			thead {
+				overflow: hidden;
+				width: 100%;
+				display: block;
+
+				@include color-cabecera();
+			}
+			tbody {
+				overflow: auto;
+				width: 100%;
+				display: block;
+			}
+
+			tr {
+		
+				display: block;
+				padding: 0 4px;
+    			//width: 100%;
+
+				&:not(.header) {
+	    			margin-top: -1px;
+
+	    			&:nth-child(odd) {
+	    				@include color-degradado2($color1, $color2, $color3, $color-texto);
+						&:hover {
+		    				@include color-degradado2($color1-resaltado, $color2-resaltado, $color3-resaltado, $color-texto-resaltado);
+						}
+	    			}
+	    			&:nth-child(even) {
+	    				@include color-degradado2($color3, $color2, $color1, $color-texto);
+						&:hover {
+		    				@include color-degradado2($color3-resaltado, $color2-resaltado, $color1-resaltado, $color-texto-resaltado);
+						}
+	    			}
+				}
+				
+				th {
+					cursor: pointer;
+					font-size: 1.1em;
+					margin: 0;
+					padding: 0;
+
+					&:hover {
+						@include color-cabecera-hover();
+					}
+
+					i {
+						position: relative;
+						&:before {
+							font-size: 6pt;
+							left: -8px;
+							top: -6px;
+							position: absolute;
+						}
+						&.icon-inv:before {
+							margin-left: 0;
+						}
+						&:not(.icon) {
+							min-width: 8px;
+						}
+					}
+					.tabla-celda-div {
+						padding: 8px 16px;
+					}
+				}
+				td {
+					position: relative;
+					margin: 0;
+					padding: 0;
+
+					&:hover {
+	    				//@include color-degradado2($color1-resaltado, $color2-resaltado, $color3-resaltado, $color-texto-resaltado);
+	    			}
+
+					input,select {
+						@include pantalla-completa();
+						font-size: 8pt;
+						border-width: 0;
+						padding: 0;
+					}
+					
+					.menu {
+						border-radius: 25px;
+						margin: 4px 0;
+
+						.menu-item {
+							padding: 0px 8px;
+						}
+					}
+
+					.tabla-celda-div {
+						padding: 4px 8px;
+					}
+				}
+			}
+		}
+	}
+
+	@include velo();
+}
+
+

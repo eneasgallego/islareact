@@ -1,0 +1,24 @@
+body {
+	overflow: hidden;
+	margin: 0;
+	@include color-fondo();
+}
+header {
+	position: relative;
+	width: 100%;
+	@include color-fondo();
+}
+main {
+	position: relative;
+	width: 100%;
+	overflow: auto;
+	@include color-fondo();
+}
+
+@import "icons";
+
+@import "menu";
+
+@import "tabla";
+
+@import "dialogo";
