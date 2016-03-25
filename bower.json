@@ -17,6 +17,6 @@
   ],
   "dependencies": {
     "react": "~0.14.7",
-    "nreactjs": "https://github.com/eneasgallego/reactjs.git#panel"
+    "nreactjs": "https://github.com/eneasgallego/reactjs.git"
   }
 }

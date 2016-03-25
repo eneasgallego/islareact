@@ -175,8 +175,9 @@ window.App = React.createClass({
 				},*/{
 					id: 'pedidos',
 					titulo: 'Pedidos',
-					url: 'vistaPedidos.php',
+					url: 'http://localhost:3000/db',
 					id_campo: 'idtipos_pedido',
+					parseData: 'parseDataPedidos',
 					cols: 'colsPedidos',
 					acciones: 'accionesPedidos',
 					claseFila: 'claseFilaPedidos'
@@ -192,6 +193,221 @@ window.App = React.createClass({
 			}
 		};
 	},
+	parseDataPedidos: function (data, tabla, panel) {
+
+		var ret = [];
+		var map = {};
+		var mapas = {};
+
+		var getMapa = function (mapa, id) {
+			var ret = mapas[mapa];
+
+			if (!ret) {
+				ret = data[mapa].crearMapa(id);
+			}
+
+			return ret;
+		};
+
+		for (var i = 0 ; i < data.pedidos.length ; i++) {
+			var pedido = data.pedidos[i];
+
+			var idtipos_pedido = pedido.tipopedidos;
+
+			var obj = map[idtipos_pedido];
+			if (!obj) {
+				obj = {
+					idtipos_pedido: idtipos_pedido,
+					cantidadpedido: 0
+				};
+				ret.push(obj);
+			}
+
+			var tipos_pedido = getMapa('tipos_pedido', 'id');
+			var tipo_pedido = tipos_pedido[idtipos_pedido];
+			obj.nombretipos_pedido = tipo_pedido.nombretipos_pedido;
+
+			var materiales = getMapa('materiales', 'id');
+			var material = materiales[pedido.materialpedidos];
+			obj.stockmateriales = material.stockmateriales;
+			obj.haciendomateriales = material.haciendomateriales;
+
+			obj.cantidadpedido += pedido.cantidadpedidos;
+
+			if (typeof(obj.procesadopedidos) === 'undefined' || obj.procesadopedidos > pedido.procesadopedidos) {
+				obj.procesadopedidos = pedido.procesadopedidos;
+			}
+
+			var faltapedidos = (pedido.cantidadpedidos - material.stockmateriales) > 0 ? 1 : 0;
+			if (typeof(obj.faltapedidos) === 'undefined' || obj.faltapedidos < pedido.faltapedidos) {
+				obj.faltapedidos = faltapedidos;
+			}
+
+			map[idtipos_pedido] = obj;
+		}
+
+		return ret;
+	},
+	colsNecesitaMateriales: function colsNecesitaMateriales() {
+		return [{
+			texto: 'PROF',
+			campo: 'profundidadpedidos'
+		}, {
+			texto: 'MATERIAL',
+			campo: 'nombremateriales'
+		}, {
+			texto: 'FALTA',
+			campo: 'faltamateriales'
+		}, {
+			texto: 'FABRICA',
+			campo: 'nombrefabricas'
+		}];
+	},
+	colsNecesita: function colsNecesita() {
+		return [{
+			texto: 'PROF',
+			campo: 'profundidadpedidos'
+		}, {
+			texto: 'MATERIAL',
+			campo: 'nombremateriales'
+		}, {
+			texto: 'HACIENDO',
+			campo: 'haciendomateriales'
+		}, {
+			texto: 'FABRICA',
+			campo: 'nombrefabricas'
+		}];
+	},
+	colsPedidos: function colsPedidos() {
+		return [{
+			texto: 'PEDIDO',
+			campo: 'nombretipos_pedido'
+		}, {
+			texto: 'NECESITA',
+			campo: 'cantidadpedido'
+		}, {
+			texto: 'TIENE',
+			campo: 'stockmateriales'
+		}, {
+			texto: 'HACIENDO',
+			campo: 'haciendomateriales'
+		}];
+	},
+	colsPedido: function colsPedido() {
+		return [{
+			texto: 'MATERIAL',
+			campo: 'nombremateriales'
+		}, {
+			texto: 'NECESITA',
+			campo: 'cantidadpedidos'
+		}, {
+			texto: 'TIENE',
+			campo: 'stockmateriales'
+		}, {
+			texto: 'HACIENDO',
+			campo: 'haciendomateriales'
+		}];
+	},
+	accionesNecesitaHuerto: function accionesNecesitaHuerto() {
+		return [{
+			texto: 'X1',
+			tag: 'hacerMaterial'
+		}, {
+			texto: 'X3',
+			tag: 'hacerMaterial3'
+		}, {
+			texto: 'X6',
+			tag: 'hacerMaterial6'
+		}];
+	},
+	accionesNecesitaMateriales: function accionesNecesitaMateriales() {
+		return [{
+			texto: 'hacer',
+			tag: 'hacerMaterial'
+		}];
+	},
+	accionesNecesita: function accionesNecesita() {
+		return [{
+			texto: 'recoger',
+			tag: 'recogerMaterial'
+		}];
+	},
+	accionesPedidos: function accionesPedidos() {
+		return [{
+			texto: 'ver',
+			tag: 'verPedido'
+		}, {
+			texto: 'procesar',
+			tag: 'procesarPedidos'
+		}, {
+			texto: 'cerrar',
+			tag: 'cerrarPedido'
+		}];
+	},
+	accionesPedido: function accionesPedido() {
+		return [{
+			texto: 'hacer',
+			tag: 'hacerMaterial'
+		}, {
+			texto: 'recoger',
+			tag: 'recogerMaterial'
+		}, {
+			texto: 'procesar',
+			tag: 'procesarPedido'
+		}];
+	},
+	claseFilaNecesita: function claseFilaNecesita(datos) {
+		var clase;
+		if (parseInt(datos.stockmateriales) >= parseInt(datos.cantidadpedidos)) {
+			clase = 'bueno';
+		} else if (parseInt(datos.stockmateriales) + parseInt(datos.haciendomateriales) >= parseInt(datos.cantidadpedidos)) {
+			clase = 'medio';
+		} else if (datos.maximofabricas == -1) {
+			clase = 'huerto';
+		} else if (datos.haciendofabricas < datos.maximofabricas) {
+			clase = 'malo';
+		}
+
+		if (clase == 'malo') {
+			if (!parseInt(datos.faltanecesita)) {
+				clase = 'nulo';
+			}
+		}
+
+		return clase;
+	},
+	claseFilaPedidos: function claseFilaPedidos(datos) {
+		var clase;
+		if (parseInt(datos.procesadopedidos)) {
+			if (parseInt(datos.faltapedidos)) {
+				clase = 'malo';
+			} else {
+				clase = 'bueno';
+			}
+		}
+
+		return clase;
+	},
+	claseFilaPedido: function claseFilaPedido(datos) {
+		var clase;
+		if (parseInt(datos.procesadopedidos)) {
+			if (parseInt(datos.stockmateriales) >= parseInt(datos.cantidadpedidos)) {
+				clase = 'bueno';
+			} else if (parseInt(datos.stockmateriales) + parseInt(datos.haciendomateriales) >= parseInt(datos.cantidadpedidos)) {
+				clase = 'medio';
+			} else if (datos.haciendofabricas < datos.maximofabricas) {
+				clase = 'malo';
+			}
+
+			if (clase == 'malo') {
+				if (!parseInt(datos.faltanecesita)) {
+					clase = 'nulo';
+				}
+			}
+		}
+
+		return clase;
+	},
 	componentDidMount: function() {
 		this.dimensionar();
 		window.onresize = function (e) {
@@ -204,7 +420,15 @@ window.App = React.createClass({
 		var altoMenu = menu.offsetHeight;
 		var alto = altoPadre - altoMenu;
 
-		this.setState({alto:alto});
+		this.setState({alto:alto}, function () {
+			for (var i in this.refs) {
+				var ref = this.refs[i];
+
+				if (typeof(ref.dimensionar) === 'function') {
+					ref.dimensionar();
+				}
+			}
+		}.bind(this));
 	},
 	accionMenu: function (tag) {
 		this.setState({contenido:tag});
@@ -233,6 +457,7 @@ window.App = React.createClass({
 					cols={this[config.cols]()}
 					acciones={this[config.acciones]()}
 					claseFila={this[config.claseFila]}
+					parseData={this[config.parseData]}
 					onClickAcciones={this.onClickAcciones}
 				/>
 			);
@@ -274,6 +499,7 @@ window.App = React.createClass({
 								cols={this.props.config[this.state.contenido].cols}
 								eliminar={this.props.config[this.state.contenido].eliminar}
 								key={this.state.contenido}
+								ref={this.state.contenido}
 								setDialogo={this.setDialogo}
 					/>;
 		}

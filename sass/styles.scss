@@ -2,24 +2,4 @@
 
 @import "app";
 
-
-
-section {
-	border-style: solid;
-	border-width: 1px;
-	width: 49%;
-	display: inline-block;
-	height: 300px;
-	overflow: hidden;
-}
-section>div {
-	overflow: auto;
-	height: 268px;
-}
-h1 {
-	font-family: Verdana;
-	text-align: center;
-	margin: 0;
-	padding: 0;
-	height: 32px;
-}
+@import "custom";
