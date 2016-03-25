@@ -148,7 +148,7 @@ window.App = React.createClass({
 						tipo: 'int'
 					}]
 				},
-				inicio: [{
+				inicio: [/*{
 					id: 'huerto',
 					titulo: 'Huerto',
 					url: 'vistaNecesitaHuerto.php',
@@ -172,7 +172,7 @@ window.App = React.createClass({
 					cols: 'colsNecesita',
 					acciones: 'accionesNecesita',
 					claseFila: 'claseFilaNecesita'
-				},{
+				},*/{
 					id: 'pedidos',
 					titulo: 'Pedidos',
 					url: 'vistaPedidos.php',
@@ -219,13 +219,10 @@ window.App = React.createClass({
 	},
 	renderInicio: function () {
 		var ret = [];
-/*
+
 		for (var i = 0 ; i < this.props.config.inicio.length ; i++) {
 			var config = this.props.config.inicio[i];
-			if (config.necesitaParametros) {
-
-			}
-			ret.push(	
+			ret.push(
 				<PanelTabla	
 					ref={config.id}
 					key={config.id}
@@ -240,7 +237,7 @@ window.App = React.createClass({
 				/>
 			);
 		}
-
+/*
 		if (this.state.pedido_ver) {
 			var params = {
 				idtipos_pedido: this.state.pedido_ver.idtipos_pedido
