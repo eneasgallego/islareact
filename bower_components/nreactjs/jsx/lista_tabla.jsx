@@ -71,7 +71,7 @@ window.ListaTabla = React.createClass({
 	guardar: function (valor, field, celda, fila, tabla) {
 		var id = fila.getIdFila();
 		var campo = celda.props.campo;
-		var params = {};
+		var params = fila.props.datos;
 		params[campo] = valor;
 		var url = this.props.url;
 		var metodo = 'post';

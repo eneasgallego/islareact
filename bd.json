@@ -34,11 +34,11 @@
   ],
   "pedidos": [
     {
-      "cantidadpedidos": 10,
       "tipopedidos": 2,
       "materialpedidos": 1,
-      "procesadopedidos": "undefined",
-      "profundidadpedidos": "undefined",
+      "cantidadpedidos": 10,
+      "procesadopedidos": false,
+      "profundidadpedidos": 0,
       "id": 1
     }
   ]

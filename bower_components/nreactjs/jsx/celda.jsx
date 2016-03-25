@@ -49,7 +49,7 @@ window.Celda = React.createClass({
 	guardar: function (e, field) {
 		var valor;
 		if (this.state.tipo.tipo == 'bool') {
-			valor = (e.currentTarget.checked ? '1' : '0');
+			valor = e.currentTarget.checked;
 		} else if (this.state.tipo.tipo == 'float' || this.state.tipo.tipo == 'int') {
 			valor = 0;
 			if (!isNaN(e.currentTarget.value)) {
@@ -151,7 +151,7 @@ window.Celda = React.createClass({
 				}
 			}
 		} else if (this.state.tipo.tipo == 'bool') {
-			ret = parseInt(ret) ? 'Sí' : 'No';
+			ret = ret ? 'Sí' : 'No';
 		}
 
 		return ret;
@@ -172,12 +172,14 @@ window.Celda = React.createClass({
 		return ret;
 	},
 	renderCelda: function () {
-		return <td style={this.renderStyle()} onClick={this.accionCelda}>
-			<div className="tabla-celda-div">
-				{this.renderValor()}
-				{this.renderEditar()}
-			</div>
-		</td>
+		return <td 	style={this.renderStyle()}
+					onClick={this.accionCelda}
+				>
+					<div className="tabla-celda-div">
+						{this.renderValor()}
+						{this.renderEditar()}
+					</div>
+				</td>
 	},
 	renderIconoOrden: function () {
 		var ret = '';

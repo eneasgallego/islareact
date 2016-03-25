@@ -18,13 +18,13 @@
     "react": "~0.14.7"
   },
   "homepage": "https://github.com/eneasgallego/reactjs",
-  "_release": "c597b640fb",
+  "_release": "4087ca9081",
   "_resolution": {
     "type": "branch",
-    "branch": "combos_ordenados",
-    "commit": "c597b640fb06327ab78d164f497ff461f4b5539e"
+    "branch": "master",
+    "commit": "4087ca9081ae5d5ce3a863fd327334a1db9946b3"
   },
   "_source": "https://github.com/eneasgallego/reactjs.git",
-  "_target": "combos_ordenados",
+  "_target": "*",
   "_originalSource": "https://github.com/eneasgallego/reactjs.git"
 }
