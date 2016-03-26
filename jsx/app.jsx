@@ -161,23 +161,17 @@ window.App = React.createClass({
 					cols: 'colsNecesitaMateriales',
 					acciones: 'accionesNecesitaHuerto',
 					claseFila: 'claseFilaNecesita'
-				},/*{
+				},{
 					id: 'materiales',
 					titulo: 'Materiales',
-					url: 'vistaNecesitaMateriales.php',
+					url: 'http://localhost:3000/db',
+//					url: 'vistaNecesitaMateriales.php',
+					parseData: 'parseDataNecesitaMateriales',
 					id_campo: 'materialpedidos',
 					cols: 'colsNecesitaMateriales',
 					acciones: 'accionesNecesitaMateriales',
 					claseFila: 'claseFilaNecesita'
 				},{
-					id: 'necesita',
-					titulo: 'Necesita',
-					url: 'vistaNecesita.php',
-					id_campo: 'materialpedidos',
-					cols: 'colsNecesita',
-					acciones: 'accionesNecesita',
-					claseFila: 'claseFilaNecesita'
-				},*/{
 					id: 'pedidos',
 					titulo: 'Pedidos',
 					url: 'http://localhost:3000/db',
@@ -186,6 +180,16 @@ window.App = React.createClass({
 					cols: 'colsPedidos',
 					acciones: 'accionesPedidos',
 					claseFila: 'claseFilaPedidos'
+				},{
+					id: 'necesita',
+					titulo: 'Necesita',
+					url: 'http://localhost:3000/db',
+//					url: 'vistaNecesita.php',
+					parseData: 'parseDataNecesita',
+					id_campo: 'materialpedidos',
+					cols: 'colsNecesita',
+					acciones: 'accionesNecesita',
+					claseFila: 'claseFilaNecesita'
 				}],
 				inicio_pedido: {
 					id: 'pedido',
@@ -252,6 +256,24 @@ window.App = React.createClass({
 
 			map[id] = obj;
 		}
+
+		return ret;
+	},
+	parseDataNecesitaMateriales: function (data, tabla, panel) {
+		var vistaNecesita = this.getVistaNecesita(data);
+
+		var ret = vistaNecesita.filter(function (item) {
+			return (!!~item.maximofabricas) && item.stockmateriales < item.cantidadpedidos && item.stockmateriales + item.haciendomateriales < item.cantidadpedidos;
+		});
+
+		return ret;
+	},
+	parseDataNecesita: function (data, tabla, panel) {
+		var vistaNecesita = this.getVistaNecesita(data);
+
+		var ret = vistaNecesita.filter(function (item) {
+			return item.haciendomateriales > 0;
+		});
 
 		return ret;
 	},
@@ -348,7 +370,7 @@ window.App = React.createClass({
 	accionesNecesita: function () {
 		return [{
 			texto: 'recoger',
-			tag: 'recogerMaterial'
+			tag: 'accionRecogerMaterial'
 		}];
 	},
 	accionesPedidos: function () {
@@ -369,10 +391,10 @@ window.App = React.createClass({
 			tag: 'accionHacerMaterial'
 		}, {
 			texto: 'recoger',
-			tag: 'recogerMaterial'
+			tag: 'accionRecogerMaterial'
 		}, {
 			texto: 'procesar',
-			tag: 'procesarPedido'
+			tag: 'accionProcesarPedido'
 		}];
 	},
 	cargarBD: function (callback) {
@@ -408,12 +430,8 @@ window.App = React.createClass({
 				valor = par.valor(item);
 			}
 
-			if (par.tipo == 'SUM') {
-				if (!ret) {
-					ret = 0
-				}
-
-				ret += valor;
+			if (typeof(par.tipo) === 'function') {
+				ret = par.tipo(ret, valor);
 			} else if (par.tipo == 'MIN') {
 				if (typeof(ret) === 'undefined' || ret > valor) {
 					ret = valor;
@@ -422,6 +440,12 @@ window.App = React.createClass({
 				if (typeof(ret) === 'undefined' || ret < valor) {
 					ret = valor;
 				}
+			} else if (par.tipo == 'SUM') {
+				if (!ret) {
+					ret = 0
+				}
+
+				ret += valor;
 			}
 		}
 
@@ -443,7 +467,8 @@ window.App = React.createClass({
 					nombremateriales: material.nombremateriales,
 					stockmateriales: material.stockmateriales,
 					haciendomateriales: material.haciendomateriales,
-					hacemateriales: material.hacemateriales
+					hacemateriales: material.hacemateriales,
+					cantidadpedidos: 0
 				};
 				ret.push(obj);
 			}
@@ -460,7 +485,9 @@ window.App = React.createClass({
 				}
 			});
 			for (var key in totales) {
-				obj[key] = totales[key];
+				if (typeof(totales[key]) !== 'undefined') {
+					obj[key] = totales[key];
+				}
 			}
 
 			obj.faltamateriales = obj.cantidadpedidos - material.stockmateriales - material.haciendomateriales;
@@ -557,20 +584,34 @@ window.App = React.createClass({
 
 			var id = material.id;
 
+			var materiales_necesita = vistaMaterialesNecesita.filter(function (item) {
+				return item.materialmateriales_necesita == id;
+			});
+
 			var obj = map[id];
 			if (!obj) {
 				obj = {
 					idmateriales: id,
 					nombremateriales: material.nombremateriales,
-					dif: 1
+					dif: false
 				};
 				ret.push(obj);
 			}
 
 			var totales = this.calcularTotales({
 				dif: {
-					tipo: 'MIN',
-					lista: vistaMaterialesNecesita,
+					tipo: function (a, b) {
+						var ret = false;
+
+						if (typeof(a) === 'undefined') {
+							ret = b;
+						} else if (a && b) {
+							ret = true;
+						}
+
+						return ret;
+					},
+					lista: materiales_necesita,
 					valor: function (item) {
 						return (item.cantidadmateriales_necesita - item.stockmaterialesnecesita) <= 0;
 					}
@@ -601,19 +642,19 @@ window.App = React.createClass({
 
 			var id = material_necesita.id;
 
-			var obj = map[idfabrica];
+			var obj = map[id];
 			if (!obj) {
 				obj = {
 					idmateriales_necesita: id,
-					materialmateriales_necesita: materiales_necesita.materialmateriales_necesita,
+					materialmateriales_necesita: material_necesita.materialmateriales_necesita,
 					nombremateriales: material.nombremateriales,
 					stockmateriales: material.stockmateriales,
 					haciendomateriales: material.haciendomateriales,
-					materialnecesitamateriales_necesita: materiales_necesita.materialnecesitamateriales_necesita,
+					materialnecesitamateriales_necesita: material_necesita.materialnecesitamateriales_necesita,
 					nombrematerialesnecesita: materialNecesita.nombremateriales,
 					stockmaterialesnecesita: materialNecesita.stockmateriales,
 					haciendomaterialesnecesita: materialNecesita.haciendomateriales,
-					cantidadmateriales_necesita: materiales_necesita.cantidadmateriales_necesita
+					cantidadmateriales_necesita: material_necesita.cantidadmateriales_necesita
 				};
 				ret.push(obj);
 			}
@@ -729,11 +770,13 @@ window.App = React.createClass({
 				cantidadpedidos: cantidad,
 				materialpedidos: id,
 				padrepedidos: padrepedidos,
-				tipopedidos: 13,
+				tipopedidos: bd.tipos_pedido.buscar('auxtipos_pedido', true).id,
 				procesadopedidos: 1,
 				profundidadpedidos: profundidad
-		}, function (res) {
-			var idpedidos = res.id;
+		}, function (pedido) {
+			var idpedidos = pedido.id;
+
+			bd.pedidos.push(pedido);
 
 			var mapas = {};
 
@@ -766,10 +809,14 @@ window.App = React.createClass({
 							bd,
 							resolve,
 							reject);
+					} else {
+						resolve();
 					}
 				}.bind(this);
 
 				materiales_necesita.promesas(fnPromesa, callback, error, this);
+			} else {
+				callback();
 			}
 		}.bind(this), error);
 	},
@@ -801,7 +848,7 @@ window.App = React.createClass({
 								}
 								this.guardarPedidos(material_necesita.materialnecesitamateriales_necesita,
 									Math.ceil(material_necesita.cantidadmateriales_necesita * cantidad2 / material.hacemateriales),
-									pedido.idpedidos,
+									pedido.id,
 									material.hacemateriales,
 									1,
 									bd,
@@ -822,7 +869,7 @@ window.App = React.createClass({
 			}.bind(this));
 		}
 	},
-	limpiarPedidos: function (id, cantidad, bd) {
+	limpiarPedidos: function (id, cantidad, bd, callback, error) {
 		var mapas = {};
 
 		var tipo_pedido_huerto = bd.tipos_pedido.buscar('auxtipos_pedido', true);
@@ -838,17 +885,39 @@ window.App = React.createClass({
 			var dif = pedido.cantidadpedidos - cantidad;
 			if (dif > 0) {
 				pedido.cantidadpedidos = dif;
-				this.editar('pedidos',pedido,'id',pedido.id);
+				this.editar('pedidos',pedido,'id',pedido.id, callback, error);
 			} else {
 				this.eliminar('pedidos','id',pedido.id, function () {
 					if (dif < 0) {
-						this.limpiarPedidos(id, cantidad + dif, bd);
+						this.limpiarPedidos(id, cantidad + dif, bd, callback, error);
+					} else {
+						callback();
 					}
 				}.bind(this));
 			}
+		} else {
+			callback();
 		}
 	},
-	hacerMaterial: function (id, cantidad, panel) {
+	recogerMaterial: function (id, panel, callback, error) {
+		this.cargarBD(function (data) {
+			var mapas = {};
+
+			var materiales = this.getMapa('materiales','id',mapas,data.materiales);
+			var material = materiales[id];
+
+			if (material.haciendomateriales > 0) {
+				material.haciendomateriales -= material.hacemateriales;
+				material.stockmateriales += material.hacemateriales;
+
+				this.editar('materiales',material,'id',id,callback, error);
+			} else {
+				callback();
+			}
+
+		}.bind(this));
+	},
+	hacerMaterial: function (id, cantidad, panel, callback, error) {
 		this.cargarBD(function (data) {
 			var mapas = {};
 
@@ -860,15 +929,13 @@ window.App = React.createClass({
 			var fabrica = mapVistaFabricas[material.fabricamateriales];
 
 			if (fabrica.maximofabricas >= 0) {
-				if (fabrica.haciendomateriales >= fabrica.maximofabricas) {
-					console.error('Fabrica completa');
-				} else {
+				if (fabrica.haciendomateriales < fabrica.maximofabricas) {
 					var materiales_necesita = this.getVistaMaterialesNecesita(data).filter(function (item) {
 						return item.materialmateriales_necesita == id;
 					});
 
 					if (!~materiales_necesita.indice(function (item) {
-							return material_necesita.cantidadmateriales_necesita - material_necesita.stockmaterialesnecesita > 0;
+							return item.cantidadmateriales_necesita - item.stockmaterialesnecesita > 0;
 						})) {
 
 						material.haciendomateriales += material.hacemateriales;
@@ -879,19 +946,17 @@ window.App = React.createClass({
 								var auxMaterial = materiales[material_necesita.materialnecesitamateriales_necesita];
 								auxMaterial.stockmateriales = dif;
 								this.editar('materiales',auxMaterial,'id',auxMaterial.id, function () {
-									this.limpiarPedidos(material_necesita.materialnecesitamateriales_necesita, material_necesita.cantidadmateriales_necesita, data, resolve);
+									this.limpiarPedidos(material_necesita.materialnecesitamateriales_necesita, material_necesita.cantidadmateriales_necesita, data, resolve, reject);
 								}.bind(this), reject);
 							}.bind(this);
-							var successPromesa = function successPromesa() {
-								this.refrescarInicio();
-							}.bind(this);
-							var errorPromesa = function errorPromesa(err) {
-								console.error(err);
-							}.bind(this);
 
-							materiales_necesita.promesas(fnPromesa, successPromesa, errorPromesa, this);
+							materiales_necesita.promesas(fnPromesa, callback, error, this);
 						}.bind(this), error);
+					} else {
+						callback();
 					}
+				} else {
+					callback();
 				}
 			} else {
 				material.stockmateriales += (material.hacemateriales * cantidad);
@@ -899,16 +964,43 @@ window.App = React.createClass({
 			}
 		}.bind(this));
 	},
+	accionRecogerMaterial: function (tag, fila, tabla, panel) {
+		if (fila.props.datos.procesadopedidos) {
+			if (fila.props.datos.haciendomateriales > 0) {
+				this.recogerMaterial(fila.props.datos.materialpedidos, panel, function () {
+					this.refrescarInicio();
+				}.bind(this), function (err) {
+					console.error(err);
+				});
+			} else {
+				alert('No se puede');
+			}
+		} else {
+			alert('Hay que procesarlo');
+		}
+	},
 	accionHacerMaterial: function (tag, fila, tabla, panel) {
-		this.hacerMaterial(fila.props.datos.materialpedidos, 1, panel);
+		this.hacerMaterial(fila.props.datos.materialpedidos, 1, panel, function () {
+			this.refrescarInicio();
+		}.bind(this), function (err) {
+			console.error(err);
+		});
 	},
 	accionHacerMaterial3: function (tag, fila, tabla, panel) {
-		this.hacerMaterial(fila.props.datos.materialpedidos, 3, panel);
+		this.hacerMaterial(fila.props.datos.materialpedidos, 3, panel, function () {
+			this.refrescarInicio();
+		}.bind(this), function (err) {
+			console.error(err);
+		});
 	},
 	accionHacerMaterial6: function (tag, fila, tabla, panel) {
-		this.hacerMaterial(fila.props.datos.materialpedidos, 6, panel);
+		this.hacerMaterial(fila.props.datos.materialpedidos, 6, panel, function () {
+			this.refrescarInicio();
+		}.bind(this), function (err) {
+			console.error(err);
+		});
 	},
-	cerrarPedido: function(id, bd) {
+	cerrarPedido: function(id, bd, callback, error) {
 		var mapas = {};
 
 		var vistaPedido = this.getVistaPedido(bd);
@@ -929,16 +1021,10 @@ window.App = React.createClass({
 			var fnPromesaEliminar = function (item, index, resolve, reject) {
 				this.eliminar('pedidos','id',item.id, resolve, reject);
 			}.bind(this);
-			var successPromesaEliminar = function () {
-				this.refrescarInicio();
-			}.bind(this);
-			pedidos_eliminar.promesas(fnPromesaEliminar, successPromesaEliminar, errorPromesa, this);
-		}.bind(this);
-		var errorPromesa = function (err) {
-			console.error(err);
+			pedidos_eliminar.promesas(fnPromesaEliminar, callback, error, this);
 		}.bind(this);
 
-		pedidos.promesas(fnPromesa, successPromesa, errorPromesa, this);
+		pedidos.promesas(fnPromesa, successPromesa, error, this);
 	},
 	accionVerPedido: function (tag, fila, tabla, panel) {
 		this.setState({ pedido_ver: fila.props.datos }, function () {
@@ -948,7 +1034,11 @@ window.App = React.createClass({
 	},
 	accionCerrarPedido: function (tag, fila, tabla, panel) {
 		this.cargarBD(function (data) {
-			this.cerrarPedido(fila.props.datos.idtipos_pedido, data);
+			this.cerrarPedido(fila.props.datos.idtipos_pedido, data, function () {
+				this.refrescarInicio();
+			}.bind(this), function (err) {
+				console.error(err);
+			});
 		}.bind(this));
 	},
 	accionProcesarPedidos: function (tag, fila, tabla, panel) {
@@ -973,11 +1063,11 @@ window.App = React.createClass({
 			pedidos_filtrados.promesas(fnPromesa, successPromesa, errorPromesa, this);
 		}.bind(this));
 	},
-	claseFilaNecesita: function claseFilaNecesita(datos) {
+	claseFilaNecesita: function (datos) {
 		var clase;
-		if (parseInt(datos.stockmateriales) >= parseInt(datos.cantidadpedidos)) {
+		if (datos.stockmateriales >= datos.cantidadpedidos) {
 			clase = 'bueno';
-		} else if (parseInt(datos.stockmateriales) + parseInt(datos.haciendomateriales) >= parseInt(datos.cantidadpedidos)) {
+		} else if (datos.stockmateriales + datos.haciendomateriales >= datos.cantidadpedidos) {
 			clase = 'medio';
 		} else if (datos.maximofabricas == -1) {
 			clase = 'huerto';
@@ -986,7 +1076,7 @@ window.App = React.createClass({
 		}
 
 		if (clase == 'malo') {
-			if (!parseInt(datos.faltanecesita)) {
+			if (!datos.faltanecesita) {
 				clase = 'nulo';
 			}
 		}

@@ -25,6 +25,24 @@ $color2-bueno-resaltado: #339b2f;
 $color3-bueno-resaltado: #579b2e;
 $color-texto-bueno-resaltado: white;
 
+$color1-medio: #d6ff3a;
+$color2-medio: #fffd3d;
+$color3-medio: #ffc535;
+$color-texto-medio: black;
+$color1-medio-resaltado: #809b26;
+$color2-medio-resaltado: #9b9929;
+$color3-medio-resaltado: #9b7426;
+$color-texto-medio-resaltado: white;
+
+$color1-nulo: #7f7f7f;
+$color2-nulo: #404040;
+$color3-nulo: #000000;
+$color-texto-nulo: white;
+$color1-nulo-resaltado: #ffffff;
+$color2-nulo-resaltado: #c0c0c0;
+$color3-nulo-resaltado: #808080;
+$color-texto-nulo-resaltado: black;
+
 #pedidos {
   min-width: 250px;
 }
@@ -64,6 +82,18 @@ $color-texto-bueno-resaltado: white;
                 @include color-degradado2($color1-bueno-resaltado, $color2-bueno-resaltado, $color3-bueno-resaltado, $color-texto-bueno-resaltado);
               }
             }
+            &.medio {
+              @include color-degradado2($color1-medio, $color2-medio, $color3-medio, $color-texto-medio);
+              &:hover {
+                @include color-degradado2($color1-medio-resaltado, $color2-medio-resaltado, $color3-medio-resaltado, $color-texto-medio-resaltado);
+              }
+            }
+            &.nulo {
+              @include color-degradado2($color1-nulo, $color2-nulo, $color3-nulo, $color-texto-nulo);
+              &:hover {
+                @include color-degradado2($color1-nulo-resaltado, $color2-nulo-resaltado, $color3-nulo-resaltado, $color-texto-nulo-resaltado);
+              }
+            }
           }
           &:nth-child(even) {
             &.malo {
@@ -82,6 +112,18 @@ $color-texto-bueno-resaltado: white;
               @include color-degradado2($color3-bueno, $color2-bueno, $color1-bueno, $color-texto-bueno);
               &:hover {
                 @include color-degradado2($color3-bueno-resaltado, $color2-bueno-resaltado, $color1-bueno-resaltado, $color-texto-bueno-resaltado);
+              }
+            }
+            &.medio {
+              @include color-degradado2($color3-medio, $color2-medio, $color1-medio, $color-texto-medio);
+              &:hover {
+                @include color-degradado2($color3-medio-resaltado, $color2-medio-resaltado, $color1-medio-resaltado, $color-texto-medio-resaltado);
+              }
+            }
+            &.nulo {
+              @include color-degradado2($color3-nulo, $color2-nulo, $color1-nulo, $color-texto-nulo);
+              &:hover {
+                @include color-degradado2($color3-nulo-resaltado, $color2-nulo-resaltado, $color1-nulo-resaltado, $color-texto-nulo-resaltado);
               }
             }
           }
