@@ -17,14 +17,14 @@
       "nombremateriales": "Algodón",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": -2,
+      "stockmateriales": 12,
       "id": 1
     },
     {
       "nombremateriales": "Bambu",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 10,
+      "stockmateriales": 12,
       "haciendomateriales": 0,
       "id": 2
     },
@@ -40,7 +40,7 @@
       "nombremateriales": "Café",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 10,
+      "stockmateriales": 13,
       "haciendomateriales": 0,
       "id": 4
     },
@@ -72,7 +72,7 @@
       "nombremateriales": "Azúcar",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 10,
+      "stockmateriales": 12,
       "haciendomateriales": 0,
       "id": 8
     },
@@ -88,7 +88,7 @@
       "nombremateriales": "Limón",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 9,
+      "stockmateriales": 18,
       "haciendomateriales": 0,
       "id": 10
     },
@@ -96,7 +96,7 @@
       "nombremateriales": "Granada",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 9,
+      "stockmateriales": 18,
       "haciendomateriales": 0,
       "id": 11
     },
@@ -104,7 +104,7 @@
       "nombremateriales": "Cacao",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 9,
+      "stockmateriales": 18,
       "haciendomateriales": 0,
       "id": 12
     },
@@ -112,7 +112,7 @@
       "nombremateriales": "Chile",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 9,
+      "stockmateriales": 18,
       "haciendomateriales": 0,
       "id": 13
     },
@@ -120,7 +120,7 @@
       "nombremateriales": "Coco",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 9,
+      "stockmateriales": 18,
       "haciendomateriales": 0,
       "id": 14
     },
@@ -128,7 +128,7 @@
       "nombremateriales": "Rosas",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 9,
+      "stockmateriales": 18,
       "haciendomateriales": 0,
       "id": 15
     },
@@ -136,7 +136,7 @@
       "nombremateriales": "Magnolias",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 9,
+      "stockmateriales": 18,
       "haciendomateriales": 0,
       "id": 16
     }

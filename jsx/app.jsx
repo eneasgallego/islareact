@@ -155,7 +155,7 @@ window.App = React.createClass({
 				inicio: [{
 					id: 'huerto',
 					titulo: 'Huerto',
-					url: 'http://localhost:3000/db'/*'vistaNecesitaHuerto.php'*/,
+					url: 'http://localhost:3000/db',
 					id_campo: 'materialpedidos',
 					parseData: 'parseDataHuerto',
 					cols: 'colsNecesitaMateriales',
@@ -189,8 +189,9 @@ window.App = React.createClass({
 				}],
 				inicio_pedido: {
 					id: 'pedido',
-					url: 'vistaPedido.php',
+					url: 'http://localhost:3000/db',
 					id_campo: 'idpedidos',
+					parseData: 'parseDataPedido',
 					cols: 'colsPedido',
 					acciones: 'accionesPedido',
 					claseFila: 'claseFilaPedido'
@@ -205,6 +206,11 @@ window.App = React.createClass({
 		}.bind(this);
 
 	},
+	parseDataPedido: function (data, tabla, panel) {
+		return this.getVistaPedido(data).filter(function (item) {
+			return item.tipopedidos == panel.props.params.idtipos_pedido
+		});
+	},
 	parseDataPedidos: function (data, tabla, panel) {
 
 		var ret = [];
@@ -214,38 +220,37 @@ window.App = React.createClass({
 		for (var i = 0 ; i < data.pedidos.length ; i++) {
 			var pedido = data.pedidos[i];
 
-			var idtipos_pedido = pedido.tipopedidos;
+			var id = pedido.tipopedidos;
 
-			var obj = map[idtipos_pedido];
+			var tipos_pedido = this.getMapa('tipos_pedido', 'id', mapas, data.tipos_pedido);
+			var tipo_pedido = tipos_pedido[id];
+
+			var materiales = this.getMapa('materiales', 'id', mapas, data.materiales);
+			var material = materiales[pedido.materialpedidos];
+
+			var faltapedidos = (pedido.cantidadpedidos - material.stockmateriales) > 0;
+
+			var obj = map[id];
 			if (!obj) {
 				obj = {
-					idtipos_pedido: idtipos_pedido,
-					cantidadpedido: 0
+					idtipos_pedido: id,
+					cantidadpedido: 0,
+					procesadopedidos: pedido.procesadopedidos,
+					faltapedidos: faltapedidos,
+					nombretipos_pedido: tipo_pedido.nombretipos_pedido,
+					stockmateriales: material.stockmateriales,
+					haciendomateriales: material.haciendomateriales
 				};
 				ret.push(obj);
 			}
 
-			var tipos_pedido = this.getMapa('tipos_pedido', 'id', mapas, data.tipos_pedido);
-			var tipo_pedido = tipos_pedido[idtipos_pedido];
-			obj.nombretipos_pedido = tipo_pedido.nombretipos_pedido;
-
-			var materiales = this.getMapa('materiales', 'id', mapas, data.materiales);
-			var material = materiales[pedido.materialpedidos];
-			obj.stockmateriales = material.stockmateriales;
-			obj.haciendomateriales = material.haciendomateriales;
-
 			obj.cantidadpedido += pedido.cantidadpedidos;
 
-			if (typeof(obj.procesadopedidos) === 'undefined' || obj.procesadopedidos > pedido.procesadopedidos) {
-				obj.procesadopedidos = pedido.procesadopedidos;
-			}
+			obj.procesadopedidos = (obj.procesadopedidos || pedido.procesadopedidos);
 
-			var faltapedidos = (pedido.cantidadpedidos - material.stockmateriales) > 0 ? 1 : 0;
-			if (typeof(obj.faltapedidos) === 'undefined' || obj.faltapedidos < pedido.faltapedidos) {
-				obj.faltapedidos = faltapedidos;
-			}
+			obj.faltapedidos = (obj.faltapedidos || faltapedidos);
 
-			map[idtipos_pedido] = obj;
+			map[id] = obj;
 		}
 
 		return ret;
@@ -310,13 +315,16 @@ window.App = React.createClass({
 			campo: 'nombremateriales'
 		}, {
 			texto: 'NECESITA',
-			campo: 'cantidadpedidos'
+			campo: 'cantidadpedidos',
+			tipo: 'float'
 		}, {
 			texto: 'TIENE',
-			campo: 'stockmateriales'
+			campo: 'stockmateriales',
+			tipo: 'float'
 		}, {
 			texto: 'HACIENDO',
-			campo: 'haciendomateriales'
+			campo: 'haciendomateriales',
+			tipo: 'float'
 		}];
 	},
 	accionesNecesitaHuerto: function () {
@@ -346,7 +354,7 @@ window.App = React.createClass({
 	accionesPedidos: function () {
 		return [{
 			texto: 'ver',
-			tag: 'verPedido'
+			tag: 'accionVerPedido'
 		}, {
 			texto: 'procesar',
 			tag: 'accionProcesarPedidos'
@@ -496,7 +504,7 @@ window.App = React.createClass({
 					stockmateriales: material.stockmateriales,
 					haciendomateriales: material.haciendomateriales,
 					maximofabricas: fabrica.maximofabricas,
-					haciendofabricas: fabrica.haciendofabricas,
+					haciendofabricas: fabrica.haciendomateriales,
 					faltanecesita: material_falta.dif
 				};
 				ret.push(obj);
@@ -932,6 +940,12 @@ window.App = React.createClass({
 
 		pedidos.promesas(fnPromesa, successPromesa, errorPromesa, this);
 	},
+	accionVerPedido: function (tag, fila, tabla, panel) {
+		this.setState({ pedido_ver: fila.props.datos }, function () {
+			this.refs.pedido.refs.tabla.refrescar();
+			this.refs.pedido.dimensionar();
+		}.bind(this));
+	},
 	accionCerrarPedido: function (tag, fila, tabla, panel) {
 		this.cargarBD(function (data) {
 			this.cerrarPedido(fila.props.datos.idtipos_pedido, data);
@@ -979,7 +993,7 @@ window.App = React.createClass({
 
 		return clase;
 	},
-	claseFilaPedidos: function claseFilaPedidos(datos) {
+	claseFilaPedidos: function (datos) {
 		var clase;
 		if (datos.procesadopedidos) {
 			if (datos.faltapedidos) {
@@ -991,19 +1005,21 @@ window.App = React.createClass({
 
 		return clase;
 	},
-	claseFilaPedido: function claseFilaPedido(datos) {
+	claseFilaPedido: function (datos) {
 		var clase;
-		if (parseInt(datos.procesadopedidos)) {
-			if (parseInt(datos.stockmateriales) >= parseInt(datos.cantidadpedidos)) {
+		if (datos.procesadopedidos) {
+			if (datos.stockmateriales >= datos.cantidadpedidos) {
 				clase = 'bueno';
-			} else if (parseInt(datos.stockmateriales) + parseInt(datos.haciendomateriales) >= parseInt(datos.cantidadpedidos)) {
+			} else if (datos.stockmateriales + datos.haciendomateriales >= datos.cantidadpedidos) {
 				clase = 'medio';
+			} else if (datos.maximofabricas == -1) {
+				clase = 'huerto';
 			} else if (datos.haciendofabricas < datos.maximofabricas) {
 				clase = 'malo';
 			}
 
 			if (clase == 'malo') {
-				if (!parseInt(datos.faltanecesita)) {
+				if (!datos.faltanecesita) {
 					clase = 'nulo';
 				}
 			}
@@ -1036,7 +1052,9 @@ window.App = React.createClass({
 		}.bind(this));
 	},
 	accionMenu: function (tag) {
-		this.setState({contenido:tag});
+		this.setState({contenido:tag}, function () {
+			this.dimensionar();
+		}.bind(this));
 	},
 	onClickAcciones: function (tag, fila, tabla, panel) {
 		if (typeof(this[tag]) === 'function') {
@@ -1067,7 +1085,7 @@ window.App = React.createClass({
 				/>
 			);
 		}
-/*
+
 		if (this.state.pedido_ver) {
 			var params = {
 				idtipos_pedido: this.state.pedido_ver.idtipos_pedido
@@ -1083,12 +1101,13 @@ window.App = React.createClass({
 					id_campo={this.props.config.inicio_pedido.id_campo}
 					cols={this[this.props.config.inicio_pedido.cols]()}
 					acciones={this[this.props.config.inicio_pedido.acciones]()}
+					parseData={this[this.props.config.inicio_pedido.parseData]}
 					claseFila={this[this.props.config.inicio_pedido.claseFila]}
 					onClickAcciones={this.onClickAcciones}
 				/>
 			);
 		}
-*/
+
 		return ret;
 	},
 	renderContenido: function (e) {
