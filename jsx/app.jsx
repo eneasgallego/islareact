@@ -110,6 +110,10 @@ window.App = React.createClass({
 					cols: [{
 						texto: 'TIPO',
 						campo: 'nombretipos_pedido'
+					},{
+						texto: 'AUX',
+						campo: 'auxtipos_pedido',
+						tipo: 'bool'
 					}]
 				},
 				pedidos: {

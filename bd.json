@@ -150,6 +150,11 @@
     {
       "nombretipos_pedido": "Colchón",
       "id": 2
+    },
+    {
+      "nombretipos_pedido": "Otros",
+      "auxtipos_pedido": true,
+      "id": 3
     }
   ],
   "pedidos": [
