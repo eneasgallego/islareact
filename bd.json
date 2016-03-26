@@ -280,6 +280,14 @@
       "procesadopedidos": true,
       "profundidadpedidos": -1,
       "id": 16
+    },
+    {
+      "tipopedidos": 1,
+      "materialpedidos": 1,
+      "cantidadpedidos": 3,
+      "procesadopedidos": true,
+      "profundidadpedidos": 0,
+      "id": 17
     }
   ]
 }

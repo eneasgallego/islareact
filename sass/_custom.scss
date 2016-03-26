@@ -7,8 +7,20 @@ $color2-malo-resaltado: #ff9092;
 $color3-malo-resaltado: #ffca95;
 $color-texto-malo-resaltado: black;
 
+$color1-huerto: #f2dbff;
+$color2-huerto: #ffd5fd;
+$color3-huerto: #ffcdeb;
+$color-texto-huerto: black;
+$color1-huerto-resaltado: #be66ff;
+$color2-huerto-resaltado: #ff6bef;
+$color3-huerto-resaltado: #ff618c;
+$color-texto-huerto-resaltado: black;
+
 #pedidos {
   min-width: 525px;
+}
+#huerto {
+  min-width: 450px;
 }
 
 .tabla-cont {
@@ -22,11 +34,16 @@ $color-texto-malo-resaltado: black;
         &:not(.header) {
 
           &:nth-child(odd) {
-
             &.malo {
               @include color-degradado2($color1-malo, $color2-malo, $color3-malo, $color-texto-malo);
               &:hover {
                 @include color-degradado2($color1-malo-resaltado, $color2-malo-resaltado, $color3-malo-resaltado, $color-texto-malo-resaltado);
+              }
+            }
+            &.huerto {
+              @include color-degradado2($color1-huerto, $color2-huerto, $color3-huerto, $color-texto-huerto);
+              &:hover {
+                @include color-degradado2($color1-huerto-resaltado, $color2-huerto-resaltado, $color3-huerto-resaltado, $color-texto-huerto-resaltado);
               }
             }
           }
@@ -35,6 +52,12 @@ $color-texto-malo-resaltado: black;
               @include color-degradado2($color3-malo, $color2-malo, $color1-malo, $color-texto-malo);
               &:hover {
                 @include color-degradado2($color3-malo-resaltado, $color2-malo-resaltado, $color1-malo-resaltado, $color-texto-malo-resaltado);
+              }
+            }
+            &.huerto {
+              @include color-degradado2($color3-huerto, $color2-huerto, $color1-huerto, $color-texto-huerto);
+              &:hover {
+                @include color-degradado2($color3-huerto-resaltado, $color2-huerto-resaltado, $color1-huerto-resaltado, $color-texto-huerto-resaltado);
               }
             }
           }
