@@ -17,14 +17,14 @@
       "nombremateriales": "Algodón",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 13,
       "id": 1
     },
     {
       "nombremateriales": "Bambu",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 10,
       "haciendomateriales": 0,
       "id": 2
     },
@@ -32,7 +32,7 @@
       "nombremateriales": "Vainilla",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 12,
       "haciendomateriales": 0,
       "id": 3
     },
@@ -40,7 +40,7 @@
       "nombremateriales": "Café",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 10,
       "haciendomateriales": 0,
       "id": 4
     },
@@ -48,7 +48,7 @@
       "nombremateriales": "Trigo",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 12,
       "haciendomateriales": 0,
       "id": 5
     },
@@ -56,7 +56,7 @@
       "nombremateriales": "Piña",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 12,
       "haciendomateriales": 0,
       "id": 6
     },
@@ -64,7 +64,7 @@
       "nombremateriales": "Arroz",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 22,
       "haciendomateriales": 0,
       "id": 7
     },
@@ -72,7 +72,7 @@
       "nombremateriales": "Azúcar",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 10,
       "haciendomateriales": 0,
       "id": 8
     },
@@ -80,7 +80,7 @@
       "nombremateriales": "Arándanos",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 0,
+      "stockmateriales": 9,
       "haciendomateriales": 0,
       "id": 9
     },
@@ -88,7 +88,7 @@
       "nombremateriales": "Limón",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 0,
+      "stockmateriales": 9,
       "haciendomateriales": 0,
       "id": 10
     },
@@ -96,7 +96,7 @@
       "nombremateriales": "Granada",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 0,
+      "stockmateriales": 9,
       "haciendomateriales": 0,
       "id": 11
     },
@@ -104,7 +104,7 @@
       "nombremateriales": "Cacao",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 0,
+      "stockmateriales": 9,
       "haciendomateriales": 0,
       "id": 12
     },
@@ -112,7 +112,7 @@
       "nombremateriales": "Chile",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 0,
+      "stockmateriales": 9,
       "haciendomateriales": 0,
       "id": 13
     },
@@ -120,7 +120,7 @@
       "nombremateriales": "Coco",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 0,
+      "stockmateriales": 9,
       "haciendomateriales": 0,
       "id": 14
     },
@@ -128,7 +128,7 @@
       "nombremateriales": "Rosas",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 0,
+      "stockmateriales": 9,
       "haciendomateriales": 0,
       "id": 15
     },
@@ -136,7 +136,7 @@
       "nombremateriales": "Magnolias",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 0,
+      "stockmateriales": 9,
       "haciendomateriales": 0,
       "id": 16
     }
@@ -155,6 +155,11 @@
       "nombretipos_pedido": "Otros",
       "auxtipos_pedido": true,
       "id": 3
+    },
+    {
+      "nombretipos_pedido": "Pedido 2",
+      "auxtipos_pedido": false,
+      "id": 4
     }
   ],
   "pedidos": [
@@ -293,6 +298,14 @@
       "procesadopedidos": true,
       "profundidadpedidos": 0,
       "id": 17
+    },
+    {
+      "tipopedidos": 4,
+      "materialpedidos": 7,
+      "cantidadpedidos": 10,
+      "procesadopedidos": true,
+      "profundidadpedidos": 0,
+      "id": 18
     }
   ]
 }

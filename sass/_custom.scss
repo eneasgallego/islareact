@@ -1,23 +1,32 @@
-$color1-malo: #ffd8ec;
-$color2-malo: #ffdbe0;
-$color3-malo: #ffe3d1;
+$color1-malo: #ff92d1;
+$color2-malo: #ff9092;
+$color3-malo: #ffca95;
 $color-texto-malo: black;
-$color1-malo-resaltado: #ff92d1;
-$color2-malo-resaltado: #ff9092;
-$color3-malo-resaltado: #ffca95;
-$color-texto-malo-resaltado: black;
+$color1-malo-resaltado: #9b527f;
+$color2-malo-resaltado: #9b5657;
+$color3-malo-resaltado: #9b7859;
+$color-texto-malo-resaltado: white;
 
-$color1-huerto: #f2dbff;
-$color2-huerto: #ffd5fd;
-$color3-huerto: #ffcdeb;
+$color1-huerto: #be66ff;
+$color2-huerto: #ff6bef;
+$color3-huerto: #ff618c;
 $color-texto-huerto: black;
-$color1-huerto-resaltado: #be66ff;
-$color2-huerto-resaltado: #ff6bef;
-$color3-huerto-resaltado: #ff618c;
-$color-texto-huerto-resaltado: black;
+$color1-huerto-resaltado: #733e9b;
+$color2-huerto-resaltado: #9b498c;
+$color3-huerto-resaltado: #9b3f4a;
+$color-texto-huerto-resaltado: white;
+
+$color1-bueno: #58ff82;
+$color2-bueno: #50ff4c;
+$color3-bueno: #94ff4e;
+$color-texto-bueno: black;
+$color1-bueno-resaltado: #349b51;
+$color2-bueno-resaltado: #339b2f;
+$color3-bueno-resaltado: #579b2e;
+$color-texto-bueno-resaltado: white;
 
 #pedidos {
-  min-width: 525px;
+  min-width: 250px;
 }
 #huerto {
   min-width: 450px;
@@ -46,6 +55,12 @@ $color-texto-huerto-resaltado: black;
                 @include color-degradado2($color1-huerto-resaltado, $color2-huerto-resaltado, $color3-huerto-resaltado, $color-texto-huerto-resaltado);
               }
             }
+            &.bueno {
+              @include color-degradado2($color1-bueno, $color2-bueno, $color3-bueno, $color-texto-bueno);
+              &:hover {
+                @include color-degradado2($color1-bueno-resaltado, $color2-bueno-resaltado, $color3-bueno-resaltado, $color-texto-bueno-resaltado);
+              }
+            }
           }
           &:nth-child(even) {
             &.malo {
@@ -58,6 +73,12 @@ $color-texto-huerto-resaltado: black;
               @include color-degradado2($color3-huerto, $color2-huerto, $color1-huerto, $color-texto-huerto);
               &:hover {
                 @include color-degradado2($color3-huerto-resaltado, $color2-huerto-resaltado, $color1-huerto-resaltado, $color-texto-huerto-resaltado);
+              }
+            }
+            &.bueno {
+              @include color-degradado2($color3-bueno, $color2-bueno, $color1-bueno, $color-texto-bueno);
+              &:hover {
+                @include color-degradado2($color3-bueno-resaltado, $color2-bueno-resaltado, $color1-bueno-resaltado, $color-texto-bueno-resaltado);
               }
             }
           }

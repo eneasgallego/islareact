@@ -293,7 +293,7 @@ window.App = React.createClass({
 		return [{
 			texto: 'PEDIDO',
 			campo: 'nombretipos_pedido'
-		}, {
+/*		}, {
 			texto: 'NECESITA',
 			campo: 'cantidadpedido'
 		}, {
@@ -301,7 +301,7 @@ window.App = React.createClass({
 			campo: 'stockmateriales'
 		}, {
 			texto: 'HACIENDO',
-			campo: 'haciendomateriales'
+			campo: 'haciendomateriales'	*/
 		}];
 	},
 	colsPedido: function () {
@@ -650,6 +650,16 @@ window.App = React.createClass({
 			error: error
 		});
 	},
+	eliminar: function (tabla, id_campo, id) {
+		var url = 'http://localhost:3000/' + tabla + '/' + id;
+
+		ajax({
+			metodo: 'DELETE',
+			url: url,
+			success: callback,
+			error: error
+		});
+	},
 	editar: function (tabla, par, id_campo, id, callback, error) {
 		var url = 'http://localhost:3000/' + tabla + '/' + id;
 
@@ -760,32 +770,31 @@ window.App = React.createClass({
 	limpiarPedidos: function (id, cantidad, bd) {
 		var mapas = {};
 
-		//$material = getArraySQL("SELECT * FROM materiales WHERE idmateriales=$id")[0];
-		var tipo_pedido_huerto = bd.tipos_pedido.buscar('');
-		var material = materiales[id];
-eneas
-		$pedido = getArraySQL("SELECT * FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13 and profundidadpedidos = (SELECT max(profundidadpedidos) FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13)");
-		$pedido = getArraySQL("SELECT * FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13 and profundidadpedidos = (SELECT max(profundidadpedidos) FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13)");
-		$pedido = getArraySQL("SELECT * FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13 and profundidadpedidos = (SELECT max(profundidadpedidos) FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13)");
-		bd.pedidos.filter(function (item) {
-			return
+		var tipo_pedido_huerto = bd.tipos_pedido.buscar('auxtipos_pedido', true);
+		var pedidos = bd.pedidos.filter(function (item) {
+			return item.materialpedidos == id && item.tipopedidos == tipo_pedido_huerto.id;
 		});
-		if (count($pedido) > 0) {
-			$pedido = $pedido[0];
-			$dif = $pedido->cantidadpedidos - $cantidad;
-			if ($dif > 0) {
-				array_push($ret, editar($_SESSION['tabla_pedidos'], array("cantidadpedidos"=>$dif), "idpedidos", $pedido->idpedidos));
+		if (pedidos.length) {
+			var pedido_profundo = pedidos.sort(function (a, b) {
+				return a.profundidadpedidos > b.profundidadpedidos;
+			})[0];
+
+			//$pedido = getArraySQL("SELECT * FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13 and profundidadpedidos = (SELECT max(profundidadpedidos) FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13)");
+			var pedido = pedidos.buscar('profundidadpedidos', pedido_profundo.profundidadpedidos);
+			var dif = pedido.cantidadpedidos - cantidad;
+			if (dif > 0) {
+				//array_push($ret, editar($_SESSION['tabla_pedidos'], array("cantidadpedidos"=>$dif), "idpedidos", $pedido->idpedidos));
+				pedido.cantidadpedidos = dif;
+				this.editar('pedidos',pedido,'id',pedido.id);
 			} else {
-				array_push($ret, eliminar($_SESSION['tabla_pedidos'], "idpedidos", $pedido->idpedidos));
-				if ($dif < 0) {
-					$sql = limpiarPedidos($id, $cantidad + $dif);
-					for ($j = 0 ; $j < count($sql) ; $j++) {
-						array_push($ret, $sql[$j]);
+//				array_push($ret, eliminar($_SESSION['tabla_pedidos'], "idpedidos", $pedido->idpedidos));
+				this.eliminar('pedidos','id',pedido.id, function () {
+					if (dif < 0) {
+						this.limpiarPedidos(id, cantidad + dif, bd);
 					}
-				}
+				}.bind(this));
 			}
 		}
-		return $ret;
 	},
 	hacerMaterial: function (id, cantidad, panel) {
 		this.cargarBD(function (data) {
@@ -814,29 +823,35 @@ eneas
 						})) {
 
 //						array_push($ret['sql'], editar("materiales", array("haciendomateriales"=>$material->haciendomateriales + $material->hacemateriales), "idmateriales", $id));
-						material.haciendomateriales = material.haciendomateriales + material.hacemateriales;
+						material.haciendomateriales += material.hacemateriales;
 						this.editar('materiales',material,'id',material.id, function () {
-							for (var i = 0 ; i < materiales_necesita.length ; i++) {
-								var material_necesita = materiales_necesita[i];
 
+							var fnPromesa = function (material_necesita, index, resolve, reject) {
 								var dif = material_necesita.stockmaterialesnecesita - material_necesita.cantidadmateriales_necesita;
 								//array_push($ret['sql'], editar("materiales", array("stockmateriales"=>$dif), "idmateriales", $material_necesita->materialnecesitamateriales_necesita));
-								this.editar('materiales',{
-									stockmateriales: dif
-								},'id',material_necesita.materialnecesitamateriales_necesita, function () {
-									$sql = limpiarPedidos($material_necesita->materialnecesitamateriales_necesita, $material_necesita->cantidadmateriales_necesita);
-									eneas
-								}.bind(this), error);
-							}
+								var auxMaterial = materiales[material_necesita.materialnecesitamateriales_necesita];
+								auxMaterial.stockmateriales = dif;
+								this.editar('materiales',auxMaterial,'id',auxMaterial.id, function () {
+//									$sql = limpiarPedidos($material_necesita->materialnecesitamateriales_necesita, $material_necesita->cantidadmateriales_necesita);
+									this.limpiarPedidos(material_necesita.materialnecesitamateriales_necesita, material_necesita.cantidadmateriales_necesita, data, resolve);
+								}.bind(this), reject);
+							}.bind(this);
+							var successPromesa = function successPromesa() {
+								this.refrescarInicio();
+							}.bind(this);
+							var errorPromesa = function errorPromesa(err) {
+								console.error(err);
+							}.bind(this);
+
+							materiales_necesita.promesas(fnPromesa, successPromesa, errorPromesa, this);
 						}.bind(this), error);
 					}
 				}
 			} else {
-				array_push($ret['sql'], editar("materiales", array("stockmateriales"=>$material->stockmateriales + ($material->hacemateriales * $cantidad)), "idmateriales", $id));
-				$ret['success'] = true;
+				//array_push($ret['sql'], editar("materiales", array("stockmateriales"=>$material->stockmateriales + ($material->hacemateriales * $cantidad)), "idmateriales", $id));
+				material.stockmateriales += (material.hacemateriales * cantidad);
+				this.editar('materiales',material,'id',material.id, this.refrescarInicio);
 			}
-
-			echo json_encode($ret);
 		}.bind(this));
 /*
 		if (parseInt(datos.procesadopedidos)) {
