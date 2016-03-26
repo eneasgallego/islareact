@@ -318,19 +318,19 @@ window.App = React.createClass({
 	accionesNecesitaHuerto: function () {
 		return [{
 			texto: 'X1',
-			tag: 'hacerMaterial'
+			tag: 'accionHacerMaterial'
 		}, {
 			texto: 'X3',
-			tag: 'hacerMaterial3'
+			tag: 'accionHacerMaterial3'
 		}, {
 			texto: 'X6',
-			tag: 'hacerMaterial6'
+			tag: 'accionHacerMaterial6'
 		}];
 	},
 	accionesNecesitaMateriales: function () {
 		return [{
 			texto: 'hacer',
-			tag: 'hacerMaterial'
+			tag: 'accionHacerMaterial'
 		}];
 	},
 	accionesNecesita: function () {
@@ -354,7 +354,7 @@ window.App = React.createClass({
 	accionesPedido: function () {
 		return [{
 			texto: 'hacer',
-			tag: 'hacerMaterial'
+			tag: 'accionHacerMaterial'
 		}, {
 			texto: 'recoger',
 			tag: 'recogerMaterial'
@@ -418,7 +418,6 @@ window.App = React.createClass({
 	getVistaMaterialesProcesar: function (data) {
 		var ret = [];
 		var map = {};
-		var mapas = {};
 
 		for (var i = 0 ; i < data.materiales.length ; i++) {
 			var material = data.materiales[i];
@@ -493,7 +492,6 @@ window.App = React.createClass({
 	getVistaMaterialesFalta: function (data) {
 		var ret = [];
 		var map = {};
-		var mapas = {};
 
 		var vistaMaterialesNecesita = this.getVistaMaterialesNecesita(data);
 
@@ -659,7 +657,7 @@ window.App = React.createClass({
 			error: error
 		});
 	},
-	guardarPedidos: function (id, cantidad, padrepedidos, hacemateriales, profundidad, callback, error) {
+	guardarPedidos: function (id, cantidad, padrepedidos, hacemateriales, profundidad, bd, callback, error) {
 		this.insertar('pedidos', {
 				cantidadpedidos: cantidad,
 				materialpedidos: id,
@@ -669,6 +667,8 @@ window.App = React.createClass({
 				profundidadpedidos: profundidad
 		}, function (res) {
 			var idpedidos = res.id;
+
+			var mapas = {};
 
 			var vistaMaterialesProcesar = this.getVistaMaterialesProcesar(bd);
 			var mapVistaMaterialesProcesar = this.getMapa('vistaMaterialesProcesar', 'materialpedidos', mapas, vistaMaterialesProcesar);
@@ -684,7 +684,7 @@ window.App = React.createClass({
 					return item.materialmateriales_necesita == id;
 				});
 
-				var fnPromesa = function guardarPedidos(material_necesita, index, resolve, reject) {
+				var fnPromesa = function (material_necesita, index, resolve, reject) {
 					var cantidad2 = material.faltamateriales;
 
 					if (cantidad2 > 0) {
@@ -696,27 +696,13 @@ window.App = React.createClass({
 							idpedidos,
 							material.hacemateriales,
 							profundidad+1,
+							bd,
 							resolve,
 							reject);
 					}
 				}.bind(this);
 
 				materiales_necesita.promesas(fnPromesa, callback, error, this);
-				/*
-				for (var i = 0 ; i < materiales_necesita.length ; i++) {
-					var material_necesita = materiales_necesita[i];
-
-					this.guardarPedidos(material_necesita.materialnecesitamateriales_necesita,
-										Math.ceil(material_necesita.cantidadmateriales_necesita * cantidad2 / material.hacemateriales),
-										idpedidos,
-										material.hacemateriales,
-										profundidad+1);
-				}
-
-				if (typeof(callback) === 'function') {
-					callback();
-				}
-				*/
 			}
 		}.bind(this), error);
 	},
@@ -751,30 +737,13 @@ window.App = React.createClass({
 									pedido.idpedidos,
 									material.hacemateriales,
 									1,
+									bd,
 									resolve,
 									reject);
 							}
 						}.bind(this);
 
 						materiales_necesita.promesas(fnPromesa, callback, error, this);
-/*
-						for (var i = 0 ; i < materiales_necesita.length ; i++) {
-							material_necesita = materiales_necesita[i];
-
-							var cantidad2 = material.faltamateriales;
-
-							if (cantidad2 > 0) {
-								if (cantidad2 > pedido.cantidadpedidos) {
-									cantidad2 = pedido.cantidadpedidos;
-								}
-								this.guardarPedidos(material_necesita.materialnecesitamateriales_necesita,
-													Math.ceil(material_necesita.cantidadmateriales_necesita * cantidad2 / material.hacemateriales),
-													pedido.idpedidos,
-													material.hacemateriales,
-													1);
-							}
-						}
-						*/
 					}
 				}.bind(this), error);
 			}
@@ -784,34 +753,95 @@ window.App = React.createClass({
 			}.bind(this));
 		}
 	},
-	hacerMaterial: function hacerMaterial(tag, fila, tabla, panel) {
-		if (parseInt(fila.props.datos.procesadopedidos)) {
-			ajax({
-				metodo: 'post',
-				url: 'hacerMaterial.php',
-				params: {
-					id: fila.props.datos.materialpedidos
-				},
-				success: function (response) {
-					if (response.success) {
-						this.refrescarInicio();
-					} else {
-						alert(response.msg);
+	limpiarPedidos: function (id, cantidad, bd) {
+		var mapas = {};
+
+		//$material = getArraySQL("SELECT * FROM materiales WHERE idmateriales=$id")[0];
+		var tipo_pedido_huerto = bd.tipos_pedido.buscar('');
+		var material = materiales[id];
+eneas
+		$pedido = getArraySQL("SELECT * FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13 and profundidadpedidos = (SELECT max(profundidadpedidos) FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13)");
+		$pedido = getArraySQL("SELECT * FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13 and profundidadpedidos = (SELECT max(profundidadpedidos) FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13)");
+		$pedido = getArraySQL("SELECT * FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13 and profundidadpedidos = (SELECT max(profundidadpedidos) FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13)");
+		bd.pedidos.filter(function (item) {
+			return
+		});
+		if (count($pedido) > 0) {
+			$pedido = $pedido[0];
+			$dif = $pedido->cantidadpedidos - $cantidad;
+			if ($dif > 0) {
+				array_push($ret, editar($_SESSION['tabla_pedidos'], array("cantidadpedidos"=>$dif), "idpedidos", $pedido->idpedidos));
+			} else {
+				array_push($ret, eliminar($_SESSION['tabla_pedidos'], "idpedidos", $pedido->idpedidos));
+				if ($dif < 0) {
+					$sql = limpiarPedidos($id, $cantidad + $dif);
+					for ($j = 0 ; $j < count($sql) ; $j++) {
+						array_push($ret, $sql[$j]);
 					}
-				}.bind(this)
-			}, tabla);
-		} else {
-			alert('Hay que procesarlo');
+				}
+			}
 		}
+		return $ret;
 	},
-	hacerMaterial3: function hacerMaterial3(tag, fila, tabla, panel) {
-		if (parseInt(fila.props.datos.procesadopedidos)) {
+	hacerMaterial: function (id, cantidad, panel) {
+		this.cargarBD(function (data) {
+			var mapas = {};
+
+			//$material = getArraySQL("SELECT * FROM materiales WHERE idmateriales=$id")[0];
+			var materiales = this.getMapa('materiales', 'id', mapas, data.materiales);
+			var material = materiales[id];
+
+			//$fabrica = getArraySQL("SELECT * FROM vistaFabricas WHERE fabricamateriales=$material->fabricamateriales")[0];
+			var vistaFabricas = this.getVistaFabricas(data);
+			var mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
+			var fabrica = mapVistaFabricas[material.fabricamateriales];
+
+			if (fabrica.maximofabricas >= 0) {
+				if (fabrica.haciendomateriales >= fabrica.maximofabricas) {
+					console.error('Fabrica completa');
+				} else {
+//					$materiales_necesita = getArraySQL("SELECT * FROM vistaMaterialesNecesita WHERE materialmateriales_necesita=$id");
+					var materiales_necesita = this.getVistaMaterialesNecesita(data).filter(function (item) {
+						return item.materialmateriales_necesita == id;
+					});
+
+					if (!~materiales_necesita.indice(function (item) {
+							return material_necesita.cantidadmateriales_necesita - material_necesita.stockmaterialesnecesita > 0;
+						})) {
+
+//						array_push($ret['sql'], editar("materiales", array("haciendomateriales"=>$material->haciendomateriales + $material->hacemateriales), "idmateriales", $id));
+						material.haciendomateriales = material.haciendomateriales + material.hacemateriales;
+						this.editar('materiales',material,'id',material.id, function () {
+							for (var i = 0 ; i < materiales_necesita.length ; i++) {
+								var material_necesita = materiales_necesita[i];
+
+								var dif = material_necesita.stockmaterialesnecesita - material_necesita.cantidadmateriales_necesita;
+								//array_push($ret['sql'], editar("materiales", array("stockmateriales"=>$dif), "idmateriales", $material_necesita->materialnecesitamateriales_necesita));
+								this.editar('materiales',{
+									stockmateriales: dif
+								},'id',material_necesita.materialnecesitamateriales_necesita, function () {
+									$sql = limpiarPedidos($material_necesita->materialnecesitamateriales_necesita, $material_necesita->cantidadmateriales_necesita);
+									eneas
+								}.bind(this), error);
+							}
+						}.bind(this), error);
+					}
+				}
+			} else {
+				array_push($ret['sql'], editar("materiales", array("stockmateriales"=>$material->stockmateriales + ($material->hacemateriales * $cantidad)), "idmateriales", $id));
+				$ret['success'] = true;
+			}
+
+			echo json_encode($ret);
+		}.bind(this));
+/*
+		if (parseInt(datos.procesadopedidos)) {
 			ajax({
 				metodo: 'post',
 				url: 'hacerMaterial.php',
 				params: {
-					id: fila.props.datos.materialpedidos,
-					cantidad: 3
+					id: datos.materialpedidos,
+					cantidad: cantidad
 				},
 				success: function (response) {
 					if (response.success) {
@@ -820,37 +850,26 @@ window.App = React.createClass({
 						alert(response.msg);
 					}
 				}.bind(this)
-			}, tabla);
+			}, panel);
 		} else {
 			alert('Hay que procesarlo');
 		}
+		*/
 	},
-	hacerMaterial6: function hacerMaterial6(tag, fila, tabla, panel) {
-		if (parseInt(fila.props.datos.procesadopedidos)) {
-			ajax({
-				metodo: 'post',
-				url: 'hacerMaterial.php',
-				params: {
-					id: fila.props.datos.materialpedidos,
-					cantidad: 6
-				},
-				success: function (response) {
-					if (response.success) {
-						this.refrescarInicio();
-					} else {
-						alert(response.msg);
-					}
-				}.bind(this)
-			}, tabla);
-		} else {
-			alert('Hay que procesarlo');
-		}
+	accionHacerMaterial: function (tag, fila, tabla, panel) {
+		this.hacerMaterial(fila.props.datos.materialpedidos, 1, panel);
+	},
+	accionHacerMaterial3: function (tag, fila, tabla, panel) {
+		this.hacerMaterial(fila.props.datos.materialpedidos, 3, panel);
+	},
+	accionHacerMaterial6: function (tag, fila, tabla, panel) {
+		this.hacerMaterial(fila.props.datos.materialpedidos, 6, panel);
 	},
 	accionProcesarPedidos: function (tag, fila, tabla, panel) {
 
 		this.cargarBD(function (data) {
 			var idtipos_pedido = fila.props.datos.idtipos_pedido;
-			var mapas = {};
+
 			var pedidos_filtrados = data.pedidos.filter(function (item) {
 				return item.tipopedidos == idtipos_pedido;
 			});
@@ -866,16 +885,6 @@ window.App = React.createClass({
 			}.bind(this);
 
 			pedidos_filtrados.promesas(fnPromesa, successPromesa, errorPromesa, this);
-
-/*
-			for (var i = 0 ; i < pedidos_filtrados.length ; i++) {
-				var pedido = pedidos_filtrados[i];
-
-				this.procesarPedido(pedido, data, function () {
-					this.refrescarInicio();
-				}.bind(this));
-			}
-			*/
 		}.bind(this));
 	},
 	claseFilaNecesita: function claseFilaNecesita(datos) {
