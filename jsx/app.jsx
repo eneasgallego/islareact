@@ -352,7 +352,7 @@ window.App = React.createClass({
 			tag: 'accionProcesarPedidos'
 		}, {
 			texto: 'cerrar',
-			tag: 'cerrarPedido'
+			tag: 'accionCerrarPedido'
 		}];
 	},
 	accionesPedido: function () {
@@ -458,6 +458,51 @@ window.App = React.createClass({
 			obj.faltamateriales = obj.cantidadpedidos - material.stockmateriales - material.haciendomateriales;
 
 			map[idmaterial] = obj;
+		}
+
+		return ret;
+	},
+	getVistaPedido: function (bd) {
+		var ret = [];
+		var map = {};
+		var mapas = {};
+
+		var vistaFabricas = this.getVistaFabricas(bd);
+		var vistaMaterialesFalta = this.getVistaMaterialesFalta(bd);
+
+		for (var i = 0 ; i < bd.pedidos.length ; i++) {
+			var pedido = bd.pedidos[i];
+
+			var materiales = this.getMapa('materiales','id',mapas,bd.materiales);
+			var material = materiales[pedido.materialpedidos];
+
+			var mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
+			var fabrica = mapVistaFabricas[material.fabricamateriales];
+
+			var mapVistaMaterialesFalta = this.getMapa('vistaMaterialesFalta','idmateriales',mapas,vistaMaterialesFalta);
+			var material_falta = mapVistaMaterialesFalta[material.id];
+
+			var id = pedido.id;
+
+			var obj = map[id];
+			if (!obj) {
+				obj = {
+					idpedidos: id,
+					tipopedidos: pedido.tipopedidos,
+					procesadopedidos: pedido.procesadopedidos,
+					materialpedidos: material.id,
+					nombremateriales: material.nombremateriales,
+					cantidadpedidos: pedido.cantidadpedidos,
+					stockmateriales: material.stockmateriales,
+					haciendomateriales: material.haciendomateriales,
+					maximofabricas: fabrica.maximofabricas,
+					haciendofabricas: fabrica.haciendofabricas,
+					faltanecesita: material_falta.dif
+				};
+				ret.push(obj);
+			}
+
+			map[id] = obj;
 		}
 
 		return ret;
@@ -650,7 +695,7 @@ window.App = React.createClass({
 			error: error
 		});
 	},
-	eliminar: function (tabla, id_campo, id) {
+	eliminar: function (tabla, id_campo, id, callback, error) {
 		var url = 'http://localhost:3000/' + tabla + '/' + id;
 
 		ajax({
@@ -724,7 +769,7 @@ window.App = React.createClass({
 
 		if (bd) {
 			if (pedido.procesadopedidos) {
-				error('Ya está procesado');
+				callback();
 			} else {
 				var mapas = {};
 
@@ -758,6 +803,8 @@ window.App = React.createClass({
 						}.bind(this);
 
 						materiales_necesita.promesas(fnPromesa, callback, error, this);
+					} else {
+						callback();
 					}
 				}.bind(this), error);
 			}
@@ -779,15 +826,12 @@ window.App = React.createClass({
 				return a.profundidadpedidos > b.profundidadpedidos;
 			})[0];
 
-			//$pedido = getArraySQL("SELECT * FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13 and profundidadpedidos = (SELECT max(profundidadpedidos) FROM ".$_SESSION['tabla_pedidos']." WHERE materialpedidos=$id and tipopedidos=13)");
 			var pedido = pedidos.buscar('profundidadpedidos', pedido_profundo.profundidadpedidos);
 			var dif = pedido.cantidadpedidos - cantidad;
 			if (dif > 0) {
-				//array_push($ret, editar($_SESSION['tabla_pedidos'], array("cantidadpedidos"=>$dif), "idpedidos", $pedido->idpedidos));
 				pedido.cantidadpedidos = dif;
 				this.editar('pedidos',pedido,'id',pedido.id);
 			} else {
-//				array_push($ret, eliminar($_SESSION['tabla_pedidos'], "idpedidos", $pedido->idpedidos));
 				this.eliminar('pedidos','id',pedido.id, function () {
 					if (dif < 0) {
 						this.limpiarPedidos(id, cantidad + dif, bd);
@@ -800,11 +844,9 @@ window.App = React.createClass({
 		this.cargarBD(function (data) {
 			var mapas = {};
 
-			//$material = getArraySQL("SELECT * FROM materiales WHERE idmateriales=$id")[0];
 			var materiales = this.getMapa('materiales', 'id', mapas, data.materiales);
 			var material = materiales[id];
 
-			//$fabrica = getArraySQL("SELECT * FROM vistaFabricas WHERE fabricamateriales=$material->fabricamateriales")[0];
 			var vistaFabricas = this.getVistaFabricas(data);
 			var mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
 			var fabrica = mapVistaFabricas[material.fabricamateriales];
@@ -813,7 +855,6 @@ window.App = React.createClass({
 				if (fabrica.haciendomateriales >= fabrica.maximofabricas) {
 					console.error('Fabrica completa');
 				} else {
-//					$materiales_necesita = getArraySQL("SELECT * FROM vistaMaterialesNecesita WHERE materialmateriales_necesita=$id");
 					var materiales_necesita = this.getVistaMaterialesNecesita(data).filter(function (item) {
 						return item.materialmateriales_necesita == id;
 					});
@@ -822,17 +863,14 @@ window.App = React.createClass({
 							return material_necesita.cantidadmateriales_necesita - material_necesita.stockmaterialesnecesita > 0;
 						})) {
 
-//						array_push($ret['sql'], editar("materiales", array("haciendomateriales"=>$material->haciendomateriales + $material->hacemateriales), "idmateriales", $id));
 						material.haciendomateriales += material.hacemateriales;
 						this.editar('materiales',material,'id',material.id, function () {
 
 							var fnPromesa = function (material_necesita, index, resolve, reject) {
 								var dif = material_necesita.stockmaterialesnecesita - material_necesita.cantidadmateriales_necesita;
-								//array_push($ret['sql'], editar("materiales", array("stockmateriales"=>$dif), "idmateriales", $material_necesita->materialnecesitamateriales_necesita));
 								var auxMaterial = materiales[material_necesita.materialnecesitamateriales_necesita];
 								auxMaterial.stockmateriales = dif;
 								this.editar('materiales',auxMaterial,'id',auxMaterial.id, function () {
-//									$sql = limpiarPedidos($material_necesita->materialnecesitamateriales_necesita, $material_necesita->cantidadmateriales_necesita);
 									this.limpiarPedidos(material_necesita.materialnecesitamateriales_necesita, material_necesita.cantidadmateriales_necesita, data, resolve);
 								}.bind(this), reject);
 							}.bind(this);
@@ -848,32 +886,10 @@ window.App = React.createClass({
 					}
 				}
 			} else {
-				//array_push($ret['sql'], editar("materiales", array("stockmateriales"=>$material->stockmateriales + ($material->hacemateriales * $cantidad)), "idmateriales", $id));
 				material.stockmateriales += (material.hacemateriales * cantidad);
 				this.editar('materiales',material,'id',material.id, this.refrescarInicio);
 			}
 		}.bind(this));
-/*
-		if (parseInt(datos.procesadopedidos)) {
-			ajax({
-				metodo: 'post',
-				url: 'hacerMaterial.php',
-				params: {
-					id: datos.materialpedidos,
-					cantidad: cantidad
-				},
-				success: function (response) {
-					if (response.success) {
-						this.refrescarInicio();
-					} else {
-						alert(response.msg);
-					}
-				}.bind(this)
-			}, panel);
-		} else {
-			alert('Hay que procesarlo');
-		}
-		*/
 	},
 	accionHacerMaterial: function (tag, fila, tabla, panel) {
 		this.hacerMaterial(fila.props.datos.materialpedidos, 1, panel);
@@ -883,6 +899,43 @@ window.App = React.createClass({
 	},
 	accionHacerMaterial6: function (tag, fila, tabla, panel) {
 		this.hacerMaterial(fila.props.datos.materialpedidos, 6, panel);
+	},
+	cerrarPedido: function(id, bd) {
+		var mapas = {};
+
+		var vistaPedido = this.getVistaPedido(bd);
+		var pedidos = vistaPedido.filter(function (item) {
+			return item.tipopedidos == id;
+		});
+
+		var fnPromesa = function (pedido, index, resolve, reject) {
+			var materiales = this.getMapa('materiales','id',mapas,bd.materiales);
+			var material = materiales[pedido.materialpedidos];
+			material.stockmateriales -= pedido.cantidadpedidos
+			this.editar('materiales',material,'id',material.id, resolve, reject);
+		}.bind(this);
+		var successPromesa = function () {
+			var pedidos_eliminar = bd.pedidos.filter(function (item) {
+				return item.tipopedidos == id;
+			});
+			var fnPromesaEliminar = function (item, index, resolve, reject) {
+				this.eliminar('pedidos','id',item.id, resolve, reject);
+			}.bind(this);
+			var successPromesaEliminar = function () {
+				this.refrescarInicio();
+			}.bind(this);
+			pedidos_eliminar.promesas(fnPromesaEliminar, successPromesaEliminar, errorPromesa, this);
+		}.bind(this);
+		var errorPromesa = function (err) {
+			console.error(err);
+		}.bind(this);
+
+		pedidos.promesas(fnPromesa, successPromesa, errorPromesa, this);
+	},
+	accionCerrarPedido: function (tag, fila, tabla, panel) {
+		this.cargarBD(function (data) {
+			this.cerrarPedido(fila.props.datos.idtipos_pedido, data);
+		}.bind(this));
 	},
 	accionProcesarPedidos: function (tag, fila, tabla, panel) {
 

@@ -17,7 +17,7 @@
       "nombremateriales": "Algodón",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 13,
+      "stockmateriales": -2,
       "id": 1
     },
     {
@@ -64,7 +64,7 @@
       "nombremateriales": "Arroz",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 22,
+      "stockmateriales": 12,
       "haciendomateriales": 0,
       "id": 7
     },
@@ -163,14 +163,6 @@
     }
   ],
   "pedidos": [
-    {
-      "procesadopedidos": true,
-      "tipopedidos": 2,
-      "materialpedidos": 1,
-      "cantidadpedidos": 10,
-      "profundidadpedidos": -1,
-      "id": 1
-    },
     {
       "tipopedidos": 2,
       "materialpedidos": 2,
@@ -292,20 +284,12 @@
       "id": 16
     },
     {
-      "tipopedidos": 1,
+      "tipopedidos": 2,
       "materialpedidos": 1,
-      "cantidadpedidos": 3,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 17
-    },
-    {
-      "tipopedidos": 4,
-      "materialpedidos": 7,
       "cantidadpedidos": 10,
       "procesadopedidos": true,
       "profundidadpedidos": 0,
-      "id": 18
+      "id": 19
     }
   ]
 }
