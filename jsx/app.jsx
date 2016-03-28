@@ -165,7 +165,6 @@ window.App = React.createClass({
 					id: 'materiales',
 					titulo: 'Materiales',
 					url: 'http://localhost:3000/db',
-//					url: 'vistaNecesitaMateriales.php',
 					parseData: 'parseDataNecesitaMateriales',
 					id_campo: 'materialpedidos',
 					cols: 'colsNecesitaMateriales',
@@ -397,11 +396,12 @@ window.App = React.createClass({
 			tag: 'accionProcesarPedido'
 		}];
 	},
-	cargarBD: function (callback) {
+	cargarBD: function (callback, error) {
 		ajax({
 			metodo: 'get',
 			url: 'http://localhost:3000/db',
-			success: callback
+			success: callback,
+			error: error
 		});
 	},
 	calcularTotales: function (par) {
@@ -765,14 +765,135 @@ window.App = React.createClass({
 			error: error
 		});
 	},
+	limpiarPedidos: function (id, cantidad, bd, callback, error) {
+		var mapas = {};
+
+		var tipo_pedido_otros = bd.tipos_pedido.buscar('auxtipos_pedido', true);
+		var pedidos = bd.pedidos.filter(function (item) {
+			return item.materialpedidos == id && item.tipopedidos == tipo_pedido_otros.id;
+		});
+		if (pedidos.length) {
+			var pedido = pedidos.sort(function (a, b) {
+				return a.profundidadpedidos < b.profundidadpedidos;
+			})[0];
+
+			var dif = pedido.cantidadpedidos - cantidad;
+			if (dif > 0) {
+				pedido.cantidadpedidos = dif;
+				this.editar('pedidos',pedido,'id',pedido.id, callback, error);
+			} else {
+				this.eliminar('pedidos','id',pedido.id, function () {
+					bd.pedidos.splice(bd.pedidos.indexOf(pedido), 1);
+					if (dif < 0) {
+						this.limpiarPedidos(id, cantidad + dif, bd, callback, error);
+					} else {
+						callback();
+					}
+				}.bind(this));
+			}
+		} else {
+			throw new Error('No hay pedidos de ' + bd.materiales.buscar('id', id).nombremateriales);
+		}
+	},
+	recogerMaterial: function (id, bd, callback, error) {
+		var mapas = {};
+
+		var materiales = this.getMapa('materiales','id',mapas,bd.materiales);
+		var material = materiales[id];
+
+		if (material.haciendomateriales > 0) {
+
+			material.haciendomateriales -= material.hacemateriales;
+			material.stockmateriales += material.hacemateriales;
+
+			this.editar('materiales',material,'id',id,callback, error);
+		} else {
+			throw new Error('No hay nada que recoger');
+		}
+	},
+	hacerMaterial: function (id, cantidad, bd, callback, error) {
+		var mapas = {};
+
+		var materiales = this.getMapa('materiales', 'id', mapas, bd.materiales);
+		var material = materiales[id];
+
+		var vistaFabricas = this.getVistaFabricas(bd);
+		var mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
+		var fabrica = mapVistaFabricas[material.fabricamateriales];
+
+		if (fabrica.maximofabricas >= 0) {
+			if (fabrica.haciendomateriales < fabrica.maximofabricas) {
+				var materiales_necesita = this.getVistaMaterialesNecesita(bd).filter(function (item) {
+					return item.materialmateriales_necesita == id;
+				});
+
+				var material_necesita_falta = materiales_necesita.buscar(function (item) {
+					return item.cantidadmateriales_necesita - item.stockmaterialesnecesita > 0;
+				});
+				if (!material_necesita_falta) {
+
+					material.haciendomateriales += material.hacemateriales;
+					this.editar('materiales',material,'id',material.id, function () {
+
+						var fnPromesa = function (material_necesita, index, resolve, reject) {
+							var dif = material_necesita.stockmaterialesnecesita - material_necesita.cantidadmateriales_necesita;
+							var auxMaterial = materiales[material_necesita.materialnecesitamateriales_necesita];
+							auxMaterial.stockmateriales = dif;
+							this.editar('materiales',auxMaterial,'id',auxMaterial.id, function () {
+								this.limpiarPedidos(material_necesita.materialnecesitamateriales_necesita, material_necesita.cantidadmateriales_necesita, bd, resolve, reject);
+							}.bind(this), reject);
+						}.bind(this);
+
+						materiales_necesita.promesas(fnPromesa, callback, error, this);
+					}.bind(this), error);
+				} else {
+					throw new Error('Falta ' + material_necesita_falta.nombrematerialesnecesita + '.');
+				}
+			} else {
+				throw new Error('Fábrica completa.');
+			}
+		} else {
+			material.stockmateriales += (material.hacemateriales * cantidad);
+			this.editar('materiales',material,'id',material.id, callback, error);
+		}
+	},
+	cerrarPedido: function(id, bd, callback, error) {
+		var mapas = {};
+
+		var vistaPedido = this.getVistaPedido(bd);
+		var pedidos = vistaPedido.filter(function (item) {
+			return item.tipopedidos == id;
+		});
+
+		var fnPromesa = function (pedido, index, resolve, reject) {
+			var materiales = this.getMapa('materiales','id',mapas,bd.materiales);
+			var material = materiales[pedido.materialpedidos];
+			material.stockmateriales -= pedido.cantidadpedidos
+			if (material.stockmateriales < 0) {
+				material.stockmateriales = 0;
+			}
+			this.editar('materiales',material,'id',material.id, resolve, reject);
+		}.bind(this);
+		var successPromesa = function () {
+			var pedidos_eliminar = bd.pedidos.filter(function (item) {
+				return item.tipopedidos == id;
+			});
+			var fnPromesaEliminar = function (item, index, resolve, reject) {
+				this.eliminar('pedidos','id',item.id, resolve, reject);
+			}.bind(this);
+			pedidos_eliminar.promesas(fnPromesaEliminar, callback, error, this);
+		}.bind(this);
+
+		pedidos.promesas(fnPromesa, successPromesa, error, this);
+	},
 	guardarPedidos: function (id, cantidad, padrepedidos, hacemateriales, profundidad, bd, callback, error) {
 		this.insertar('pedidos', {
-				cantidadpedidos: cantidad,
-				materialpedidos: id,
-				padrepedidos: padrepedidos,
-				tipopedidos: bd.tipos_pedido.buscar('auxtipos_pedido', true).id,
-				procesadopedidos: 1,
-				profundidadpedidos: profundidad
+			cantidadpedidos: cantidad,
+			materialpedidos: id,
+			padrepedidos: padrepedidos,
+			tipopedidos: bd.tipos_pedido.buscar('auxtipos_pedido', true).id,
+			procesadopedidos: true,
+			profundidadpedidos: profundidad
 		}, function (pedido) {
 			var idpedidos = pedido.id;
 
@@ -820,247 +941,124 @@ window.App = React.createClass({
 			}
 		}.bind(this), error);
 	},
-	procesarPedido: function (pedido, bd, callback, error) {
+	procesarPedido: function (id, bd, callback, error) {
 
-		if (bd) {
-			if (pedido.procesadopedidos) {
-				callback();
-			} else {
-				var mapas = {};
+		var pedido = bd.pedidos.buscar('id', id);
 
-				pedido.procesadopedidos = true;
-				this.editar('pedidos',pedido,'id',pedido.id, function editarProcesarPedido() {
-					var vistaMaterialesProcesar = this.getVistaMaterialesProcesar(bd);
-					var mapVistaMaterialesProcesar = this.getMapa('vistaMaterialesProcesar', 'materialpedidos', mapas, vistaMaterialesProcesar);
-					var material = mapVistaMaterialesProcesar[pedido.materialpedidos];
-
-					if (material.cantidadpedidos > material.stockmateriales + material.haciendomateriales) {
-						var materiales_necesita = bd.materiales_necesita.filter(function (item) {
-							return item.materialmateriales_necesita == pedido.materialpedidos;
-						});
-
-						var fnPromesa = function promesaProcesarPedido(material_necesita, index, resolve, reject) {
-							var cantidad2 = material.faltamateriales;
-
-							if (cantidad2 > 0) {
-								if (cantidad2 > pedido.cantidadpedidos) {
-									cantidad2 = pedido.cantidadpedidos;
-								}
-								this.guardarPedidos(material_necesita.materialnecesitamateriales_necesita,
-									Math.ceil(material_necesita.cantidadmateriales_necesita * cantidad2 / material.hacemateriales),
-									pedido.id,
-									material.hacemateriales,
-									1,
-									bd,
-									resolve,
-									reject);
-							}
-						}.bind(this);
-
-						materiales_necesita.promesas(fnPromesa, callback, error, this);
-					} else {
-						callback();
-					}
-				}.bind(this), error);
-			}
-		} else {
-			this.cargarBD(function (data) {
-				this.procesarPedido(pedido, data);
-			}.bind(this));
-		}
-	},
-	limpiarPedidos: function (id, cantidad, bd, callback, error) {
-		var mapas = {};
-
-		var tipo_pedido_huerto = bd.tipos_pedido.buscar('auxtipos_pedido', true);
-		var pedidos = bd.pedidos.filter(function (item) {
-			return item.materialpedidos == id && item.tipopedidos == tipo_pedido_huerto.id;
-		});
-		if (pedidos.length) {
-			var pedido_profundo = pedidos.sort(function (a, b) {
-				return a.profundidadpedidos > b.profundidadpedidos;
-			})[0];
-
-			var pedido = pedidos.buscar('profundidadpedidos', pedido_profundo.profundidadpedidos);
-			var dif = pedido.cantidadpedidos - cantidad;
-			if (dif > 0) {
-				pedido.cantidadpedidos = dif;
-				this.editar('pedidos',pedido,'id',pedido.id, callback, error);
-			} else {
-				this.eliminar('pedidos','id',pedido.id, function () {
-					if (dif < 0) {
-						this.limpiarPedidos(id, cantidad + dif, bd, callback, error);
-					} else {
-						callback();
-					}
-				}.bind(this));
-			}
-		} else {
+		if (pedido.procesadopedidos) {
 			callback();
-		}
-	},
-	recogerMaterial: function (id, panel, callback, error) {
-		this.cargarBD(function (data) {
+		} else {
 			var mapas = {};
 
-			var materiales = this.getMapa('materiales','id',mapas,data.materiales);
-			var material = materiales[id];
+			pedido.procesadopedidos = true;
+			this.editar('pedidos',pedido,'id',pedido.id, function () {
+				var vistaMaterialesProcesar = this.getVistaMaterialesProcesar(bd);
+				var mapVistaMaterialesProcesar = this.getMapa('vistaMaterialesProcesar', 'materialpedidos', mapas, vistaMaterialesProcesar);
+				var material = mapVistaMaterialesProcesar[pedido.materialpedidos];
 
-			if (material.haciendomateriales > 0) {
-				material.haciendomateriales -= material.hacemateriales;
-				material.stockmateriales += material.hacemateriales;
-
-				this.editar('materiales',material,'id',id,callback, error);
-			} else {
-				callback();
-			}
-
-		}.bind(this));
-	},
-	hacerMaterial: function (id, cantidad, panel, callback, error) {
-		this.cargarBD(function (data) {
-			var mapas = {};
-
-			var materiales = this.getMapa('materiales', 'id', mapas, data.materiales);
-			var material = materiales[id];
-
-			var vistaFabricas = this.getVistaFabricas(data);
-			var mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
-			var fabrica = mapVistaFabricas[material.fabricamateriales];
-
-			if (fabrica.maximofabricas >= 0) {
-				if (fabrica.haciendomateriales < fabrica.maximofabricas) {
-					var materiales_necesita = this.getVistaMaterialesNecesita(data).filter(function (item) {
-						return item.materialmateriales_necesita == id;
+				if (material.cantidadpedidos > material.stockmateriales + material.haciendomateriales) {
+					var materiales_necesita = bd.materiales_necesita.filter(function (item) {
+						return item.materialmateriales_necesita == pedido.materialpedidos;
 					});
 
-					if (!~materiales_necesita.indice(function (item) {
-							return item.cantidadmateriales_necesita - item.stockmaterialesnecesita > 0;
-						})) {
+					var fnPromesa = function (material_necesita, index, resolve, reject) {
+						var cantidad2 = material.faltamateriales;
 
-						material.haciendomateriales += material.hacemateriales;
-						this.editar('materiales',material,'id',material.id, function () {
+						if (cantidad2 > 0) {
+							if (cantidad2 > pedido.cantidadpedidos) {
+								cantidad2 = pedido.cantidadpedidos;
+							}
+							this.guardarPedidos(material_necesita.materialnecesitamateriales_necesita,
+								Math.ceil(material_necesita.cantidadmateriales_necesita * cantidad2 / material.hacemateriales),
+								pedido.id,
+								material.hacemateriales,
+								1,
+								bd,
+								resolve,
+								reject);
+						} else {
+							resolve();
+						}
+					}.bind(this);
 
-							var fnPromesa = function (material_necesita, index, resolve, reject) {
-								var dif = material_necesita.stockmaterialesnecesita - material_necesita.cantidadmateriales_necesita;
-								var auxMaterial = materiales[material_necesita.materialnecesitamateriales_necesita];
-								auxMaterial.stockmateriales = dif;
-								this.editar('materiales',auxMaterial,'id',auxMaterial.id, function () {
-									this.limpiarPedidos(material_necesita.materialnecesitamateriales_necesita, material_necesita.cantidadmateriales_necesita, data, resolve, reject);
-								}.bind(this), reject);
-							}.bind(this);
-
-							materiales_necesita.promesas(fnPromesa, callback, error, this);
-						}.bind(this), error);
-					} else {
-						callback();
-					}
+					materiales_necesita.promesas(fnPromesa, callback, error, this);
 				} else {
 					callback();
 				}
-			} else {
-				material.stockmateriales += (material.hacemateriales * cantidad);
-				this.editar('materiales',material,'id',material.id, this.refrescarInicio);
-			}
-		}.bind(this));
-	},
-	accionRecogerMaterial: function (tag, fila, tabla, panel) {
-		if (fila.props.datos.procesadopedidos) {
-			if (fila.props.datos.haciendomateriales > 0) {
-				this.recogerMaterial(fila.props.datos.materialpedidos, panel, function () {
-					this.refrescarInicio();
-				}.bind(this), function (err) {
-					console.error(err);
-				});
-			} else {
-				alert('No se puede');
-			}
-		} else {
-			alert('Hay que procesarlo');
+			}.bind(this), error);
 		}
 	},
-	accionHacerMaterial: function (tag, fila, tabla, panel) {
-		this.hacerMaterial(fila.props.datos.materialpedidos, 1, panel, function () {
-			this.refrescarInicio();
-		}.bind(this), function (err) {
-			console.error(err);
-		});
-	},
-	accionHacerMaterial3: function (tag, fila, tabla, panel) {
-		this.hacerMaterial(fila.props.datos.materialpedidos, 3, panel, function () {
-			this.refrescarInicio();
-		}.bind(this), function (err) {
-			console.error(err);
-		});
-	},
-	accionHacerMaterial6: function (tag, fila, tabla, panel) {
-		this.hacerMaterial(fila.props.datos.materialpedidos, 6, panel, function () {
-			this.refrescarInicio();
-		}.bind(this), function (err) {
-			console.error(err);
-		});
-	},
-	cerrarPedido: function(id, bd, callback, error) {
-		var mapas = {};
-
-		var vistaPedido = this.getVistaPedido(bd);
-		var pedidos = vistaPedido.filter(function (item) {
+	procesarPedidos: function (id, bd, callback, error) {
+		var pedidos_filtrados = bd.pedidos.filter(function (item) {
 			return item.tipopedidos == id;
 		});
 
-		var fnPromesa = function (pedido, index, resolve, reject) {
-			var materiales = this.getMapa('materiales','id',mapas,bd.materiales);
-			var material = materiales[pedido.materialpedidos];
-			material.stockmateriales -= pedido.cantidadpedidos
-			this.editar('materiales',material,'id',material.id, resolve, reject);
-		}.bind(this);
-		var successPromesa = function () {
-			var pedidos_eliminar = bd.pedidos.filter(function (item) {
-				return item.tipopedidos == id;
-			});
-			var fnPromesaEliminar = function (item, index, resolve, reject) {
-				this.eliminar('pedidos','id',item.id, resolve, reject);
-			}.bind(this);
-			pedidos_eliminar.promesas(fnPromesaEliminar, callback, error, this);
+		var fnPromesa = function (item, index, resolve, reject) {
+			this.procesarPedido(item.id, bd, resolve, reject);
 		}.bind(this);
 
-		pedidos.promesas(fnPromesa, successPromesa, error, this);
+		pedidos_filtrados.promesas(fnPromesa, callback, error, this);
+	},
+	gestionarError: function (err) {
+		throw err;
+	},
+	accion: function (accion, par_accion, tabla) {
+		this.cargarBD(function (data) {
+			var fn = typeof(accion) === 'string' ? this[accion] : accion;
+
+			if (typeof(fn) === 'function') {
+				if (! (par_accion instanceof Array)) {
+					par_accion = [];
+				}
+				par_accion.push(data);
+				par_accion.push(function () {
+					tabla.setState({velo: false}, function () {
+						this.refrescarInicio();
+					}.bind(this));
+				}.bind(this));
+				par_accion.push(this.gestionarError);
+				try {
+					tabla.setState({velo: true}, function () {
+						fn.apply(this, par_accion);
+					}.bind(this));
+				} catch (err) {
+					//console.error(err);
+					this.setDialogo({
+						titulo: 'Error',
+						puedeCerrar: true,
+						contenido: err.message
+					});
+				}
+			} else {
+				this.gestionarError('Acción ' + accion + ' inválida');
+			}
+		}.bind(this), this.gestionarError);
+	},
+	accionRecogerMaterial: function (tag, fila, tabla, panel) {
+		this.accion(this.recogerMaterial, [fila.props.datos.materialpedidos], tabla);
+	},
+	accionHacerMaterial: function (tag, fila, tabla, panel) {
+		this.accion(this.hacerMaterial, [fila.props.datos.materialpedidos, 1], tabla);
+	},
+	accionHacerMaterial3: function (tag, fila, tabla, panel) {
+		this.accion(this.hacerMaterial, [fila.props.datos.materialpedidos, 3], tabla);
+	},
+	accionHacerMaterial6: function (tag, fila, tabla, panel) {
+		this.accion(this.hacerMaterial, [fila.props.datos.materialpedidos, 6], tabla);
+	},
+	accionCerrarPedido: function (tag, fila, tabla, panel) {
+		this.accion(this.cerrarPedido, [fila.props.datos.idtipos_pedido], tabla);
+	},
+	accionProcesarPedidos: function (tag, fila, tabla, panel) {
+		this.accion(this.procesarPedidos, [fila.props.datos.idtipos_pedido], tabla);
+	},
+	accionProcesarPedido: function (tag, fila, tabla, panel) {
+		this.accion(this.procesarPedido, [fila.props.datos.idpedidos], tabla);
 	},
 	accionVerPedido: function (tag, fila, tabla, panel) {
 		this.setState({ pedido_ver: fila.props.datos }, function () {
 			this.refs.pedido.refs.tabla.refrescar();
 			this.refs.pedido.dimensionar();
-		}.bind(this));
-	},
-	accionCerrarPedido: function (tag, fila, tabla, panel) {
-		this.cargarBD(function (data) {
-			this.cerrarPedido(fila.props.datos.idtipos_pedido, data, function () {
-				this.refrescarInicio();
-			}.bind(this), function (err) {
-				console.error(err);
-			});
-		}.bind(this));
-	},
-	accionProcesarPedidos: function (tag, fila, tabla, panel) {
-
-		this.cargarBD(function (data) {
-			var idtipos_pedido = fila.props.datos.idtipos_pedido;
-
-			var pedidos_filtrados = data.pedidos.filter(function (item) {
-				return item.tipopedidos == idtipos_pedido;
-			});
-
-			var fnPromesa = function promesaProcesarPedidos(item, index, resolve, reject) {
-				this.procesarPedido(item, data, resolve, reject);
-			}.bind(this);
-			var successPromesa = function successPromesa() {
-				this.refrescarInicio();
-			}.bind(this);
-			var errorPromesa = function errorPromesa(err) {
-				console.error(err);
-			}.bind(this);
-
-			pedidos_filtrados.promesas(fnPromesa, successPromesa, errorPromesa, this);
 		}.bind(this));
 	},
 	claseFilaNecesita: function (datos) {

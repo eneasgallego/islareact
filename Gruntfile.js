@@ -114,5 +114,6 @@ module.exports = function(grunt) {
     grunt.registerTask('fonts', ['webfont']);
     grunt.registerTask('css', ['sass']);
     grunt.registerTask('release', ['jsx','fonts','sass']);
+    grunt.registerTask('release2', ['jsx2','fonts','sass']);
 
 };
