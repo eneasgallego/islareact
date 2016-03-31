@@ -1,6 +1,7 @@
 {
   "name": "isla",
   "version": "0.1.0",
+  "folder": "web/",
   "devDependencies": {
     "babel-plugin-transform-react-jsx": "~6.5.2",
     "babel-preset-es2015": "~6.5.0",

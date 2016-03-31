@@ -3,6 +3,11 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        folder: {
+            js: '<%= pkg.folder %>js/',     // folder.js    -> web/js/
+            fonts: '<%= pkg.folder %>fonts/',     // folder.fonts    -> web/fonts/
+            css: '<%= pkg.folder %>css/'    // folder.css   -> web/css/
+        },
         watch: {
             scripts: {
                 files: ['jsx/**/*.jsx','sass/**/*.scss'],
@@ -16,7 +21,7 @@ module.exports = function(grunt) {
             install: {
                 options: {
                     install: true,
-                    targetDir: './js/lib',
+                    targetDir: './<%= folder.js %>lib/', // bower.install.options.targetDir -> web/js/lib/
                     cleanBowerDir: true,
                     cleanTargetDir: true,
                     verbose: true
@@ -32,22 +37,22 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: './',
-                    src: ['jsx/*.jsx','js/lib/nreactjs/jsx/*.jsx'],
-                    dest: 'js/tmp/',
+                    src: ['jsx/*.jsx','<%= bower.install.options.targetDir %>nreactjs/jsx/*.jsx'],
+                    dest: '<%= folder.js %>tmp/', // babel.jsx.files[0].dest -> web/js/tmp/
                     ext: '.js'
                 }]
             }
         },
         webfont: {
             icons: {
-                src: ['icons/*.svg','js/lib/nreactjs/icons/*.svg'],
-                dest: 'fonts',
+                src: ['icons/*.svg','<%= bower.install.options.targetDir %>nreactjs/icons/*.svg'],
+                dest: '<%= folder.fonts %>',
                 destCss: 'sass/icons',          //Ruta de destino donde se creará la hoja de estilos css y un html ejemplo
                 options: {
                     stylesheet: 'scss',      //Extensión de la hoja de estilos, css
                     relativeFontPath: '../fonts',    //La ruta del src - font-family que se imprime dentro de la hoja de estilos
                     syntax: 'bem',
-                    template: 'js/lib/nreactjs/icons/templates/icons.scss'/*,
+                    template: '<%= bower.install.options.targetDir %>nreactjs/icons/templates/icons.scss'/*,
                     templateOptions: {
                         baseClass: 'icon',
                         classPrefix: 'icon-',
@@ -59,11 +64,11 @@ module.exports = function(grunt) {
         sass: {
             dist: {
                 options: {
-                    loadPath: [ 'js/lib/nreactjs/sass/','sass/icons/' ],
+                    loadPath: [ '<%= bower.install.options.targetDir %>nreactjs/sass/','sass/icons/' ],
                     style: 'expanded'
                 },
                 files: {
-                    'css/styles.css': 'sass/styles.scss'
+                    '<%= folder.css %>styles.css': 'sass/styles.scss'
                 }
             }
         },
@@ -73,31 +78,32 @@ module.exports = function(grunt) {
                 stripBanners: true,
                 banner: '/*! <%= grunt.template.today("yyyy-mm-dd") %> */'
             },
-            dist: {
-                src: [  'js/tmp/js/lib/nreactjs/jsx/base.js',
+            dist: { // web/js/tmp/ web/js/lib/
+                src: [  '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/base.js',
 
-                        'js/tmp/js/lib/nreactjs/jsx/boton.js',
-                        'js/tmp/js/lib/nreactjs/jsx/menu_item.js',
-                        'js/tmp/js/lib/nreactjs/jsx/menu.js',
+                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/boton.js',
+                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/menu_item.js',
+                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/menu.js',
 
-                        'js/tmp/js/lib/nreactjs/jsx/dialogo.js',
+                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/dialogo.js',
                         
-                        'js/tmp/js/lib/nreactjs/jsx/combo.js',
-                        'js/tmp/js/lib/nreactjs/jsx/checkbox.js',
-                        'js/tmp/js/lib/nreactjs/jsx/textfield.js',
+                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/combo.js',
+                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/checkbox.js',
+                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/textfield.js',
                         
-                        'js/tmp/js/lib/nreactjs/jsx/celda.js',
-                        'js/tmp/js/lib/nreactjs/jsx/fila.js',
-                        'js/tmp/js/lib/nreactjs/jsx/tabla.js',
+                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/celda.js',
+                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/fila.js',
+                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/tabla.js',
                         
-                        'js/tmp/js/lib/nreactjs/jsx/lista_tabla.js',
-                        'js/tmp/js/lib/nreactjs/jsx/panel_tabla.js',
+                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/lista_tabla.js',
+                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/panel_tabla.js',
 
-                        'js/tmp/jsx/app.js' ],
-                dest: 'js/app.js'
+                        '<%= babel.jsx.files[0].dest %>jsx/app.js' ],
+                dest: '<%= folder.js %>app.js'
+                //dest: '<%= babel.jsx.files[0].dest %>app.js'
             }
         },
-        clean: ["js/tmp"]
+        clean: ["<%= babel.jsx.files[0].dest %>"]
     });
 
     grunt.loadNpmTasks('grunt-babel');
