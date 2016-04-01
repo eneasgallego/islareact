@@ -94,6 +94,11 @@
       "nombrefabricas": "Pastelería",
       "maximofabricas": 3,
       "id": 19
+    },
+    {
+      "nombrefabricas": "Joyería",
+      "maximofabricas": 3,
+      "id": 20
     }
   ],
   "materiales": [
@@ -102,14 +107,14 @@
       "nombremateriales": "Algodón",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 6,
+      "stockmateriales": 3,
       "id": 1
     },
     {
       "nombremateriales": "Bambu",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 12,
+      "stockmateriales": 10,
       "haciendomateriales": 0,
       "id": 2
     },
@@ -117,7 +122,7 @@
       "nombremateriales": "Vainilla",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 16,
+      "stockmateriales": 18,
       "haciendomateriales": 0,
       "id": 3
     },
@@ -125,7 +130,7 @@
       "nombremateriales": "Café",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 10,
+      "stockmateriales": 11,
       "haciendomateriales": 0,
       "id": 4
     },
@@ -133,7 +138,7 @@
       "nombremateriales": "Trigo",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 10,
+      "stockmateriales": 12,
       "haciendomateriales": 0,
       "id": 5
     },
@@ -149,7 +154,7 @@
       "nombremateriales": "Arroz",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 23,
+      "stockmateriales": 6,
       "haciendomateriales": 0,
       "id": 7
     },
@@ -181,7 +186,7 @@
       "nombremateriales": "Granada",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 5,
+      "stockmateriales": 6,
       "haciendomateriales": 0,
       "id": 11
     },
@@ -197,7 +202,7 @@
       "nombremateriales": "Chile",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 5,
+      "stockmateriales": 4,
       "haciendomateriales": 0,
       "id": 13
     },
@@ -205,7 +210,7 @@
       "nombremateriales": "Coco",
       "fabricamateriales": 2,
       "hacemateriales": 3,
-      "stockmateriales": 6,
+      "stockmateriales": 4,
       "haciendomateriales": 0,
       "id": 14
     },
@@ -229,7 +234,7 @@
       "nombremateriales": "Cangrejo",
       "fabricamateriales": 3,
       "hacemateriales": 1,
-      "stockmateriales": 1,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 17
     },
@@ -237,7 +242,7 @@
       "nombremateriales": "Redes",
       "fabricamateriales": 4,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 1,
       "haciendomateriales": 0,
       "id": 18
     },
@@ -261,8 +266,8 @@
       "nombremateriales": "Piña Parrilla",
       "fabricamateriales": 7,
       "hacemateriales": 1,
-      "stockmateriales": 0,
-      "haciendomateriales": 3,
+      "stockmateriales": 1,
+      "haciendomateriales": 0,
       "id": 21
     },
     {
@@ -301,7 +306,7 @@
       "nombremateriales": "Hierro",
       "fabricamateriales": 12,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 6,
       "haciendomateriales": 0,
       "id": 26
     },
@@ -333,7 +338,7 @@
       "nombremateriales": "Pescado",
       "fabricamateriales": 3,
       "hacemateriales": 1,
-      "stockmateriales": 2,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 30
     },
@@ -341,7 +346,7 @@
       "nombremateriales": "Cestos",
       "fabricamateriales": 4,
       "hacemateriales": 1,
-      "stockmateriales": 1,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 31
     },
@@ -350,15 +355,15 @@
       "fabricamateriales": 14,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 0,
+      "haciendomateriales": 2,
       "id": 32
     },
     {
       "nombremateriales": "Botella",
       "fabricamateriales": 15,
       "hacemateriales": 1,
-      "stockmateriales": 2,
-      "haciendomateriales": 0,
+      "stockmateriales": 4,
+      "haciendomateriales": 1,
       "id": 33
     },
     {
@@ -366,7 +371,7 @@
       "fabricamateriales": 8,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 2,
+      "haciendomateriales": 0,
       "id": 34
     },
     {
@@ -381,8 +386,8 @@
       "nombremateriales": "Camarón",
       "fabricamateriales": 3,
       "hacemateriales": 1,
-      "stockmateriales": 8,
-      "haciendomateriales": 0,
+      "stockmateriales": 5,
+      "haciendomateriales": 5,
       "id": 36
     },
     {
@@ -390,15 +395,15 @@
       "fabricamateriales": 16,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 1,
+      "haciendomateriales": 0,
       "id": 37
     },
     {
       "nombremateriales": "Algas",
       "fabricamateriales": 13,
       "hacemateriales": 1,
-      "stockmateriales": 1,
-      "haciendomateriales": 4,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
       "id": 38
     },
     {
@@ -413,8 +418,8 @@
       "nombremateriales": "Cuerdas",
       "fabricamateriales": 6,
       "hacemateriales": 1,
-      "stockmateriales": 2,
-      "haciendomateriales": 0,
+      "stockmateriales": 1,
+      "haciendomateriales": 1,
       "id": 40
     },
     {
@@ -429,15 +434,15 @@
       "nombremateriales": "Café Leche",
       "fabricamateriales": 5,
       "hacemateriales": 1,
-      "stockmateriales": 1,
-      "haciendomateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
       "id": 42
     },
     {
       "nombremateriales": "Leche Coco",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 2,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 43
     },
@@ -445,8 +450,8 @@
       "nombremateriales": "Sopa Algas",
       "fabricamateriales": 10,
       "hacemateriales": 1,
-      "stockmateriales": 0,
-      "haciendomateriales": 3,
+      "stockmateriales": 3,
+      "haciendomateriales": 0,
       "id": 44
     },
     {
@@ -454,7 +459,7 @@
       "fabricamateriales": 18,
       "hacemateriales": 3,
       "stockmateriales": 1,
-      "haciendomateriales": 3,
+      "haciendomateriales": 0,
       "id": 45
     },
     {
@@ -470,7 +475,7 @@
       "fabricamateriales": 9,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 2,
+      "haciendomateriales": 0,
       "id": 47
     },
     {
@@ -501,8 +506,8 @@
       "nombremateriales": "Sushi Salmón",
       "fabricamateriales": 16,
       "hacemateriales": 1,
-      "stockmateriales": 0,
-      "haciendomateriales": 3,
+      "stockmateriales": 1,
+      "haciendomateriales": 0,
       "id": 51
     },
     {
@@ -557,15 +562,15 @@
       "nombremateriales": "Savia",
       "fabricamateriales": 18,
       "hacemateriales": 3,
-      "stockmateriales": 0,
-      "haciendomateriales": 6,
+      "stockmateriales": 2,
+      "haciendomateriales": 3,
       "id": 58
     },
     {
       "nombremateriales": "Marco Plata",
       "fabricamateriales": 15,
       "hacemateriales": 1,
-      "stockmateriales": 2,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 59
     },
@@ -576,6 +581,126 @@
       "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 60
+    },
+    {
+      "nombremateriales": "Camarón Parrilla",
+      "fabricamateriales": 7,
+      "hacemateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
+      "id": 61
+    },
+    {
+      "nombremateriales": "Café Helado",
+      "fabricamateriales": 5,
+      "hacemateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
+      "id": 62
+    },
+    {
+      "nombremateriales": "Sushi Camarón",
+      "fabricamateriales": 16,
+      "hacemateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
+      "id": 63
+    },
+    {
+      "nombremateriales": "Café Moka",
+      "fabricamateriales": 5,
+      "hacemateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
+      "id": 64
+    },
+    {
+      "nombremateriales": "Guiso Pescado",
+      "fabricamateriales": 10,
+      "hacemateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
+      "id": 65
+    },
+    {
+      "nombremateriales": "Sushi Arco Iris",
+      "fabricamateriales": 16,
+      "hacemateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
+      "id": 66
+    },
+    {
+      "nombremateriales": "Pastel Arándanos",
+      "fabricamateriales": 19,
+      "hacemateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
+      "id": 67
+    },
+    {
+      "nombremateriales": "Llave",
+      "fabricamateriales": 11,
+      "hacemateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
+      "id": 68
+    },
+    {
+      "nombremateriales": "Conchas",
+      "fabricamateriales": 13,
+      "hacemateriales": 1,
+      "stockmateriales": 2,
+      "haciendomateriales": 0,
+      "id": 69
+    },
+    {
+      "nombremateriales": "Collar",
+      "fabricamateriales": 8,
+      "hacemateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
+      "id": 70
+    },
+    {
+      "nombremateriales": "Barril",
+      "fabricamateriales": 17,
+      "hacemateriales": 1,
+      "stockmateriales": 5,
+      "haciendomateriales": 0,
+      "id": 71
+    },
+    {
+      "nombremateriales": "Pulsera",
+      "fabricamateriales": 20,
+      "hacemateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
+      "id": 72
+    },
+    {
+      "nombremateriales": "Catalejo",
+      "fabricamateriales": 9,
+      "hacemateriales": 1,
+      "stockmateriales": 5,
+      "haciendomateriales": 0,
+      "id": 73
+    },
+    {
+      "nombremateriales": "Lente",
+      "fabricamateriales": 15,
+      "hacemateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
+      "id": 74
+    },
+    {
+      "nombremateriales": "Lingote Hierro",
+      "fabricamateriales": 11,
+      "hacemateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
+      "id": 75
     }
   ],
   "materiales_necesita": [
@@ -1028,6 +1153,198 @@
       "materialnecesitamateriales_necesita": 27,
       "cantidadmateriales_necesita": 1,
       "id": 75
+    },
+    {
+      "materialmateriales_necesita": 61,
+      "materialnecesitamateriales_necesita": 36,
+      "cantidadmateriales_necesita": 3,
+      "id": 76
+    },
+    {
+      "materialmateriales_necesita": 61,
+      "materialnecesitamateriales_necesita": 10,
+      "cantidadmateriales_necesita": 1,
+      "id": 77
+    },
+    {
+      "materialmateriales_necesita": 62,
+      "materialnecesitamateriales_necesita": 4,
+      "cantidadmateriales_necesita": 3,
+      "id": 78
+    },
+    {
+      "materialmateriales_necesita": 63,
+      "materialnecesitamateriales_necesita": 36,
+      "cantidadmateriales_necesita": 3,
+      "id": 79
+    },
+    {
+      "materialmateriales_necesita": 63,
+      "materialnecesitamateriales_necesita": 38,
+      "cantidadmateriales_necesita": 3,
+      "id": 80
+    },
+    {
+      "materialmateriales_necesita": 63,
+      "materialnecesitamateriales_necesita": 7,
+      "cantidadmateriales_necesita": 6,
+      "id": 81
+    },
+    {
+      "materialmateriales_necesita": 64,
+      "materialnecesitamateriales_necesita": 13,
+      "cantidadmateriales_necesita": 1,
+      "id": 82
+    },
+    {
+      "materialmateriales_necesita": 64,
+      "materialnecesitamateriales_necesita": 12,
+      "cantidadmateriales_necesita": 2,
+      "id": 83
+    },
+    {
+      "materialmateriales_necesita": 64,
+      "materialnecesitamateriales_necesita": 4,
+      "cantidadmateriales_necesita": 3,
+      "id": 84
+    },
+    {
+      "materialmateriales_necesita": 64,
+      "materialnecesitamateriales_necesita": 43,
+      "cantidadmateriales_necesita": 1,
+      "id": 85
+    },
+    {
+      "materialmateriales_necesita": 65,
+      "materialnecesitamateriales_necesita": 30,
+      "cantidadmateriales_necesita": 2,
+      "id": 86
+    },
+    {
+      "materialmateriales_necesita": 65,
+      "materialnecesitamateriales_necesita": 10,
+      "cantidadmateriales_necesita": 1,
+      "id": 87
+    },
+    {
+      "materialmateriales_necesita": 66,
+      "materialnecesitamateriales_necesita": 30,
+      "cantidadmateriales_necesita": 3,
+      "id": 88
+    },
+    {
+      "materialmateriales_necesita": 66,
+      "materialnecesitamateriales_necesita": 38,
+      "cantidadmateriales_necesita": 3,
+      "id": 89
+    },
+    {
+      "materialmateriales_necesita": 66,
+      "materialnecesitamateriales_necesita": 7,
+      "cantidadmateriales_necesita": 6,
+      "id": 90
+    },
+    {
+      "materialmateriales_necesita": 67,
+      "materialnecesitamateriales_necesita": 8,
+      "cantidadmateriales_necesita": 1,
+      "id": 91
+    },
+    {
+      "materialmateriales_necesita": 67,
+      "materialnecesitamateriales_necesita": 5,
+      "cantidadmateriales_necesita": 2,
+      "id": 92
+    },
+    {
+      "materialmateriales_necesita": 67,
+      "materialnecesitamateriales_necesita": 9,
+      "cantidadmateriales_necesita": 3,
+      "id": 93
+    },
+    {
+      "materialmateriales_necesita": 68,
+      "materialnecesitamateriales_necesita": 26,
+      "cantidadmateriales_necesita": 1,
+      "id": 94
+    },
+    {
+      "materialmateriales_necesita": 68,
+      "materialnecesitamateriales_necesita": 48,
+      "cantidadmateriales_necesita": 1,
+      "id": 95
+    },
+    {
+      "materialmateriales_necesita": 69,
+      "materialnecesitamateriales_necesita": 31,
+      "cantidadmateriales_necesita": 1,
+      "id": 96
+    },
+    {
+      "materialmateriales_necesita": 70,
+      "materialnecesitamateriales_necesita": 69,
+      "cantidadmateriales_necesita": 2,
+      "id": 97
+    },
+    {
+      "materialmateriales_necesita": 70,
+      "materialnecesitamateriales_necesita": 29,
+      "cantidadmateriales_necesita": 1,
+      "id": 98
+    },
+    {
+      "materialmateriales_necesita": 71,
+      "materialnecesitamateriales_necesita": 26,
+      "cantidadmateriales_necesita": 1,
+      "id": 99
+    },
+    {
+      "materialmateriales_necesita": 71,
+      "materialnecesitamateriales_necesita": 2,
+      "cantidadmateriales_necesita": 3,
+      "id": 100
+    },
+    {
+      "materialmateriales_necesita": 72,
+      "materialnecesitamateriales_necesita": 60,
+      "cantidadmateriales_necesita": 2,
+      "id": 101
+    },
+    {
+      "materialmateriales_necesita": 72,
+      "materialnecesitamateriales_necesita": 48,
+      "cantidadmateriales_necesita": 3,
+      "id": 102
+    },
+    {
+      "materialmateriales_necesita": 73,
+      "materialnecesitamateriales_necesita": 74,
+      "cantidadmateriales_necesita": 2,
+      "id": 103
+    },
+    {
+      "materialmateriales_necesita": 73,
+      "materialnecesitamateriales_necesita": 39,
+      "cantidadmateriales_necesita": 1,
+      "id": 104
+    },
+    {
+      "materialmateriales_necesita": 73,
+      "materialnecesitamateriales_necesita": 60,
+      "cantidadmateriales_necesita": 1,
+      "id": 105
+    },
+    {
+      "materialmateriales_necesita": 74,
+      "materialnecesitamateriales_necesita": 28,
+      "cantidadmateriales_necesita": 1,
+      "id": 106
+    },
+    {
+      "materialmateriales_necesita": 75,
+      "materialnecesitamateriales_necesita": 26,
+      "cantidadmateriales_necesita": 2,
+      "id": 107
     }
   ],
   "tipos_pedido": [
@@ -1098,6 +1415,11 @@
       "nombretipos_pedido": "Barco 4",
       "auxtipos_pedido": false,
       "id": 14
+    },
+    {
+      "nombretipos_pedido": "Pedido 6",
+      "auxtipos_pedido": false,
+      "id": 15
     }
   ],
   "pedidos": [
@@ -1230,205 +1552,76 @@
       "id": 16
     },
     {
-      "tipopedidos": 14,
-      "materialpedidos": 44,
-      "cantidadpedidos": 3,
+      "tipopedidos": 4,
+      "materialpedidos": 36,
+      "cantidadpedidos": 10,
       "procesadopedidos": true,
       "profundidadpedidos": 0,
-      "id": 32
+      "id": 396
     },
     {
-      "tipopedidos": 10,
-      "materialpedidos": 47,
-      "cantidadpedidos": 2,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 88
-    },
-    {
-      "tipopedidos": 1,
-      "materialpedidos": 37,
-      "cantidadpedidos": 2,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 135
-    },
-    {
-      "tipopedidos": 1,
-      "materialpedidos": 42,
-      "cantidadpedidos": 2,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 136
-    },
-    {
-      "tipopedidos": 5,
-      "materialpedidos": 21,
-      "cantidadpedidos": 3,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 139
-    },
-    {
-      "tipopedidos": 5,
-      "materialpedidos": 45,
-      "cantidadpedidos": 3,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 140
-    },
-    {
-      "tipopedidos": 5,
-      "materialpedidos": 38,
-      "cantidadpedidos": 3,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 141
-    },
-    {
-      "tipopedidos": 5,
-      "materialpedidos": 56,
-      "cantidadpedidos": 2,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 142
-    },
-    {
-      "tipopedidos": 6,
-      "materialpedidos": 43,
-      "cantidadpedidos": 2,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 143
-    },
-    {
-      "tipopedidos": 6,
-      "materialpedidos": 34,
-      "cantidadpedidos": 2,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 144
-    },
-    {
-      "cantidadpedidos": 3,
-      "materialpedidos": 38,
-      "padrepedidos": 135,
-      "tipopedidos": 3,
-      "procesadopedidos": 1,
-      "profundidadpedidos": 1,
-      "id": 145
-    },
-    {
-      "cantidadpedidos": 1,
-      "materialpedidos": 17,
-      "padrepedidos": 135,
-      "tipopedidos": 3,
-      "procesadopedidos": 1,
-      "profundidadpedidos": 1,
-      "id": 148
-    },
-    {
-      "cantidadpedidos": 6,
+      "tipopedidos": 4,
       "materialpedidos": 3,
-      "padrepedidos": 142,
-      "tipopedidos": 3,
-      "procesadopedidos": 1,
-      "profundidadpedidos": 1,
-      "id": 166
-    },
-    {
-      "cantidadpedidos": 2,
-      "materialpedidos": 57,
-      "padrepedidos": 142,
-      "tipopedidos": 3,
-      "procesadopedidos": 1,
-      "profundidadpedidos": 1,
-      "id": 167
-    },
-    {
-      "cantidadpedidos": 2,
-      "materialpedidos": 33,
-      "padrepedidos": 167,
-      "tipopedidos": 3,
-      "procesadopedidos": 1,
-      "profundidadpedidos": 2,
-      "id": 168
-    },
-    {
-      "cantidadpedidos": 1,
-      "materialpedidos": 31,
-      "padrepedidos": 169,
-      "tipopedidos": 3,
-      "procesadopedidos": 1,
-      "profundidadpedidos": 4,
-      "id": 170
-    },
-    {
-      "cantidadpedidos": 2,
-      "materialpedidos": 2,
-      "padrepedidos": 170,
-      "tipopedidos": 3,
-      "procesadopedidos": 1,
-      "profundidadpedidos": 5,
-      "id": 171
-    },
-    {
-      "cantidadpedidos": 4,
-      "materialpedidos": 58,
-      "padrepedidos": 167,
-      "tipopedidos": 3,
-      "procesadopedidos": 1,
-      "profundidadpedidos": 2,
-      "id": 172
-    },
-    {
-      "tipopedidos": 7,
-      "materialpedidos": 30,
-      "cantidadpedidos": 2,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 181
-    },
-    {
-      "tipopedidos": 7,
-      "materialpedidos": 51,
-      "cantidadpedidos": 3,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 182
-    },
-    {
       "cantidadpedidos": 6,
-      "materialpedidos": 7,
-      "padrepedidos": 182,
-      "tipopedidos": 3,
-      "procesadopedidos": 1,
-      "profundidadpedidos": 1,
-      "id": 188
+      "procesadopedidos": true,
+      "profundidadpedidos": 0,
+      "id": 397
     },
     {
-      "tipopedidos": 4,
+      "tipopedidos": 5,
       "materialpedidos": 32,
-      "cantidadpedidos": 1,
-      "procesadopedidos": false,
+      "cantidadpedidos": 2,
+      "procesadopedidos": true,
       "profundidadpedidos": 0,
-      "id": 189
+      "id": 398
     },
     {
-      "tipopedidos": 4,
-      "materialpedidos": 16,
-      "cantidadpedidos": 3,
-      "procesadopedidos": false,
+      "tipopedidos": 5,
+      "materialpedidos": 40,
+      "cantidadpedidos": 2,
+      "procesadopedidos": true,
       "profundidadpedidos": 0,
-      "id": 190
+      "id": 399
     },
     {
-      "tipopedidos": 4,
-      "materialpedidos": 59,
+      "tipopedidos": 5,
+      "materialpedidos": 58,
       "cantidadpedidos": 3,
+      "procesadopedidos": true,
+      "profundidadpedidos": 0,
+      "id": 400
+    },
+    {
+      "tipopedidos": 5,
+      "materialpedidos": 73,
+      "cantidadpedidos": 3,
+      "procesadopedidos": true,
+      "profundidadpedidos": 0,
+      "id": 401
+    },
+    {
+      "tipopedidos": 9,
+      "materialpedidos": 33,
+      "cantidadpedidos": 5,
+      "procesadopedidos": true,
+      "profundidadpedidos": 0,
+      "id": 411
+    },
+    {
+      "tipopedidos": 6,
+      "materialpedidos": 4,
+      "cantidadpedidos": 4,
       "procesadopedidos": false,
       "profundidadpedidos": 0,
-      "id": 191
+      "id": 450
+    },
+    {
+      "tipopedidos": 6,
+      "materialpedidos": 62,
+      "cantidadpedidos": 2,
+      "procesadopedidos": false,
+      "profundidadpedidos": 0,
+      "id": 451
     }
   ]
 }
