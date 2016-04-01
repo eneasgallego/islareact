@@ -1023,11 +1023,13 @@ window.App = React.createClass({
 					}.bind(this));
 				} catch (err) {
 					//console.error(err);
-					this.setDialogo({
-						titulo: 'Error',
-						puedeCerrar: true,
-						contenido: err.message
-					});
+					tabla.setState({velo: false}, function () {
+						this.setDialogo({
+							titulo: 'Error',
+							puedeCerrar: true,
+							contenido: err.message
+						});
+					}.bind(this));
 				}
 			} else {
 				this.gestionarError('Acción ' + accion + ' inválida');
