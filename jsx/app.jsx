@@ -235,24 +235,24 @@ window.App = React.createClass({
 	},
 	parseDataPedidos(data, tabla, panel) {
 
-		var ret = [];
-		var map = {};
-		var mapas = {};
+		let ret = [];
+		let map = {};
+		let mapas = {};
 
-		for (var i = 0 ; i < data.pedidos.length ; i++) {
-			var pedido = data.pedidos[i];
+		for (let i = 0 ; i < data.pedidos.length ; i++) {
+			let pedido = data.pedidos[i];
 
-			var id = pedido.tipopedidos;
+			let id = pedido.tipopedidos;
 
-			var tipos_pedido = this.getMapa('tipos_pedido', 'id', mapas, data.tipos_pedido);
-			var tipo_pedido = tipos_pedido[id];
+			let tipos_pedido = this.getMapa('tipos_pedido', 'id', mapas, data.tipos_pedido);
+			let tipo_pedido = tipos_pedido[id];
 
-			var materiales = this.getMapa('materiales', 'id', mapas, data.materiales);
-			var material = materiales[pedido.materialpedidos];
+			let materiales = this.getMapa('materiales', 'id', mapas, data.materiales);
+			let material = materiales[pedido.materialpedidos];
 
-			var faltapedidos = (pedido.cantidadpedidos - material.stockmateriales) > 0;
+			let faltapedidos = (pedido.cantidadpedidos - material.stockmateriales) > 0;
 
-			var obj = map[id];
+			let obj = map[id];
 			if (!obj) {
 				obj = {
 					idtipos_pedido: id,
@@ -278,27 +278,27 @@ window.App = React.createClass({
 		return ret;
 	},
 	parseDataNecesitaMateriales(data, tabla, panel) {
-		var vistaNecesita = this.getVistaNecesita(data);
+		let vistaNecesita = this.getVistaNecesita(data);
 
-		var ret = vistaNecesita.filter(item => {
+		let ret = vistaNecesita.filter(item => {
 			return (!!~item.maximofabricas) && item.stockmateriales < item.cantidadpedidos && item.stockmateriales + item.haciendomateriales < item.cantidadpedidos;
 		});
 
 		return ret;
 	},
 	parseDataNecesita(data, tabla, panel) {
-		var vistaNecesita = this.getVistaNecesita(data);
+		let vistaNecesita = this.getVistaNecesita(data);
 
-		var ret = vistaNecesita.filter(item => {
+		let ret = vistaNecesita.filter(item => {
 			return item.haciendomateriales > 0;
 		});
 
 		return ret;
 	},
 	parseDataHuerto(data, tabla, panel) {
-		var vistaNecesita = this.getVistaNecesita(data);
+		let vistaNecesita = this.getVistaNecesita(data);
 
-		var ret = vistaNecesita.filter(item => {
+		let ret = vistaNecesita.filter(item => {
 			return (!~item.maximofabricas) && item.stockmateriales < item.cantidadpedidos;
 		});
 
@@ -424,9 +424,9 @@ window.App = React.createClass({
 		});
 	},
 	calcularTotales(par) {
-		var ret = {};
+		let ret = {};
 
-		for (var i in par) {
+		for (let i in par) {
 			ret[i] = this.calcularTotal(par[i]);
 			if (par.item) {
 				par.item[i] = ret[i];
@@ -436,13 +436,13 @@ window.App = React.createClass({
 		return ret;
 	},
 	calcularTotal(par) {
-		var ret;
+		let ret;
 
 
-		for (var i = 0 ; i < par.lista.length ; i++) {
-			var item = par.lista[i];
+		for (let i = 0 ; i < par.lista.length ; i++) {
+			let item = par.lista[i];
 
-			var valor;
+			let valor;
 			if (typeof(par.valor) === 'string') {
 				valor = item[par.valor];
 			} else if (typeof(par.valor) === 'function') {
@@ -471,15 +471,15 @@ window.App = React.createClass({
 		return ret;
 	},
 	getVistaMaterialesProcesar(data) {
-		var ret = [];
-		var map = {};
+		let ret = [];
+		let map = {};
 
-		for (var i = 0 ; i < data.materiales.length ; i++) {
-			var material = data.materiales[i];
+		for (let i = 0 ; i < data.materiales.length ; i++) {
+			let material = data.materiales[i];
 
-			var idmaterial = material.id;
+			let idmaterial = material.id;
 
-			var obj = map[idmaterial];
+			let obj = map[idmaterial];
 			if (!obj) {
 				obj = {
 					materialpedidos: idmaterial,
@@ -492,18 +492,18 @@ window.App = React.createClass({
 				ret.push(obj);
 			}
 
-			var pedidos = data.pedidos.filter(item => {
+			let pedidos = data.pedidos.filter(item => {
 				return item.procesadopedidos && idmaterial == item.materialpedidos;
 			});
 
-			var totales = this.calcularTotales({
+			let totales = this.calcularTotales({
 				cantidadpedidos: {
 					tipo: 'SUM',
 					lista: pedidos,
 					valor: 'cantidadpedidos'
 				}
 			});
-			for (var key in totales) {
+			for (let key in totales) {
 				if (typeof(totales[key]) !== 'undefined') {
 					obj[key] = totales[key];
 				}
@@ -517,28 +517,28 @@ window.App = React.createClass({
 		return ret;
 	},
 	getVistaPedido(bd) {
-		var ret = [];
-		var map = {};
-		var mapas = {};
+		let ret = [];
+		let map = {};
+		let mapas = {};
 
-		var vistaFabricas = this.getVistaFabricas(bd);
-		var vistaMaterialesFalta = this.getVistaMaterialesFalta(bd);
+		let vistaFabricas = this.getVistaFabricas(bd);
+		let vistaMaterialesFalta = this.getVistaMaterialesFalta(bd);
 
-		for (var i = 0 ; i < bd.pedidos.length ; i++) {
-			var pedido = bd.pedidos[i];
+		for (let i = 0 ; i < bd.pedidos.length ; i++) {
+			let pedido = bd.pedidos[i];
 
-			var materiales = this.getMapa('materiales','id',mapas,bd.materiales);
-			var material = materiales[pedido.materialpedidos];
+			let materiales = this.getMapa('materiales','id',mapas,bd.materiales);
+			let material = materiales[pedido.materialpedidos];
 
-			var mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
-			var fabrica = mapVistaFabricas[material.fabricamateriales];
+			let mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
+			let fabrica = mapVistaFabricas[material.fabricamateriales];
 
-			var mapVistaMaterialesFalta = this.getMapa('vistaMaterialesFalta','idmateriales',mapas,vistaMaterialesFalta);
-			var material_falta = mapVistaMaterialesFalta[material.id];
+			let mapVistaMaterialesFalta = this.getMapa('vistaMaterialesFalta','idmateriales',mapas,vistaMaterialesFalta);
+			let material_falta = mapVistaMaterialesFalta[material.id];
 
-			var id = pedido.id;
+			let id = pedido.id;
 
-			var obj = map[id];
+			let obj = map[id];
 			if (!obj) {
 				obj = {
 					idpedidos: id,
@@ -562,19 +562,19 @@ window.App = React.createClass({
 		return ret;
 	},
 	getVistaFabricas(data) {
-		var ret = [];
-		var map = {};
-		var mapas = {};
+		let ret = [];
+		let map = {};
+		let mapas = {};
 
-		for (var i = 0 ; i < data.materiales.length ; i++) {
-			var material = data.materiales[i];
+		for (let i = 0 ; i < data.materiales.length ; i++) {
+			let material = data.materiales[i];
 
-			var fabricas = this.getMapa('fabricas','id',mapas,data.fabricas);
-			var fabrica = fabricas[material.fabricamateriales];
+			let fabricas = this.getMapa('fabricas','id',mapas,data.fabricas);
+			let fabrica = fabricas[material.fabricamateriales];
 
-			var id = material.fabricamateriales;
+			let id = material.fabricamateriales;
 
-			var obj = map[id];
+			let obj = map[id];
 			if (!obj) {
 				obj = {
 					fabricamateriales: id,
@@ -593,21 +593,21 @@ window.App = React.createClass({
 		return ret;
 	},
 	getVistaMaterialesFalta(data) {
-		var ret = [];
-		var map = {};
+		let ret = [];
+		let map = {};
 
-		var vistaMaterialesNecesita = this.getVistaMaterialesNecesita(data);
+		let vistaMaterialesNecesita = this.getVistaMaterialesNecesita(data);
 
-		for (var i = 0 ; i < data.materiales.length ; i++) {
-			var material = data.materiales[i];
+		for (let i = 0 ; i < data.materiales.length ; i++) {
+			let material = data.materiales[i];
 
-			var id = material.id;
+			let id = material.id;
 
-			var materiales_necesita = vistaMaterialesNecesita.filter(item => {
+			let materiales_necesita = vistaMaterialesNecesita.filter(item => {
 				return item.materialmateriales_necesita == id;
 			});
 
-			var obj = map[id];
+			let obj = map[id];
 			if (!obj) {
 				obj = {
 					idmateriales: id,
@@ -617,10 +617,10 @@ window.App = React.createClass({
 				ret.push(obj);
 			}
 
-			var totales = this.calcularTotales({
+			let totales = this.calcularTotales({
 				dif: {
 					tipo(a, b) {
-						var ret = false;
+						let ret = false;
 
 						if (typeof(a) === 'undefined') {
 							ret = b;
@@ -636,7 +636,7 @@ window.App = React.createClass({
 					}
 				}
 			});
-			for (var key in totales) {
+			for (let key in totales) {
 				if (typeof(totales[key]) !== 'undefined') {
 					obj[key] = totales[key];
 				}
@@ -648,20 +648,20 @@ window.App = React.createClass({
 		return ret;
 	},
 	getVistaMaterialesNecesita(data) {
-		var ret = [];
-		var map = {};
-		var mapas = {};
+		let ret = [];
+		let map = {};
+		let mapas = {};
 
-		for (var i = 0 ; i < data.materiales_necesita.length ; i++) {
-			var material_necesita = data.materiales_necesita[i];
+		for (let i = 0 ; i < data.materiales_necesita.length ; i++) {
+			let material_necesita = data.materiales_necesita[i];
 
-			var materiales = this.getMapa('materiales','id',mapas,data.materiales);
-			var material = materiales[material_necesita.materialmateriales_necesita];
-			var materialNecesita = materiales[material_necesita.materialnecesitamateriales_necesita];
+			let materiales = this.getMapa('materiales','id',mapas,data.materiales);
+			let material = materiales[material_necesita.materialmateriales_necesita];
+			let materialNecesita = materiales[material_necesita.materialnecesitamateriales_necesita];
 
-			var id = material_necesita.id;
+			let id = material_necesita.id;
 
-			var obj = map[id];
+			let obj = map[id];
 			if (!obj) {
 				obj = {
 					idmateriales_necesita: id,
@@ -684,29 +684,29 @@ window.App = React.createClass({
 		return ret;
 	},
 	getVistaNecesita(data) {
-		var ret = [];
-		var map = {};
-		var mapas = {};
+		let ret = [];
+		let map = {};
+		let mapas = {};
 
-		var vistaFabricas = this.getVistaFabricas(data);
-		var vistaMaterialesFalta = this.getVistaMaterialesFalta(data);
+		let vistaFabricas = this.getVistaFabricas(data);
+		let vistaMaterialesFalta = this.getVistaMaterialesFalta(data);
 
-		for (var i = 0 ; i < data.pedidos.length ; i++) {
-			var pedido = data.pedidos[i];
+		for (let i = 0 ; i < data.pedidos.length ; i++) {
+			let pedido = data.pedidos[i];
 
-			var materiales = this.getMapa('materiales','id',mapas,data.materiales);
-			var material = materiales[pedido.materialpedidos];
+			let materiales = this.getMapa('materiales','id',mapas,data.materiales);
+			let material = materiales[pedido.materialpedidos];
 
-			var mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
-			var fabrica = mapVistaFabricas[material.fabricamateriales];
+			let mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
+			let fabrica = mapVistaFabricas[material.fabricamateriales];
 
-			var mapVistaMaterialesFalta = this.getMapa('vistaMaterialesFalta','idmateriales',mapas,vistaMaterialesFalta);
-			var material_falta = mapVistaMaterialesFalta[material.id];
+			let mapVistaMaterialesFalta = this.getMapa('vistaMaterialesFalta','idmateriales',mapas,vistaMaterialesFalta);
+			let material_falta = mapVistaMaterialesFalta[material.id];
 
 			if (pedido.cantidadpedidos > 0 && pedido.procesadopedidos) {
-				var id = pedido.materialpedidos;
+				let id = pedido.materialpedidos;
 
-				var obj = map[id];
+				let obj = map[id];
 				if (!obj) {
 					obj = {
 						materialpedidos: id,
@@ -736,8 +736,8 @@ window.App = React.createClass({
 			}
 		}
 
-		for (var i = 0 ; i < ret.length ; i++) {
-			var item = ret[i];
+		for (let i = 0 ; i < ret.length ; i++) {
+			let item = ret[i];
 
 			item.faltamateriales = item.cantidadpedidos - item.stockmateriales - item.haciendomateriales;
 		}
@@ -745,7 +745,7 @@ window.App = React.createClass({
 		return ret;
 	},
 	getMapa(mapa, id, mapas, lista) {
-		var ret = mapas[mapa];
+		let ret = mapas[mapa];
 
 		if (!ret) {
 			ret = lista.crearMapa(id);
@@ -754,7 +754,7 @@ window.App = React.createClass({
 		return ret;
 	},
 	insertar(tabla, par, callback, error) {
-		var url = 'http://localhost:3000/' + tabla;
+		let url = 'http://localhost:3000/' + tabla;
 		ajax({
 			metodo: 'POST',
 			url: url,
@@ -764,7 +764,7 @@ window.App = React.createClass({
 		});
 	},
 	eliminar(tabla, id_campo, id, callback, error) {
-		var url = 'http://localhost:3000/' + tabla + '/' + id;
+		let url = 'http://localhost:3000/' + tabla + '/' + id;
 
 		ajax({
 			metodo: 'DELETE',
@@ -774,7 +774,7 @@ window.App = React.createClass({
 		});
 	},
 	editar(tabla, par, id_campo, id, callback, error) {
-		var url = 'http://localhost:3000/' + tabla + '/' + id;
+		let url = 'http://localhost:3000/' + tabla + '/' + id;
 
 		ajax({
 			metodo: 'PUT',
@@ -785,18 +785,18 @@ window.App = React.createClass({
 		});
 	},
 	limpiarPedidos(id, cantidad, bd, callback, error) {
-		var mapas = {};
+		let mapas = {};
 
-		var tipo_pedido_otros = bd.tipos_pedido.buscar('auxtipos_pedido', true);
-		var pedidos = bd.pedidos.filter(item => {
+		let tipo_pedido_otros = bd.tipos_pedido.buscar('auxtipos_pedido', true);
+		let pedidos = bd.pedidos.filter(item => {
 			return item.materialpedidos == id && item.tipopedidos == tipo_pedido_otros.id;
 		});
 		if (pedidos.length) {
-			var pedido = pedidos.sort((a, b) => {
+			let pedido = pedidos.sort((a, b) => {
 				return a.profundidadpedidos < b.profundidadpedidos;
 			})[0];
 
-			var dif = pedido.cantidadpedidos - cantidad;
+			let dif = pedido.cantidadpedidos - cantidad;
 			if (dif > 0) {
 				pedido.cantidadpedidos = dif;
 				this.editar('pedidos',pedido,'id',pedido.id, callback, error);
@@ -815,10 +815,10 @@ window.App = React.createClass({
 		}
 	},
 	recogerMaterial(id, bd, callback, error) {
-		var mapas = {};
+		let mapas = {};
 
-		var materiales = this.getMapa('materiales','id',mapas,bd.materiales);
-		var material = materiales[id];
+		let materiales = this.getMapa('materiales','id',mapas,bd.materiales);
+		let material = materiales[id];
 
 		if (material.haciendomateriales > 0) {
 
@@ -831,22 +831,22 @@ window.App = React.createClass({
 		}
 	},
 	hacerMaterial(id, cantidad, bd, callback, error) {
-		var mapas = {};
+		let mapas = {};
 
-		var materiales = this.getMapa('materiales', 'id', mapas, bd.materiales);
-		var material = materiales[id];
+		let materiales = this.getMapa('materiales', 'id', mapas, bd.materiales);
+		let material = materiales[id];
 
-		var vistaFabricas = this.getVistaFabricas(bd);
-		var mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
-		var fabrica = mapVistaFabricas[material.fabricamateriales];
+		let vistaFabricas = this.getVistaFabricas(bd);
+		let mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
+		let fabrica = mapVistaFabricas[material.fabricamateriales];
 
 		if (fabrica.maximofabricas >= 0) {
 			if (fabrica.haciendomateriales < fabrica.maximofabricas) {
-				var materiales_necesita = this.getVistaMaterialesNecesita(bd).filter(item => {
+				let materiales_necesita = this.getVistaMaterialesNecesita(bd).filter(item => {
 					return item.materialmateriales_necesita == id;
 				});
 
-				var material_necesita_falta = materiales_necesita.buscar(item => {
+				let material_necesita_falta = materiales_necesita.buscar(item => {
 					return item.cantidadmateriales_necesita - item.stockmaterialesnecesita > 0;
 				});
 				if (!material_necesita_falta) {
@@ -854,9 +854,9 @@ window.App = React.createClass({
 					material.haciendomateriales += material.hacemateriales;
 					this.editar('materiales',material,'id',material.id, () => {
 
-						var fnPromesa = (material_necesita, index, resolve, reject) => {
-							var dif = material_necesita.stockmaterialesnecesita - material_necesita.cantidadmateriales_necesita;
-							var auxMaterial = materiales[material_necesita.materialnecesitamateriales_necesita];
+						let fnPromesa = (material_necesita, index, resolve, reject) => {
+							let dif = material_necesita.stockmaterialesnecesita - material_necesita.cantidadmateriales_necesita;
+							let auxMaterial = materiales[material_necesita.materialnecesitamateriales_necesita];
 							auxMaterial.stockmateriales = dif;
 							this.editar('materiales',auxMaterial,'id',auxMaterial.id, () => {
 								this.limpiarPedidos(material_necesita.materialnecesitamateriales_necesita, material_necesita.cantidadmateriales_necesita, bd, resolve, reject);
@@ -877,27 +877,27 @@ window.App = React.createClass({
 		}
 	},
 	cerrarPedido(id, bd, callback, error) {
-		var mapas = {};
+		let mapas = {};
 
-		var vistaPedido = this.getVistaPedido(bd);
-		var pedidos = vistaPedido.filter(item => {
+		let vistaPedido = this.getVistaPedido(bd);
+		let pedidos = vistaPedido.filter(item => {
 			return item.tipopedidos == id;
 		});
 
-		var fnPromesa = (pedido, index, resolve, reject) => {
-			var materiales = this.getMapa('materiales','id',mapas,bd.materiales);
-			var material = materiales[pedido.materialpedidos];
+		let fnPromesa = (pedido, index, resolve, reject) => {
+			let materiales = this.getMapa('materiales','id',mapas,bd.materiales);
+			let material = materiales[pedido.materialpedidos];
 			material.stockmateriales -= pedido.cantidadpedidos
 			if (material.stockmateriales < 0) {
 				material.stockmateriales = 0;
 			}
 			this.editar('materiales',material,'id',material.id, resolve, reject);
 		} ;
-		var successPromesa = () => {
-			var pedidos_eliminar = bd.pedidos.filter(item => {
+		let successPromesa = () => {
+			let pedidos_eliminar = bd.pedidos.filter(item => {
 				return item.tipopedidos == id;
 			});
-			var fnPromesaEliminar = (item, index, resolve, reject) => {
+			let fnPromesaEliminar = (item, index, resolve, reject) => {
 				this.eliminar('pedidos','id',item.id, resolve, reject);
 			} ;
 			pedidos_eliminar.promesas(fnPromesaEliminar, callback, error, this);
@@ -914,28 +914,28 @@ window.App = React.createClass({
 			procesadopedidos: true,
 			profundidadpedidos: profundidad
 		}, pedido => {
-			var idpedidos = pedido.id;
+			let idpedidos = pedido.id;
 
 			bd.pedidos.push(pedido);
 
-			var mapas = {};
+			let mapas = {};
 
-			var vistaMaterialesProcesar = this.getVistaMaterialesProcesar(bd);
-			var mapVistaMaterialesProcesar = this.getMapa('vistaMaterialesProcesar', 'materialpedidos', mapas, vistaMaterialesProcesar);
-			var material = mapVistaMaterialesProcesar[id];
+			let vistaMaterialesProcesar = this.getVistaMaterialesProcesar(bd);
+			let mapVistaMaterialesProcesar = this.getMapa('vistaMaterialesProcesar', 'materialpedidos', mapas, vistaMaterialesProcesar);
+			let material = mapVistaMaterialesProcesar[id];
 
-			var cantidad2 = material.faltamateriales;
+			let cantidad2 = material.faltamateriales;
 
 			if (cantidad2 > 0) {
 				if (cantidad2 > cantidad) {
 					cantidad2 = cantidad;
 				}
-				var materiales_necesita = bd.materiales_necesita.filter(item => {
+				let materiales_necesita = bd.materiales_necesita.filter(item => {
 					return item.materialmateriales_necesita == id;
 				});
 
-				var fnPromesa = (material_necesita, index, resolve, reject) => {
-					var cantidad2 = material.faltamateriales;
+				let fnPromesa = (material_necesita, index, resolve, reject) => {
+					let cantidad2 = material.faltamateriales;
 
 					if (cantidad2 > 0) {
 						if (cantidad2 > pedido.cantidadpedidos) {
@@ -962,26 +962,26 @@ window.App = React.createClass({
 	},
 	procesarPedido(id, bd, callback, error) {
 
-		var pedido = bd.pedidos.buscar('id', id);
+		let pedido = bd.pedidos.buscar('id', id);
 
 		if (pedido.procesadopedidos) {
 			callback();
 		} else {
-			var mapas = {};
+			let mapas = {};
 
 			pedido.procesadopedidos = true;
 			this.editar('pedidos',pedido,'id',pedido.id, () => {
-				var vistaMaterialesProcesar = this.getVistaMaterialesProcesar(bd);
-				var mapVistaMaterialesProcesar = this.getMapa('vistaMaterialesProcesar', 'materialpedidos', mapas, vistaMaterialesProcesar);
-				var material = mapVistaMaterialesProcesar[pedido.materialpedidos];
+				let vistaMaterialesProcesar = this.getVistaMaterialesProcesar(bd);
+				let mapVistaMaterialesProcesar = this.getMapa('vistaMaterialesProcesar', 'materialpedidos', mapas, vistaMaterialesProcesar);
+				let material = mapVistaMaterialesProcesar[pedido.materialpedidos];
 
 				if (material.cantidadpedidos > material.stockmateriales + material.haciendomateriales) {
-					var materiales_necesita = bd.materiales_necesita.filter(item => {
+					let materiales_necesita = bd.materiales_necesita.filter(item => {
 						return item.materialmateriales_necesita == pedido.materialpedidos;
 					});
 
-					var fnPromesa = (material_necesita, index, resolve, reject) => {
-						var cantidad2 = material.faltamateriales;
+					let fnPromesa = (material_necesita, index, resolve, reject) => {
+						let cantidad2 = material.faltamateriales;
 
 						if (cantidad2 > 0) {
 							if (cantidad2 > pedido.cantidadpedidos) {
@@ -1008,11 +1008,11 @@ window.App = React.createClass({
 		}
 	},
 	procesarPedidos(id, bd, callback, error) {
-		var pedidos_filtrados = bd.pedidos.filter(item => {
+		let pedidos_filtrados = bd.pedidos.filter(item => {
 			return item.tipopedidos == id;
 		});
 
-		var fnPromesa = (item, index, resolve, reject) => {
+		let fnPromesa = (item, index, resolve, reject) => {
 			this.procesarPedido(item.id, bd, resolve, reject);
 		} ;
 
@@ -1023,7 +1023,7 @@ window.App = React.createClass({
 	},
 	accion(accion, par_accion, tabla) {
 		this.cargarBD(data => {
-			var fn = typeof(accion) === 'string' ? this[accion] : accion;
+			let fn = typeof(accion) === 'string' ? this[accion] : accion;
 
 			if (typeof(fn) === 'function') {
 				if (! (par_accion instanceof Array)) {
@@ -1083,7 +1083,7 @@ window.App = React.createClass({
 		} );
 	},
 	claseFilaNecesita(datos) {
-		var clase;
+		let clase;
 		if (datos.stockmateriales >= datos.cantidadpedidos) {
 			clase = 'bueno';
 		} else if (datos.stockmateriales + datos.haciendomateriales >= datos.cantidadpedidos) {
@@ -1103,7 +1103,7 @@ window.App = React.createClass({
 		return clase;
 	},
 	claseFilaPedidos(datos) {
-		var clase;
+		let clase;
 		if (datos.procesadopedidos) {
 			if (datos.faltapedidos) {
 				clase = 'malo';
@@ -1115,7 +1115,7 @@ window.App = React.createClass({
 		return clase;
 	},
 	claseFilaPedido(datos) {
-		var clase;
+		let clase;
 		if (datos.procesadopedidos) {
 			if (datos.stockmateriales >= datos.cantidadpedidos) {
 				clase = 'bueno';
@@ -1137,22 +1137,22 @@ window.App = React.createClass({
 		return clase;
 	},
 	refrescarInicio() {
-		for (var key in this.refs) {
-			var panel = this.refs[key];
+		for (let key in this.refs) {
+			let panel = this.refs[key];
 			if (typeof (panel.refrescar) === 'function') {
 				panel.refrescar();
 			}
 		}
 	},
 	dimensionar() {
-		var altoPadre = window.innerHeight;
-		var menu = ReactDOM.findDOMNode(this.refs.menu);
-		var altoMenu = menu.offsetHeight;
-		var alto = altoPadre - altoMenu;
+		let altoPadre = window.innerHeight;
+		let menu = ReactDOM.findDOMNode(this.refs.menu);
+		let altoMenu = menu.offsetHeight;
+		let alto = altoPadre - altoMenu;
 
 		this.setState({alto:alto}, () => {
-			for (var i in this.refs) {
-				var ref = this.refs[i];
+			for (let i in this.refs) {
+				let ref = this.refs[i];
 
 				if (typeof(ref.dimensionar) === 'function') {
 					ref.dimensionar();
@@ -1174,10 +1174,10 @@ window.App = React.createClass({
 		this.setState({dialogo:dialogo});
 	},
 	renderInicio() {
-		var ret = [];
+		let ret = [];
 
-		for (var i = 0 ; i < this.props.config.inicio.length ; i++) {
-			var config = this.props.config.inicio[i];
+		for (let i = 0 ; i < this.props.config.inicio.length ; i++) {
+			let config = this.props.config.inicio[i];
 			ret.push(
 				<PanelTabla	
 					ref={config.id}
@@ -1197,7 +1197,7 @@ window.App = React.createClass({
 		}
 
 		if (this.state.pedido_ver) {
-			var params = {
+			let params = {
 				idtipos_pedido: this.state.pedido_ver.idtipos_pedido
 			};
 			ret.push(	
@@ -1222,7 +1222,7 @@ window.App = React.createClass({
 		return ret;
 	},
 	renderContenido(e) {
-		var ret = '';
+		let ret = '';
 
 		if (this.state.contenido == 'inicio') {
 			ret = this.renderInicio();
@@ -1242,7 +1242,7 @@ window.App = React.createClass({
 		return ret;
 	},
 	renderStyle() {
-		var ret = {};
+		let ret = {};
 
 		if (this.state.alto) {
 			ret.height = this.state.alto + 'px';
@@ -1251,7 +1251,7 @@ window.App = React.createClass({
 		return ret;
 	},
 	renderDialogo() {
-		var ret = '';
+		let ret = '';
 
 		if (this.state.dialogo) {
 			ret =	<Dialogo
