@@ -31,7 +31,7 @@ module.exports = function(grunt) {
         babel: {
             options: {
                 plugins: ['transform-react-jsx'], // npm install babel-plugin-transform-react-jsx
-                presets: ['es2015', 'react'] // npm install babel-preset-es2015 babel-preset-react
+                presets: ['es2015', 'react', "stage-2"] // npm install babel-preset-es2015 babel-preset-react
             },
             jsx: {
                 files: [{
