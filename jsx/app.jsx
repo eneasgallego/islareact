@@ -1,238 +1,31 @@
-window.App = React.createClass({
-	getInitialState() {
-    	return {
-    		contenido: 'inicio',
-    		alto: undefined,
-    		dialogo: undefined
-    	};
-  	},
-	getDefaultProps() {
-		return {
-			menu: [{
-				texto: 'Inicio',
-				tag: 'inicio'
-			},{
-				texto: 'Admin',
-				tag: 'admin',
-				menu: [{
-					texto: 'Fabricas',
-					tag: 'fabricas'
-				},{
-					texto: 'Materiales',
-					tag: 'materiales'
-				},{
-					texto: 'Materiales Necesita',
-					tag: 'materiales_necesita'
-				},{
-					texto: 'Tipos Pedido',
-					tag: 'tipos_pedido'
-				},{
-					texto: 'Pedidos',
-					tag: 'pedidos'
-				}]
-			}],
-			config: {
-				fabricas: {
-					id_campo: 'id',
-					url: 'http://localhost:3000/fabricas',
-					eliminar: true,
-					cols: [{
-						texto: 'FABRICA',
-						campo: 'nombrefabricas'
-					},{
-						texto: 'MAXIMO',
-						campo: 'maximofabricas',
-						tipo: 'int'
-					}]
-				},
-				materiales: {
-					id_campo: 'id',
-					url: 'http://localhost:3000/materiales',
-					eliminar: true,
-					cols: [{
-						texto: 'MATERIAL',
-						campo: 'nombremateriales'
-					},{
-						texto: 'FABRICA',
-						campo: 'fabricamateriales',
-						tipo: {
-							tipo: 'object',
-							url: 'http://localhost:3000/fabricas',
-							id: 'id',
-							texto: 'nombrefabricas'
-						}
-					},{
-						texto: 'HACE',
-						campo: 'hacemateriales',
-						tipo: 'int'
-					},{
-						texto: 'STOCK',
-						campo: 'stockmateriales',
-						tipo: 'int'
-					},{
-						texto: 'HACIENDO',
-						campo: 'haciendomateriales',
-						tipo: 'int'
-					}]
-				},
-				materiales_necesita: {
-					id_campo: 'id',
-					url: 'http://localhost:3000/materiales_necesita',
-					eliminar: true,
-					cols: [{
-						texto: 'MATERIAL',
-						campo: 'materialmateriales_necesita',
-						tipo: {
-							tipo: 'object',
-							url: 'http://localhost:3000/materiales',
-							id: 'id',
-							texto: 'nombremateriales'
-						}
-					},{
-						texto: 'NECESITA',
-						campo: 'materialnecesitamateriales_necesita',
-						tipo: {
-							tipo: 'object',
-							url: 'http://localhost:3000/materiales',
-							id: 'id',
-							texto: 'nombremateriales'
-						}
-					},{
-						texto: 'CANTIDAD',
-						campo: 'cantidadmateriales_necesita',
-						tipo: 'int'
-					}]
-				},
-				tipos_pedido: {
-					id_campo: 'id',
-					url: 'http://localhost:3000/tipos_pedido',
-					eliminar: true,
-					cols: [{
-						texto: 'TIPO',
-						campo: 'nombretipos_pedido'
-					},{
-						texto: 'AUX',
-						campo: 'auxtipos_pedido',
-						tipo: 'bool'
-					}]
-				},
-				pedidos: {
-					id_campo: 'id',
-					url: 'http://localhost:3000/pedidos',
-					eliminar: true,
-					cols: [{
-						texto: 'TIPO',
-						campo: 'tipopedidos',
-						tipo: {
-							tipo: 'object',
-							url: 'http://localhost:3000/tipos_pedido',
-							id: 'id',
-							texto: 'nombretipos_pedido'
-						}
-					},{
-						texto: 'MATERIAL',
-						campo: 'materialpedidos',
-						tipo: {
-							tipo: 'object',
-							url: 'http://localhost:3000/materiales',
-							id: 'id',
-							texto: 'nombremateriales'
-						}
-					},{
-						texto: 'CANTIDAD',
-						campo: 'cantidadpedidos',
-						tipo: 'int'
-					},{
-						texto: 'PROCESADO',
-						campo: 'procesadopedidos',
-						tipo: 'bool'
-					},{
-						texto: 'PROFUNDIDAD',
-						campo: 'profundidadpedidos',
-						tipo: 'int'
-					}]
-				},
-				inicio: [{
-					id: 'huerto',
-					titulo: 'Huerto',
-					url: 'http://localhost:3000/db',
-					orden: {
-						campo: "profundidadpedidos",
-						desc: true
-					},
-					id_campo: 'materialpedidos',
-					parseData: 'parseDataHuerto',
-					cols: 'colsNecesitaMateriales',
-					acciones: 'accionesNecesitaHuerto',
-					claseFila: 'claseFilaNecesita'
-				},{
-					id: 'materiales',
-					titulo: 'Materiales',
-					url: 'http://localhost:3000/db',
-					orden: {
-						campo: "profundidadpedidos",
-						desc: true
-					},
-					parseData: 'parseDataNecesitaMateriales',
-					id_campo: 'materialpedidos',
-					cols: 'colsNecesitaMateriales',
-					acciones: 'accionesNecesitaMateriales',
-					claseFila: 'claseFilaNecesita'
-				},{
-					id: 'pedidos',
-					titulo: 'Pedidos',
-					url: 'http://localhost:3000/db',
-					orden: {
-						campo: "nombretipos_pedido",
-						desc: false
-					},
-					id_campo: 'idtipos_pedido',
-					parseData: 'parseDataPedidos',
-					cols: 'colsPedidos',
-					acciones: 'accionesPedidos',
-					claseFila: 'claseFilaPedidos'
-				},{
-					id: 'necesita',
-					titulo: 'Necesita',
-					url: 'http://localhost:3000/db',
-					orden: {
-						campo: "profundidadpedidos",
-						desc: true
-					},
-					parseData: 'parseDataNecesita',
-					id_campo: 'materialpedidos',
-					cols: 'colsNecesita',
-					acciones: 'accionesNecesita',
-					claseFila: 'claseFilaNecesita'
-				}],
-				inicio_pedido: {
-					id: 'pedido',
-					url: 'http://localhost:3000/db',
-					orden: {
-						campo: "nombremateriales",
-						desc: false
-					},
-					id_campo: 'idpedidos',
-					parseData: 'parseDataPedido',
-					cols: 'colsPedido',
-					acciones: 'accionesPedido',
-					claseFila: 'claseFilaPedido'
-				}
-			}
+import React from 'react'
+
+import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
+import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
+
+class App extends React.Component {
+/*window.App = React.createClass({*/
+	// Constructor
+	constructor(props) {
+		super(props);
+		this.state = {
+			contenido: 'inicio',
+			alto: undefined,
+			dialogo: undefined
 		};
-	},
+	}
 	componentDidMount() {
 		this.dimensionar();
 		window.onresize = e => {
 			this.dimensionar();
 		};
 
-	},
+	}
 	parseDataPedido(data, tabla, panel) {
 		return this.getVistaPedido(data).filter(item => {
 			return item.tipopedidos == panel.props.params.idtipos_pedido
 		});
-	},
+	}
 	parseDataPedidos(data, tabla, panel) {
 
 		let ret = [];
@@ -276,7 +69,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	parseDataNecesitaMateriales(data, tabla, panel) {
 		let vistaNecesita = this.getVistaNecesita(data);
 
@@ -285,7 +78,7 @@ window.App = React.createClass({
 		});
 
 		return ret;
-	},
+	}
 	parseDataNecesita(data, tabla, panel) {
 		let vistaNecesita = this.getVistaNecesita(data);
 
@@ -294,7 +87,7 @@ window.App = React.createClass({
 		});
 
 		return ret;
-	},
+	}
 	parseDataHuerto(data, tabla, panel) {
 		let vistaNecesita = this.getVistaNecesita(data);
 
@@ -303,7 +96,7 @@ window.App = React.createClass({
 		});
 
 		return ret;
-	},
+	}
 	colsNecesitaMateriales() {
 		return [{
 			texto: 'PROF',
@@ -318,7 +111,7 @@ window.App = React.createClass({
 			texto: 'FABRICA',
 			campo: 'nombrefabricas'
 		}];
-	},
+	}
 	colsNecesita() {
 		return [{
 			texto: 'PROF',
@@ -333,7 +126,7 @@ window.App = React.createClass({
 			texto: 'FABRICA',
 			campo: 'nombrefabricas'
 		}];
-	},
+	}
 	colsPedidos() {
 		return [{
 			texto: 'PEDIDO',
@@ -348,7 +141,7 @@ window.App = React.createClass({
 			texto: 'HACIENDO',
 			campo: 'haciendomateriales'	*/
 		}];
-	},
+	}
 	colsPedido() {
 		return [{
 			texto: 'MATERIAL',
@@ -366,7 +159,7 @@ window.App = React.createClass({
 			campo: 'haciendomateriales',
 			tipo: 'float'
 		}];
-	},
+	}
 	accionesNecesitaHuerto() {
 		return [{
 			texto: 'X1',
@@ -378,19 +171,19 @@ window.App = React.createClass({
 			texto: 'X6',
 			tag: 'accionHacerMaterial6'
 		}];
-	},
+	}
 	accionesNecesitaMateriales() {
 		return [{
 			texto: 'hacer',
 			tag: 'accionHacerMaterial'
 		}];
-	},
+	}
 	accionesNecesita() {
 		return [{
 			texto: 'recoger',
 			tag: 'accionRecogerMaterial'
 		}];
-	},
+	}
 	accionesPedidos() {
 		return [{
 			texto: 'ver',
@@ -402,7 +195,7 @@ window.App = React.createClass({
 			texto: 'cerrar',
 			tag: 'accionCerrarPedido'
 		}];
-	},
+	}
 	accionesPedido() {
 		return [{
 			texto: 'hacer',
@@ -414,7 +207,7 @@ window.App = React.createClass({
 			texto: 'procesar',
 			tag: 'accionProcesarPedido'
 		}];
-	},
+	}
 	cargarBD(callback, error) {
 		ajax({
 			metodo: 'get',
@@ -422,7 +215,7 @@ window.App = React.createClass({
 			success: callback,
 			error: error
 		});
-	},
+	}
 	calcularTotales(par) {
 		let ret = {};
 
@@ -434,7 +227,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	calcularTotal(par) {
 		let ret;
 
@@ -469,7 +262,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	getVistaMaterialesProcesar(data) {
 		let ret = [];
 		let map = {};
@@ -515,7 +308,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	getVistaPedido(bd) {
 		let ret = [];
 		let map = {};
@@ -560,7 +353,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	getVistaFabricas(data) {
 		let ret = [];
 		let map = {};
@@ -591,7 +384,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	getVistaMaterialesFalta(data) {
 		let ret = [];
 		let map = {};
@@ -646,7 +439,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	getVistaMaterialesNecesita(data) {
 		let ret = [];
 		let map = {};
@@ -682,7 +475,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	getVistaNecesita(data) {
 		let ret = [];
 		let map = {};
@@ -743,7 +536,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	getMapa(mapa, id, mapas, lista) {
 		let ret = mapas[mapa];
 
@@ -752,7 +545,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	insertar(tabla, par, callback, error) {
 		let url = 'http://localhost:3000/' + tabla;
 		ajax({
@@ -762,7 +555,7 @@ window.App = React.createClass({
 			success: callback,
 			error: error
 		});
-	},
+	}
 	eliminar(tabla, id_campo, id, callback, error) {
 		let url = 'http://localhost:3000/' + tabla + '/' + id;
 
@@ -772,7 +565,7 @@ window.App = React.createClass({
 			success: callback,
 			error: error
 		});
-	},
+	}
 	editar(tabla, par, id_campo, id, callback, error) {
 		let url = 'http://localhost:3000/' + tabla + '/' + id;
 
@@ -783,7 +576,7 @@ window.App = React.createClass({
 			success: callback,
 			error: error
 		});
-	},
+	}
 	limpiarPedidos(id, cantidad, bd, callback, error) {
 		let mapas = {};
 
@@ -813,7 +606,7 @@ window.App = React.createClass({
 		} else {
 			throw new Error('No hay pedidos de ' + bd.materiales.buscar('id', id).nombremateriales);
 		}
-	},
+	}
 	recogerMaterial(id, bd, callback, error) {
 		let mapas = {};
 
@@ -829,7 +622,7 @@ window.App = React.createClass({
 		} else {
 			throw new Error('No hay nada que recoger');
 		}
-	},
+	}
 	hacerMaterial(id, cantidad, bd, callback, error) {
 		let mapas = {};
 
@@ -875,7 +668,7 @@ window.App = React.createClass({
 			material.stockmateriales += (material.hacemateriales * cantidad);
 			this.editar('materiales',material,'id',material.id, callback, error);
 		}
-	},
+	}
 	cerrarPedido(id, bd, callback, error) {
 		let mapas = {};
 
@@ -904,7 +697,7 @@ window.App = React.createClass({
 		} ;
 
 		pedidos.promesas(fnPromesa, successPromesa, error, this);
-	},
+	}
 	guardarPedidos(id, cantidad, padrepedidos, hacemateriales, profundidad, bd, callback, error) {
 		this.insertar('pedidos', {
 			cantidadpedidos: cantidad,
@@ -959,7 +752,7 @@ window.App = React.createClass({
 				callback();
 			}
 		} , error);
-	},
+	}
 	procesarPedido(id, bd, callback, error) {
 
 		let pedido = bd.pedidos.buscar('id', id);
@@ -1006,7 +799,7 @@ window.App = React.createClass({
 				}
 			} , error);
 		}
-	},
+	}
 	procesarPedidos(id, bd, callback, error) {
 		let pedidos_filtrados = bd.pedidos.filter(item => {
 			return item.tipopedidos == id;
@@ -1017,10 +810,10 @@ window.App = React.createClass({
 		} ;
 
 		pedidos_filtrados.promesas(fnPromesa, callback, error, this);
-	},
+	}
 	gestionarError(err) {
 		throw err;
-	},
+	}
 	accion(accion, par_accion, tabla) {
 		this.cargarBD(data => {
 			let fn = typeof(accion) === 'string' ? this[accion] : accion;
@@ -1054,34 +847,34 @@ window.App = React.createClass({
 				this.gestionarError('Acción ' + accion + ' inválida');
 			}
 		} , this.gestionarError);
-	},
+	}
 	accionRecogerMaterial(tag, fila, tabla, panel) {
 		this.accion(this.recogerMaterial, [fila.props.datos.materialpedidos], tabla);
-	},
+	}
 	accionHacerMaterial(tag, fila, tabla, panel) {
 		this.accion(this.hacerMaterial, [fila.props.datos.materialpedidos, 1], tabla);
-	},
+	}
 	accionHacerMaterial3(tag, fila, tabla, panel) {
 		this.accion(this.hacerMaterial, [fila.props.datos.materialpedidos, 3], tabla);
-	},
+	}
 	accionHacerMaterial6(tag, fila, tabla, panel) {
 		this.accion(this.hacerMaterial, [fila.props.datos.materialpedidos, 6], tabla);
-	},
+	}
 	accionCerrarPedido(tag, fila, tabla, panel) {
 		this.accion(this.cerrarPedido, [fila.props.datos.idtipos_pedido], tabla);
-	},
+	}
 	accionProcesarPedidos(tag, fila, tabla, panel) {
 		this.accion(this.procesarPedidos, [fila.props.datos.idtipos_pedido], tabla);
-	},
+	}
 	accionProcesarPedido(tag, fila, tabla, panel) {
 		this.accion(this.procesarPedido, [fila.props.datos.idpedidos], tabla);
-	},
+	}
 	accionVerPedido(tag, fila, tabla, panel) {
 		this.setState({ pedido_ver: fila.props.datos }, () => {
 			this.refs.pedido.refs.tabla.refrescar();
 			this.refs.pedido.dimensionar();
 		} );
-	},
+	}
 	claseFilaNecesita(datos) {
 		let clase;
 		if (datos.stockmateriales >= datos.cantidadpedidos) {
@@ -1101,7 +894,7 @@ window.App = React.createClass({
 		}
 
 		return clase;
-	},
+	}
 	claseFilaPedidos(datos) {
 		let clase;
 		if (datos.procesadopedidos) {
@@ -1113,7 +906,7 @@ window.App = React.createClass({
 		}
 
 		return clase;
-	},
+	}
 	claseFilaPedido(datos) {
 		let clase;
 		if (datos.procesadopedidos) {
@@ -1135,7 +928,7 @@ window.App = React.createClass({
 		}
 
 		return clase;
-	},
+	}
 	refrescarInicio() {
 		for (let key in this.refs) {
 			let panel = this.refs[key];
@@ -1143,7 +936,7 @@ window.App = React.createClass({
 				panel.refrescar();
 			}
 		}
-	},
+	}
 	dimensionar() {
 		let altoPadre = window.innerHeight;
 		let menu = ReactDOM.findDOMNode(this.refs.menu);
@@ -1159,20 +952,20 @@ window.App = React.createClass({
 				}
 			}
 		} );
-	},
+	}
 	accionMenu(tag) {
 		this.setState({contenido:tag}, () => {
 			this.dimensionar();
 		} );
-	},
+	}
 	onClickAcciones(tag, fila, tabla, panel) {
 		if (typeof(this[tag]) === 'function') {
 			this[tag].apply(this, arguments);
 		}
-	},
+	}
 	setDialogo(dialogo) {
 		this.setState({dialogo:dialogo});
-	},
+	}
 	renderInicio() {
 		let ret = [];
 
@@ -1220,7 +1013,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	renderContenido(e) {
 		let ret = '';
 
@@ -1240,7 +1033,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	renderStyle() {
 		let ret = {};
 
@@ -1249,7 +1042,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	renderDialogo() {
 		let ret = '';
 
@@ -1265,7 +1058,7 @@ window.App = React.createClass({
 		}
 
 		return ret;
-	},
+	}
 	render() {
 		return (
 			<div>
@@ -1279,9 +1072,13 @@ window.App = React.createClass({
 			</div>
 		);
     }
-});
+}
 
+export default App
+
+/*
 ReactDOM.render(
 	<App/>,
 	document.getElementById('react-container')
 );
+*/

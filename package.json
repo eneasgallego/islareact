@@ -7,14 +7,17 @@
     "babel-preset-es2015": "~6.5.0",
     "babel-preset-react": "~6.5.0",
     "babel-preset-stage-2": "^6.5.0",
+    "babelify": "^6.0.1",
     "grunt": "~0.4.5",
     "grunt-babel": "~6.0.0",
     "grunt-bower-task": "^0.4.0",
+    "grunt-browserify": "^3.6.0",
     "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-concat": "~0.5.1",
     "grunt-contrib-sass": "^1.0.0",
     "grunt-contrib-watch": "~0.6.1",
-    "grunt-webfont": "^1.2.0"
+    "grunt-webfont": "^1.2.0",
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1"
   },
   "dependencies": {
     "json-server": "^0.8.9"

@@ -28,10 +28,21 @@ module.exports = function(grunt) {
                 }
             }
         },
+        browserify: {
+            dist: {
+                options: {
+                    transform: [["babelify", { "stage": 0 }]]
+                },
+                files: {
+                    "<%= folder.js %>/app.js": "jsx/index.jsx"
+                }
+            }
+        },
         babel: {
             options: {
                 plugins: ['transform-react-jsx'], // npm install babel-plugin-transform-react-jsx
-                presets: ['es2015', 'react', "stage-2"] // npm install babel-preset-es2015 babel-preset-react
+                presets: ['es2015', 'react', "stage-2"], // npm install babel-preset-es2015 babel-preset-react
+                experimental: true
             },
             jsx: {
                 files: [{
@@ -72,54 +83,23 @@ module.exports = function(grunt) {
                 }
             }
         },
-        concat: {
-            options: {
-                separator: ';',
-                stripBanners: true,
-                banner: '/*! <%= grunt.template.today("yyyy-mm-dd") %> */'
-            },
-            dist: { // web/js/tmp/ web/js/lib/
-                src: [  '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/base.js',
-
-                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/boton.js',
-                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/menu_item.js',
-                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/menu.js',
-
-                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/dialogo.js',
-                        
-                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/combo.js',
-                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/checkbox.js',
-                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/textfield.js',
-                        
-                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/celda.js',
-                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/fila.js',
-                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/tabla.js',
-                        
-                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/lista_tabla.js',
-                        '<%= babel.jsx.files[0].dest %><%= bower.install.options.targetDir %>nreactjs/jsx/panel_tabla.js',
-
-                        '<%= babel.jsx.files[0].dest %>jsx/app.js' ],
-                dest: '<%= folder.js %>app.js'
-                //dest: '<%= babel.jsx.files[0].dest %>app.js'
-            }
-        },
         clean: ["<%= babel.jsx.files[0].dest %>"]
     });
 
     grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-webfont');
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks("grunt-browserify");
 
     grunt.registerTask('default', ['watch']);
-    grunt.registerTask('jsx', ['bower','babel','concat','clean']);
-    grunt.registerTask('jsx2', ['babel','concat','clean']);
+    grunt.registerTask('jsx', ['bower','browserify','clean']);
+    grunt.registerTask('sandbox', ['browserify']);
     grunt.registerTask('fonts', ['webfont']);
     grunt.registerTask('css', ['sass']);
     grunt.registerTask('release', ['jsx','fonts','sass']);
-    grunt.registerTask('release2', ['jsx2','fonts','sass']);
+    grunt.registerTask('release2', ['sandbox','fonts','sass']);
 
 };
