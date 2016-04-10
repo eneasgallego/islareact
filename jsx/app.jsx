@@ -156,10 +156,13 @@ window.App = React.createClass({
 					id: 'huerto',
 					titulo: 'Huerto',
 					url: 'http://localhost:3000/db',
-					orden: {
+					orden: [{
 						campo: "profundidadpedidos",
 						desc: true
-					},
+					},{
+						campo: "faltamateriales",
+						desc: true
+					}],
 					id_campo: 'materialpedidos',
 					parseData: 'parseDataHuerto',
 					cols: 'colsNecesitaMateriales',
@@ -169,10 +172,13 @@ window.App = React.createClass({
 					id: 'materiales',
 					titulo: 'Materiales',
 					url: 'http://localhost:3000/db',
-					orden: {
+					orden: [{
 						campo: "profundidadpedidos",
 						desc: true
-					},
+					},{
+						campo: "faltamateriales",
+						desc: true
+					}],
 					parseData: 'parseDataNecesitaMateriales',
 					id_campo: 'materialpedidos',
 					cols: 'colsNecesitaMateriales',
@@ -195,10 +201,13 @@ window.App = React.createClass({
 					id: 'necesita',
 					titulo: 'Necesita',
 					url: 'http://localhost:3000/db',
-					orden: {
+					orden: [{
 						campo: "profundidadpedidos",
 						desc: true
-					},
+					},{
+						campo: "haciendomateriales",
+						desc: true
+					}],
 					parseData: 'parseDataNecesita',
 					id_campo: 'materialpedidos',
 					cols: 'colsNecesita',
