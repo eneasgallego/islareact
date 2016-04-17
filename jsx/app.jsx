@@ -1,13 +1,24 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
+import ListaTabla from '../web/js/lib/nreactjs/jsx/lista_tabla.jsx'
+import Dialogo from '../web/js/lib/nreactjs/jsx/dialogo.jsx'
 
 class App extends React.Component {
-/*window.App = React.createClass({*/
-	// Constructor
 	constructor(props) {
 		super(props);
+
+		this.parseDataHuerto = this.parseDataHuerto.bind(this);
+		this.parseDataNecesitaMateriales = this.parseDataNecesitaMateriales.bind(this);
+		this.parseDataPedidos = this.parseDataPedidos.bind(this);
+		this.parseDataPedido = this.parseDataPedido.bind(this);
+		this.parseDataNecesita = this.parseDataNecesita.bind(this);
+		this.accionMenu = this.accionMenu.bind(this);
+		this.onClickAcciones = this.onClickAcciones.bind(this);
+		this.setDialogo = this.setDialogo.bind(this);
+
 		this.state = {
 			contenido: 'inicio',
 			alto: undefined,
