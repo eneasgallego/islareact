@@ -178,6 +178,15 @@ let options = {
             titulo: 'Materiales',
             url: 'http://localhost:3000/db',
             orden:  [{
+                campo(item) {
+                    return ((item.stockmateriales < item.cantidadpedidos) &&
+                    (item.stockmateriales + item.haciendomateriales < item.cantidadpedidos) &&
+                    (item.maximofabricas != -1) &&
+                    (item.haciendofabricas < item.maximofabricas) &&
+                    (item.faltanecesita)) ? 1 : 0;
+                },
+                desc: true
+            },{
                 campo: "profundidadpedidos",
                 desc: true
             },{
