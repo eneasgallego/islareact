@@ -61,7 +61,7 @@ class App extends React.Component {
 				obj = {
 					idtipos_pedido: id,
 					cantidadpedido: 0,
-					procesadopedidos: pedido.procesadopedidos,
+					procesadopedidos: 0, // 1: Todos, 0: Ninguno, -1: Alguno
 					faltapedidos: faltapedidos,
 					nombretipos_pedido: tipo_pedido.nombretipos_pedido,
 					stockmateriales: material.stockmateriales,
@@ -72,7 +72,11 @@ class App extends React.Component {
 
 			obj.cantidadpedido += pedido.cantidadpedidos;
 
-			obj.procesadopedidos = (obj.procesadopedidos || pedido.procesadopedidos);
+			if (pedido.procesadopedidos && obj.procesadopedidos === 0) {
+				obj.procesadopedidos = 1;
+			} else if (!pedido.procesadopedidos && obj.procesadopedidos === 1) {
+				obj.procesadopedidos = -1;
+			}
 
 			obj.faltapedidos = (obj.faltapedidos || faltapedidos);
 
@@ -908,11 +912,17 @@ class App extends React.Component {
 	}
 	claseFilaPedidos(datos) {
 		let clase;
-		if (datos.procesadopedidos) {
-			if (datos.faltapedidos) {
+		if (datos.faltapedidos) {
+			if (datos.procesadopedidos === 1) {
 				clase = 'malo';
-			} else {
+			} else if (datos.procesadopedidos === -1) {
+				clase = 'huerto';
+			}
+		} else {
+			if (datos.procesadopedidos === 1) {
 				clase = 'bueno';
+			} else if (datos.procesadopedidos === -1) {
+				clase = 'medio';
 			}
 		}
 
@@ -936,6 +946,8 @@ class App extends React.Component {
 					clase = 'nulo';
 				}
 			}
+		} else {
+			clase = 'huerto';
 		}
 
 		return clase;
