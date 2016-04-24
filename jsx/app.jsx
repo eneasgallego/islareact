@@ -1139,6 +1139,7 @@ class App extends React.Component {
 					claseFila={this[config.claseFila]}
 					parseData={this[config.parseData]}
 					onClickAcciones={this.onClickAcciones}
+					filtros={false}
 				/>
 			);
 		}
@@ -1162,6 +1163,7 @@ class App extends React.Component {
 					parseData={this[this.props.config.inicio_pedido.parseData]}
 					claseFila={this[this.props.config.inicio_pedido.claseFila]}
 					onClickAcciones={this.onClickAcciones}
+					filtros={false}
 				/>
 			);
 		}
