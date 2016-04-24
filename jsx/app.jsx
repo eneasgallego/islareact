@@ -15,6 +15,7 @@ class App extends React.Component {
 		this.parseDataPedidos = this.parseDataPedidos.bind(this);
 		this.parseDataPedido = this.parseDataPedido.bind(this);
 		this.parseDataNecesita = this.parseDataNecesita.bind(this);
+		this.parseDataExcedente = this.parseDataExcedente.bind(this);
 		this.accionMenu = this.accionMenu.bind(this);
 		this.onClickAcciones = this.onClickAcciones.bind(this);
 		this.setDialogo = this.setDialogo.bind(this);
@@ -103,6 +104,9 @@ class App extends React.Component {
 
 		return ret;
 	}
+	parseDataExcedente(data, tabla, panel) {
+		return this.getVistaExcedente(data);
+	}
 	parseDataHuerto(data, tabla, panel) {
 		let vistaNecesita = this.getVistaNecesita(data);
 
@@ -137,6 +141,33 @@ class App extends React.Component {
 		}, {
 			texto: 'HACIENDO',
 			campo: 'haciendomateriales'
+		}, {
+			texto: 'FABRICA',
+			campo: 'nombrefabricas'
+		}];
+	}
+	colsExcedente() {
+		return [{
+			texto: 'MATERIAL',
+			campo: 'nombremateriales'
+		}, {
+			texto: 'STOCK',
+			campo: 'stockmateriales'
+		}, {
+			texto: 'HACIENDO',
+			campo: 'haciendomateriales'
+		}, {
+			texto: 'PEDIDOS PRO',
+			campo: 'cantidadpedidosprocesados'
+		}, {
+			texto: 'PEDIDOS',
+			campo: 'cantidadpedidos'
+		}, {
+			texto: 'EXCEDENTE PRO',
+			campo: 'excedentematerialesprocesados'
+		}, {
+			texto: 'EXCEDENTE',
+			campo: 'excedentemateriales'
 		}, {
 			texto: 'FABRICA',
 			campo: 'nombrefabricas'
@@ -197,6 +228,15 @@ class App extends React.Component {
 		return [{
 			texto: 'recoger',
 			tag: 'accionRecogerMaterial'
+		}];
+	}
+	accionesExcedente() {
+		return [{
+			texto: 'ganar',
+			tag: 'accionGanarMaterial'
+		},{
+			texto: 'vender',
+			tag: 'accionVenderMaterial'
 		}];
 	}
 	accionesPedidos() {
@@ -552,6 +592,52 @@ class App extends React.Component {
 
 		return ret;
 	}
+	getVistaExcedente(data) {
+		let ret = [];
+		let map = {};
+		let mapas = {};
+
+		let vistaFabricas = this.getVistaFabricas(data);
+
+		for (let i = 0 ; i < data.materiales.length ; i++) {
+			let material = data.materiales[i];
+
+			let id = material.id;
+
+			let mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
+			let fabrica = mapVistaFabricas[material.fabricamateriales];
+
+			let materialpedidos = data.pedidos.filter(item => {
+				return item.materialpedidos == id;
+			});
+			let materialpedidosprocesados = materialpedidos.filter(item => {
+				return item.procesadopedidos;
+			});
+			let cantidadmaterialpedidos = materialpedidos.calcular('cantidadpedidos');
+			let cantidadmaterialpedidosprocesados = materialpedidosprocesados.calcular('cantidadpedidos');
+
+			let obj = map[id];
+			if (!obj) {
+				obj = {
+					materialpedidos: id,
+					nombremateriales: material.nombremateriales,
+					stockmateriales: material.stockmateriales,
+					haciendomateriales: material.haciendomateriales,
+					cantidadpedidos: cantidadmaterialpedidos,
+					cantidadpedidosprocesados: cantidadmaterialpedidosprocesados,
+					excedentemateriales: material.stockmateriales - cantidadmaterialpedidos,
+					excedentematerialesprocesados: material.stockmateriales - cantidadmaterialpedidosprocesados,
+					nombrefabricas: fabrica.nombrefabricas,
+					eshuerto: fabrica.maximofabricas == -1
+				};
+				ret.push(obj);
+			}
+
+			map[id] = obj;
+		}
+
+		return ret;
+	}
 	getMapa(mapa, id, mapas, lista) {
 		let ret = mapas[mapa];
 
@@ -637,6 +723,31 @@ class App extends React.Component {
 		} else {
 			throw new Error('No hay nada que recoger');
 		}
+	}
+	venderMaterial(id, bd, callback, error) {
+		let mapas = {};
+
+		let materiales = this.getMapa('materiales','id',mapas,bd.materiales);
+		let material = materiales[id];
+
+		if (material.stockmateriales > 0) {
+
+			material.stockmateriales--;
+
+			this.editar('materiales',material,'id',id,callback, error);
+		} else {
+			throw new Error('No hay nada que vender');
+		}
+	}
+	ganarMaterial(id, bd, callback, error) {
+		let mapas = {};
+
+		let materiales = this.getMapa('materiales','id',mapas,bd.materiales);
+		let material = materiales[id];
+
+		material.stockmateriales++;
+
+		this.editar('materiales',material,'id',id,callback, error);
 	}
 	hacerMaterial(id, cantidad, bd, callback, error) {
 		let mapas = {};
@@ -866,6 +977,12 @@ class App extends React.Component {
 	accionRecogerMaterial(tag, fila, tabla, panel) {
 		this.accion(this.recogerMaterial, [fila.props.datos.materialpedidos], tabla);
 	}
+	accionVenderMaterial(tag, fila, tabla, panel) {
+		this.accion(this.venderMaterial, [fila.props.datos.materialpedidos], tabla);
+	}
+	accionGanarMaterial(tag, fila, tabla, panel) {
+		this.accion(this.ganarMaterial, [fila.props.datos.materialpedidos], tabla);
+	}
 	accionHacerMaterial(tag, fila, tabla, panel) {
 		this.accion(this.hacerMaterial, [fila.props.datos.materialpedidos, 1], tabla);
 	}
@@ -906,6 +1023,20 @@ class App extends React.Component {
 			if (!datos.faltanecesita) {
 				clase = 'nulo';
 			}
+		}
+
+		return clase;
+	}
+	claseFilaExcedente(datos) {
+		let clase;
+		if (datos.eshuerto) {
+			clase = 'huerto';
+		} else if (datos.excedentemateriales > 0 || datos.excedentematerialesprocesados > 0) {
+				clase = 'bueno';
+		} else if (datos.stockmateriales + datos.haciendomateriales >= datos.cantidadpedidos) {
+			clase = 'medio';
+		} else {
+			clase = 'malo';
 		}
 
 		return clase;
@@ -995,7 +1126,7 @@ class App extends React.Component {
 		for (let i = 0 ; i < this.props.config.inicio.length ; i++) {
 			let config = this.props.config.inicio[i];
 			ret.push(
-				<PanelTabla	
+				<PanelTabla
 					ref={config.id}
 					key={config.id}
 					id={config.id}
@@ -1016,8 +1147,8 @@ class App extends React.Component {
 			let params = {
 				idtipos_pedido: this.state.pedido_ver.idtipos_pedido
 			};
-			ret.push(	
-				<PanelTabla	
+			ret.push(
+				<PanelTabla
 					ref={this.props.config.inicio_pedido.id}
 					key={this.props.config.inicio_pedido.id}
 					id={this.props.config.inicio_pedido.id}
@@ -1037,11 +1168,36 @@ class App extends React.Component {
 
 		return ret;
 	}
+	renderExcedente() {
+		let ret = [];
+
+		let config = this.props.config.excedente;
+		ret.push(
+			<PanelTabla
+				ref={config.id}
+				key={config.id}
+				id={config.id}
+				titulo={config.titulo}
+				url={config.url}
+				orden={config.orden}
+				id_campo={config.id_campo}
+				cols={this[config.cols]()}
+				acciones={this[config.acciones]()}
+				claseFila={this[config.claseFila]}
+				parseData={this[config.parseData]}
+				onClickAcciones={this.onClickAcciones}
+			/>
+		);
+
+		return ret;
+	}
 	renderContenido(e) {
 		let ret = '';
 
 		if (this.state.contenido == 'inicio') {
 			ret = this.renderInicio();
+		} else if (this.state.contenido == 'excedente') {
+				ret = this.renderExcedente();
 		} else {
 			ret = <ListaTabla	id_campo={this.props.config[this.state.contenido].id_campo}
 								url_editar={this.props.config[this.state.contenido].url_editar}

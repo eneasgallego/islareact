@@ -17,6 +17,9 @@ let options = {
         texto: 'Inicio',
         tag: 'inicio'
     },{
+        texto: 'Excedente',
+        tag: 'excedente'
+    },{
         texto: 'Admin',
         tag: 'admin',
         menu: [{
@@ -156,6 +159,38 @@ let options = {
                 campo: 'profundidadpedidos',
                 tipo: 'int'
             }]
+        },
+        excedente: {
+            id: 'excedente',
+            titulo: 'Excedente',
+            url: 'http://localhost:3000/db',
+            orden:  [{
+                campo: "eshuerto",
+                desc: false
+            },{
+                campo: "excedentemateriales",
+                desc: true
+            },{
+                campo: "excedentematerialesprocesados",
+                desc: true
+            },{
+                campo: "stockmateriales",
+                desc: true
+            },{
+                campo: "cantidadpedidos",
+                desc: true
+            },{
+                campo: "cantidadpedidosprocesados",
+                desc: true
+            },{
+                campo: "nombremateriales",
+                desc: false
+            }],
+            parseData: 'parseDataExcedente',
+            id_campo: 'idmateriales',
+            cols: 'colsExcedente',
+            acciones: 'accionesExcedente',
+            claseFila: 'claseFilaExcedente'
         },
         inicio: [{
             id: 'huerto',
