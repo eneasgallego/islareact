@@ -152,22 +152,28 @@ class App extends React.Component {
 			campo: 'nombremateriales'
 		}, {
 			texto: 'STOCK',
-			campo: 'stockmateriales'
+			campo: 'stockmateriales',
+			tipo: 'int'
 		}, {
 			texto: 'HACIENDO',
-			campo: 'haciendomateriales'
+			campo: 'haciendomateriales',
+			tipo: 'int'
 		}, {
 			texto: 'PEDIDOS PRO',
-			campo: 'cantidadpedidosprocesados'
+			campo: 'cantidadpedidosprocesados',
+			tipo: 'int'
 		}, {
 			texto: 'PEDIDOS',
-			campo: 'cantidadpedidos'
+			campo: 'cantidadpedidos',
+			tipo: 'int'
 		}, {
 			texto: 'EXCEDENTE PRO',
-			campo: 'excedentematerialesprocesados'
+			campo: 'excedentematerialesprocesados',
+			tipo: 'int'
 		}, {
 			texto: 'EXCEDENTE',
-			campo: 'excedentemateriales'
+			campo: 'excedentemateriales',
+			tipo: 'int'
 		}, {
 			texto: 'FABRICA',
 			campo: 'nombrefabricas'
