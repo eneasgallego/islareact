@@ -176,7 +176,13 @@ class App extends React.Component {
 			tipo: 'int'
 		}, {
 			texto: 'FABRICA',
-			campo: 'nombrefabricas'
+			campo: 'nombrefabricas'/*,
+			filtro: {
+				tipo: 'object',
+				dataset: 'http://localhost:3000/fabricas',
+				campo_texto: 'nombrefabricas',
+				campo_valor: 'nombrefabricas'
+			}*/
 		}];
 	}
 	colsPedidos() {
