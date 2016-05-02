@@ -830,8 +830,8 @@
       "nombremateriales": "Sandalias",
       "fabricamateriales": 8,
       "hacemateriales": 1,
-      "stockmateriales": 1,
-      "haciendomateriales": 3,
+      "stockmateriales": 4,
+      "haciendomateriales": 0,
       "id": 89
     },
     {
@@ -902,7 +902,7 @@
       "nombremateriales": "Mapa Rojo",
       "fabricamateriales": 24,
       "hacemateriales": 1,
-      "stockmateriales": 11,
+      "stockmateriales": 12,
       "haciendomateriales": 0,
       "id": 98
     },
@@ -934,7 +934,7 @@
       "nombremateriales": "Mapa",
       "fabricamateriales": 22,
       "hacemateriales": 1,
-      "stockmateriales": 12,
+      "stockmateriales": 8,
       "haciendomateriales": 0,
       "id": 102
     },
@@ -2360,14 +2360,6 @@
       "id": 1385
     },
     {
-      "tipopedidos": 12,
-      "materialpedidos": 89,
-      "cantidadpedidos": 4,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 1386
-    },
-    {
       "cantidadpedidos": 2,
       "materialpedidos": 98,
       "padrepedidos": 1285,
@@ -2422,7 +2414,7 @@
       "id": 1392
     },
     {
-      "cantidadpedidos": 108,
+      "cantidadpedidos": 104,
       "materialpedidos": 102,
       "padrepedidos": 1392,
       "tipopedidos": 3,
