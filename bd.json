@@ -179,7 +179,7 @@
       "nombremateriales": "Arroz",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 35,
+      "stockmateriales": 23,
       "haciendomateriales": 0,
       "id": 7
     },
@@ -259,7 +259,7 @@
       "nombremateriales": "Cangrejo",
       "fabricamateriales": 3,
       "hacemateriales": 1,
-      "stockmateriales": 3,
+      "stockmateriales": 2,
       "haciendomateriales": 0,
       "id": 17
     },
@@ -371,8 +371,8 @@
       "nombremateriales": "Cestos",
       "fabricamateriales": 4,
       "hacemateriales": 1,
-      "stockmateriales": 1,
-      "haciendomateriales": 2,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
       "id": 31
     },
     {
@@ -387,8 +387,8 @@
       "nombremateriales": "Botella",
       "fabricamateriales": 15,
       "hacemateriales": 1,
-      "stockmateriales": 3,
-      "haciendomateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
       "id": 33
     },
     {
@@ -403,15 +403,15 @@
       "nombremateriales": "Camarón Picante",
       "fabricamateriales": 7,
       "hacemateriales": 1,
-      "stockmateriales": 0,
-      "haciendomateriales": 3,
+      "stockmateriales": 1,
+      "haciendomateriales": 2,
       "id": 35
     },
     {
       "nombremateriales": "Camarón",
       "fabricamateriales": 3,
       "hacemateriales": 1,
-      "stockmateriales": 3,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 36
     },
@@ -420,15 +420,15 @@
       "fabricamateriales": 16,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 0,
+      "haciendomateriales": 1,
       "id": 37
     },
     {
       "nombremateriales": "Algas",
       "fabricamateriales": 13,
       "hacemateriales": 1,
-      "stockmateriales": 1,
-      "haciendomateriales": 5,
+      "stockmateriales": 0,
+      "haciendomateriales": 3,
       "id": 38
     },
     {
@@ -571,8 +571,8 @@
       "nombremateriales": "Smoothie Vainilla",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 0,
-      "haciendomateriales": 1,
+      "stockmateriales": 1,
+      "haciendomateriales": 0,
       "id": 56
     },
     {
@@ -627,7 +627,7 @@
       "nombremateriales": "Sushi Camarón",
       "fabricamateriales": 16,
       "hacemateriales": 1,
-      "stockmateriales": 1,
+      "stockmateriales": 2,
       "haciendomateriales": 1,
       "id": 63
     },
@@ -2514,15 +2514,7 @@
       "id": 4829
     },
     {
-      "tipopedidos": 9,
-      "materialpedidos": 33,
-      "cantidadpedidos": 4,
-      "procesadopedidos": true,
-      "profundidadpedidos": 0,
-      "id": 4830
-    },
-    {
-      "cantidadpedidos": 2,
+      "cantidadpedidos": 1,
       "materialpedidos": 17,
       "padrepedidos": 4826,
       "tipopedidos": 3,
@@ -2548,15 +2540,6 @@
     },
     {
       "cantidadpedidos": 3,
-      "materialpedidos": 36,
-      "padrepedidos": 4861,
-      "tipopedidos": 3,
-      "procesadopedidos": true,
-      "profundidadpedidos": 1,
-      "id": 4863
-    },
-    {
-      "cantidadpedidos": 9,
       "materialpedidos": 38,
       "padrepedidos": 4861,
       "tipopedidos": 3,
@@ -2565,16 +2548,7 @@
       "id": 4866
     },
     {
-      "cantidadpedidos": 3,
-      "materialpedidos": 31,
-      "padrepedidos": 4866,
-      "tipopedidos": 3,
-      "procesadopedidos": true,
-      "profundidadpedidos": 2,
-      "id": 4867
-    },
-    {
-      "cantidadpedidos": 18,
+      "cantidadpedidos": 6,
       "materialpedidos": 7,
       "padrepedidos": 4861,
       "tipopedidos": 3,
