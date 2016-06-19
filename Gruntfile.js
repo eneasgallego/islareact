@@ -96,9 +96,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('jsx', ['bower','browserify','clean']);
-    grunt.registerTask('sandbox', ['browserify']);
-    grunt.registerTask('fonts', ['webfont']);
-    grunt.registerTask('css', ['sass']);
     grunt.registerTask('release', ['jsx','fonts','sass']);
     grunt.registerTask('release2', ['sandbox','fonts','sass']);
 
