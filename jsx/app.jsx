@@ -44,8 +44,10 @@ class App extends React.Component {
 		let map = {};
 		let mapas = {};
 
-		for (let i = 0 ; i < data.pedidos.length ; i++) {
-			let pedido = data.pedidos[i];
+
+		let pedidos_dinamicos = this.getPedidosDinamicos(data);
+		for (let i = 0 ; i < pedidos_dinamicos.length ; i++) {
+			let pedido = pedidos_dinamicos[i];
 
 			let id = pedido.tipopedidos;
 
@@ -330,10 +332,98 @@ class App extends React.Component {
 
 		return ret;
 	}
+	getPedidosDinamicos(data) {
+		let ret = [];
+		let mapas = {};
+
+		let cantidadMaterialPedidos = id_material=>{
+			let num = 0;
+
+			for (let i = 0 ; i < ret.length ; i++) {
+				let pedido = ret[i];
+
+				if (pedido.procesadopedidos && pedido.materialpedidos == id_material) {
+					num += pedido.cantidadpedidos;
+				}
+			}
+
+			return num;
+		};
+
+		let generarId= ()=>{
+			let num = 1;
+			while (	ret.buscar('id',num) ||
+					data.pedidos.buscar('id',num)) {
+				num++;
+			};
+
+			return num;
+		};
+
+		let materiales = this.getMapa('materiales','id',mapas,data.materiales);
+		let hacerMaterialNecesita = (material_padre, profundidad, cantidad)=>{
+			let materiales_necesita = data.materiales_necesita.filter(material_necesita=>material_necesita.materialmateriales_necesita==material_padre.id);
+			if (materiales_necesita.length) {
+				let stock = material_padre.stockmateriales;
+				let haciendo = material_padre.haciendomateriales;
+				let cantidad_pedido = cantidadMaterialPedidos(material_padre.id);
+				let necesita = cantidad + cantidad_pedido - stock - haciendo;
+
+				if (necesita > 0) {
+					let pedido_necesita = necesita;
+					if (pedido_necesita > cantidad) {
+						pedido_necesita = cantidad;
+					}
+					for (let i = 0 ; i < materiales_necesita.length ; i++) {
+						let material_necesita = materiales_necesita[i];
+
+						let material = materiales[material_necesita.materialnecesitamateriales_necesita];
+						let pedido = ret.buscar(pedido=>pedido.tipopedidos==3 && pedido.materialpedidos==material.id);
+						let insertar = false;
+						if (!pedido) {
+							pedido = {
+								tipopedidos: 3,
+								materialpedidos: material.id,
+								procesadopedidos: true,
+								cantidadpedidos: 0,
+								profundidadpedidos: profundidad,
+								id: generarId()
+							};
+							insertar = true;
+						}
+						if (pedido.profundidadpedidos < profundidad) {
+							pedido.profundidadpedidos = profundidad;
+						}
+
+						let cantidad_hace = Math.ceil(pedido_necesita / material_padre.hacemateriales);
+						let cantidad_necesita = cantidad_hace * material_necesita.cantidadmateriales_necesita;
+						//let pedido_cantidadpedidos = cantidad_necesita - pedido.cantidadpedidos;
+						hacerMaterialNecesita(material, profundidad + 1, cantidad_necesita);
+						pedido.cantidadpedidos += cantidad_necesita;
+						insertar && ret.push(pedido);
+					}
+				}
+			}
+		};
+
+		for (let i = 0 ; i < data.pedidos.length ; i++) {
+			let pedido = data.pedidos[i];
+
+			if (pedido.procesadopedidos) {
+				let material = materiales[pedido.materialpedidos];
+
+				hacerMaterialNecesita(material, pedido.profundidadpedidos + 1, pedido.cantidadpedidos);
+			}
+			ret.push(pedido);
+		}
+
+		return ret;
+	}
 	getVistaMaterialesProcesar(data) {
 		let ret = [];
 		let map = {};
 
+		let pedidos_dinamicos = this.getPedidosDinamicos(data);
 		for (let i = 0 ; i < data.materiales.length ; i++) {
 			let material = data.materiales[i];
 
@@ -352,7 +442,7 @@ class App extends React.Component {
 				ret.push(obj);
 			}
 
-			let pedidos = data.pedidos.filter(item => {
+			let pedidos = pedidos_dinamicos.filter(item => {
 				return item.procesadopedidos && idmaterial == item.materialpedidos;
 			});
 
@@ -383,9 +473,10 @@ class App extends React.Component {
 
 		let vistaFabricas = this.getVistaFabricas(bd);
 		let vistaMaterialesFalta = this.getVistaMaterialesFalta(bd);
+		let pedidos_dinamicos = this.getPedidosDinamicos(bd);
 
-		for (let i = 0 ; i < bd.pedidos.length ; i++) {
-			let pedido = bd.pedidos[i];
+		for (let i = 0 ; i < pedidos_dinamicos.length ; i++) {
+			let pedido = pedidos_dinamicos[i];
 
 			let materiales = this.getMapa('materiales','id',mapas,bd.materiales);
 			let material = materiales[pedido.materialpedidos];
@@ -551,8 +642,10 @@ class App extends React.Component {
 		let vistaFabricas = this.getVistaFabricas(data);
 		let vistaMaterialesFalta = this.getVistaMaterialesFalta(data);
 
-		for (let i = 0 ; i < data.pedidos.length ; i++) {
-			let pedido = data.pedidos[i];
+		let pedidos_dinamicos = this.getPedidosDinamicos(data);
+
+		for (let i = 0 ; i < pedidos_dinamicos.length ; i++) {
+			let pedido = pedidos_dinamicos[i];
 
 			let materiales = this.getMapa('materiales','id',mapas,data.materiales);
 			let material = materiales[pedido.materialpedidos];
@@ -610,6 +703,7 @@ class App extends React.Component {
 		let mapas = {};
 
 		let vistaFabricas = this.getVistaFabricas(data);
+		let pedidos_dinamicos = this.getPedidosDinamicos(data);
 
 		for (let i = 0 ; i < data.materiales.length ; i++) {
 			let material = data.materiales[i];
@@ -619,7 +713,7 @@ class App extends React.Component {
 			let mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
 			let fabrica = mapVistaFabricas[material.fabricamateriales];
 
-			let materialpedidos = data.pedidos.filter(item => {
+			let materialpedidos = pedidos_dinamicos.filter(item => {
 				return item.materialpedidos == id;
 			});
 			let materialpedidosprocesados = materialpedidos.filter(item => {
@@ -690,36 +784,6 @@ class App extends React.Component {
 			error: error
 		});
 	}
-	limpiarPedidos(id, cantidad, bd, callback, error) {
-		let mapas = {};
-
-		let tipo_pedido_otros = bd.tipos_pedido.buscar('auxtipos_pedido', true);
-		let pedidos = bd.pedidos.filter(item => {
-			return item.materialpedidos == id && item.tipopedidos == tipo_pedido_otros.id;
-		});
-		if (pedidos.length) {
-			let pedido = pedidos.sort((a, b) => {
-				return a.profundidadpedidos < b.profundidadpedidos;
-			})[0];
-
-			let dif = pedido.cantidadpedidos - cantidad;
-			if (dif > 0) {
-				pedido.cantidadpedidos = dif;
-				this.editar('pedidos',pedido,'id',pedido.id, callback, error);
-			} else {
-				this.eliminar('pedidos','id',pedido.id, () => {
-					bd.pedidos.splice(bd.pedidos.indexOf(pedido), 1);
-					if (dif < 0) {
-						this.limpiarPedidos(id, cantidad + dif, bd, callback, error);
-					} else {
-						callback();
-					}
-				} );
-			}
-		} else {
-			throw new Error('No hay pedidos de ' + bd.materiales.buscar('id', id).nombremateriales);
-		}
-	}
 	recogerMaterial(id, bd, callback, error) {
 		let mapas = {};
 
@@ -782,16 +846,15 @@ class App extends React.Component {
 				});
 				if (!material_necesita_falta) {
 
-					material.haciendomateriales += material.hacemateriales;
+					material.haciendomateriales += (material.hacemateriales * cantidad);
 					this.editar('materiales',material,'id',material.id, () => {
 
 						let fnPromesa = (material_necesita, index, resolve, reject) => {
 							let dif = material_necesita.stockmaterialesnecesita - material_necesita.cantidadmateriales_necesita;
+							dif *= cantidad;
 							let auxMaterial = materiales[material_necesita.materialnecesitamateriales_necesita];
 							auxMaterial.stockmateriales = dif;
-							this.editar('materiales',auxMaterial,'id',auxMaterial.id, () => {
-								this.limpiarPedidos(material_necesita.materialnecesitamateriales_necesita, material_necesita.cantidadmateriales_necesita, bd, resolve, reject);
-							} , reject);
+							this.editar('materiales',auxMaterial,'id',auxMaterial.id, resolve, reject);
 						} ;
 
 						materiales_necesita.promesas(fnPromesa, callback, error, this);
@@ -836,61 +899,6 @@ class App extends React.Component {
 
 		pedidos.promesas(fnPromesa, successPromesa, error, this);
 	}
-	guardarPedidos(id, cantidad, padrepedidos, hacemateriales, profundidad, bd, callback, error) {
-		this.insertar('pedidos', {
-			cantidadpedidos: cantidad,
-			materialpedidos: id,
-			padrepedidos: padrepedidos,
-			tipopedidos: bd.tipos_pedido.buscar('auxtipos_pedido', true).id,
-			procesadopedidos: true,
-			profundidadpedidos: profundidad
-		}, pedido => {
-			let idpedidos = pedido.id;
-
-			bd.pedidos.push(pedido);
-
-			let mapas = {};
-
-			let vistaMaterialesProcesar = this.getVistaMaterialesProcesar(bd);
-			let mapVistaMaterialesProcesar = this.getMapa('vistaMaterialesProcesar', 'materialpedidos', mapas, vistaMaterialesProcesar);
-			let material = mapVistaMaterialesProcesar[id];
-
-			let cantidad2 = material.faltamateriales;
-
-			if (cantidad2 > 0) {
-				if (cantidad2 > cantidad) {
-					cantidad2 = cantidad;
-				}
-				let materiales_necesita = bd.materiales_necesita.filter(item => {
-					return item.materialmateriales_necesita == id;
-				});
-
-				let fnPromesa = (material_necesita, index, resolve, reject) => {
-					let cantidad2 = material.faltamateriales;
-
-					if (cantidad2 > 0) {
-						if (cantidad2 > pedido.cantidadpedidos) {
-							cantidad2 = pedido.cantidadpedidos;
-						}
-						this.guardarPedidos(material_necesita.materialnecesitamateriales_necesita,
-							Math.ceil(material_necesita.cantidadmateriales_necesita * cantidad2 / material.hacemateriales),
-							idpedidos,
-							material.hacemateriales,
-							profundidad+1,
-							bd,
-							resolve,
-							reject);
-					} else {
-						resolve();
-					}
-				} ;
-
-				materiales_necesita.promesas(fnPromesa, callback, error, this);
-			} else {
-				callback();
-			}
-		} , error);
-	}
 	procesarPedido(id, bd, callback, error) {
 
 		let pedido = bd.pedidos.buscar('id', id);
@@ -898,44 +906,8 @@ class App extends React.Component {
 		if (pedido.procesadopedidos) {
 			callback();
 		} else {
-			let mapas = {};
-
 			pedido.procesadopedidos = true;
-			this.editar('pedidos',pedido,'id',pedido.id, () => {
-				let vistaMaterialesProcesar = this.getVistaMaterialesProcesar(bd);
-				let mapVistaMaterialesProcesar = this.getMapa('vistaMaterialesProcesar', 'materialpedidos', mapas, vistaMaterialesProcesar);
-				let material = mapVistaMaterialesProcesar[pedido.materialpedidos];
-
-				if (material.cantidadpedidos > material.stockmateriales + material.haciendomateriales) {
-					let materiales_necesita = bd.materiales_necesita.filter(item => {
-						return item.materialmateriales_necesita == pedido.materialpedidos;
-					});
-
-					let fnPromesa = (material_necesita, index, resolve, reject) => {
-						let cantidad2 = material.faltamateriales;
-
-						if (cantidad2 > 0) {
-							if (cantidad2 > pedido.cantidadpedidos) {
-								cantidad2 = pedido.cantidadpedidos;
-							}
-							this.guardarPedidos(material_necesita.materialnecesitamateriales_necesita,
-								Math.ceil(material_necesita.cantidadmateriales_necesita * cantidad2 / material.hacemateriales),
-								pedido.id,
-								material.hacemateriales,
-								1,
-								bd,
-								resolve,
-								reject);
-						} else {
-							resolve();
-						}
-					} ;
-
-					materiales_necesita.promesas(fnPromesa, callback, error, this);
-				} else {
-					callback();
-				}
-			} , error);
+			this.editar('pedidos',pedido,'id',pedido.id, callback, error);
 		}
 	}
 	procesarPedidos(id, bd, callback, error) {
@@ -972,7 +944,6 @@ class App extends React.Component {
 						fn.apply(this, par_accion);
 					} );
 				} catch (err) {
-					//console.error(err);
 					tabla.setState({velo: false}, () => {
 						this.setDialogo({
 							titulo: 'Error',
