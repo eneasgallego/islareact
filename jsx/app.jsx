@@ -1178,17 +1178,11 @@ class App extends React.Component {
 		return ret;
 	}
 	renderNuevoPedido() {
-		let ret = [];
-
-		let config = this.props.config.nuevo_pedido;
-		ret.push(
-			<PanelFormulario
-				onSubmit={this[config.guardar]}
-				campos={this.campos}
-			/>
-		);
-
-		return ret;
+		return <PanelFormulario
+			titulo={this.props.config.nuevo_pedido.titulo}
+			onSubmit={this[this.props.config.nuevo_pedido.guardar]}
+			campos={this.props.config.nuevo_pedido.campos}
+		/>
 	}
 	renderContenido(e) {
 		let ret = '';

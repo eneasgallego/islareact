@@ -196,6 +196,7 @@ let options = {
             claseFila: 'claseFilaExcedente'
         },
         nuevo_pedido: {
+            titulo: 'Nuevo Pedido',
             guardar: 'guardarPedido',
             campos: [{
                 campo: 'tipopedido',
