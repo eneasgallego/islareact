@@ -20,6 +20,9 @@ let options = {
         texto: 'Excedente',
         tag: 'excedente'
     },{
+        texto: 'Nuevo Pedido',
+        tag: 'nuevo_pedido'
+    },{
         texto: 'Admin',
         tag: 'admin',
         menu: [{
@@ -191,6 +194,18 @@ let options = {
             cols: 'colsExcedente',
             acciones: 'accionesExcedente',
             claseFila: 'claseFilaExcedente'
+        },
+        nuevo_pedido: {
+            guardar: 'guardarPedido',
+            campos: [{
+                campo: 'tipopedido',
+                tipo: {
+                    tipo: 'object',
+                    url: 'http://localhost:3000/tipos_pedido',
+                    id: 'id',
+                    texto: 'nombretipos_pedido'
+                }
+            }]
         },
         inicio: [{
             id: 'huerto',

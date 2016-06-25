@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
+import PanelFormulario from '../web/js/lib/nreactjs/jsx/panel_formulario.jsx'
 import ListaTabla from '../web/js/lib/nreactjs/jsx/lista_tabla.jsx'
 import Dialogo from '../web/js/lib/nreactjs/jsx/dialogo.jsx'
 
@@ -1176,13 +1177,28 @@ class App extends React.Component {
 
 		return ret;
 	}
+	renderNuevoPedido() {
+		let ret = [];
+
+		let config = this.props.config.nuevo_pedido;
+		ret.push(
+			<PanelFormulario
+				onSubmit={this[config.guardar]}
+				campos={this.campos}
+			/>
+		);
+
+		return ret;
+	}
 	renderContenido(e) {
 		let ret = '';
 
 		if (this.state.contenido == 'inicio') {
 			ret = this.renderInicio();
 		} else if (this.state.contenido == 'excedente') {
-				ret = this.renderExcedente();
+			ret = this.renderExcedente();
+		} else if (this.state.contenido == 'nuevo_pedido') {
+			ret = this.renderNuevoPedido();
 		} else {
 			ret = <ListaTabla	id_campo={this.props.config[this.state.contenido].id_campo}
 								url_editar={this.props.config[this.state.contenido].url_editar}
