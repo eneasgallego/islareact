@@ -57,6 +57,26 @@ $color-texto-nulo-resaltado: black;
   min-width: 450px;
 }
 
+.panel_nuevo_pedido {
+  >a {
+    padding: 4px 8px;
+    margin: 2px;
+    cursor: pointer;
+    color: $color-fondo-texto;
+    text-decoration: none;
+    border-radius: 25px;
+    font-family: Arial;
+    @include color-cabecera();
+
+    &:hover {
+      @include color-cabecera-hover();
+      a {
+        color: $color-fondo-texto-inv;
+      }
+    }
+  }
+}
+
 .tabla-cont {
 
   .tabla-div {

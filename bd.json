@@ -2151,22 +2151,6 @@
   ],
   "pedidos": [
     {
-      "procesadopedidos": true,
-      "tipopedidos": 2,
-      "materialpedidos": 1,
-      "cantidadpedidos": 10,
-      "profundidadpedidos": -1,
-      "id": 1
-    },
-    {
-      "tipopedidos": 2,
-      "materialpedidos": 2,
-      "cantidadpedidos": 10,
-      "procesadopedidos": true,
-      "profundidadpedidos": -1,
-      "id": 2
-    },
-    {
       "tipopedidos": 2,
       "materialpedidos": 7,
       "cantidadpedidos": 20,
@@ -2421,6 +2405,30 @@
       "procesadopedidos": true,
       "profundidadpedidos": 0,
       "id": 5299
+    },
+    {
+      "materialpedidos": 32,
+      "cantidadpedidos": 1,
+      "tipopedidos": 11,
+      "profundidadpedidos": 0,
+      "procesadopedidos": false,
+      "id": 5300
+    },
+    {
+      "materialpedidos": 84,
+      "cantidadpedidos": 2,
+      "tipopedidos": 11,
+      "profundidadpedidos": 0,
+      "procesadopedidos": false,
+      "id": 5301
+    },
+    {
+      "materialpedidos": 25,
+      "cantidadpedidos": 3,
+      "tipopedidos": 12,
+      "profundidadpedidos": 0,
+      "procesadopedidos": false,
+      "id": 5302
     }
   ]
 }

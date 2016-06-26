@@ -1215,7 +1215,50 @@ class App extends React.Component {
 		return ret;
 	}
 	crearNuevoPedido() {
+		let dialogo = texto=>{
+			return dialogo = {
+				titulo: 'Error',
+				puedeCerrar: true,
+				contenido: texto
+			};
+		};
+		try {
+			let panel = this.refs.panel_nuevo_pedido;
+			let tipopedido = panel.refs.tipopedido.getValor();
+			if (tipopedido) {
+				let profundidad = panel.refs.profundidad.getValor();
+				if (profundidad.length && !isNaN(profundidad)) {
+					let tabla_nuevo_pedido = panel.refs.tabla_nuevo_pedido.getValor();
+					if (tabla_nuevo_pedido.length) {
+						for (let i = 0 ; i < tabla_nuevo_pedido.length ; i++) {
+							let item = tabla_nuevo_pedido[i];
 
+							item.tipopedidos = tipopedido;
+							item.profundidadpedidos = profundidad;
+							item.procesadopedidos = false;
+
+							delete item.id;
+						}
+
+						let fnPromesa = (item, index, resolve, reject) => {
+							this.insertar('pedidos',item,resolve, reject);
+						} ;
+
+						tabla_nuevo_pedido.promesas(fnPromesa, ()=>{
+							this.accionMenu('inicio');
+						}, this.gestionarError, this);
+					} else {
+						this.setDialogo(dialogo('Debe haber seleccionado algún material.'));
+					}
+				} else {
+					this.setDialogo(dialogo('Profundidad debe ser un número.'));
+				}
+			} else {
+				this.setDialogo(dialogo('Hay que seleccionar el Tipo de Pedido.'));
+			}
+		} catch (e){
+			this.setDialogo(dialogo(e.message));
+		}
 	}
 	renderContenidoNuevoPedido() {
 		let ret = [];
@@ -1274,8 +1317,8 @@ class App extends React.Component {
 		}
 	}
 	renderNuevoPedido() {
-
 		return <Panel
+			className="panel_nuevo_pedido"
 			contenido={this.renderContenidoNuevoPedido}
 			ref="panel_nuevo_pedido"
 			dimensionar={this.dimensionarNuevoPedido}
