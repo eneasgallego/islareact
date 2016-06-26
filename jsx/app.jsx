@@ -24,6 +24,7 @@ class App extends React.Component {
 		this.setDialogo = this.setDialogo.bind(this);
 		this.renderContenidoNuevoPedido = this.renderContenidoNuevoPedido.bind(this);
 		this.onResizeFilaNuevoPedido = this.onResizeFilaNuevoPedido.bind(this);
+		this.dimensionar = this.dimensionar.bind(this);
 		this.dimensionarNuevoPedido = this.dimensionarNuevoPedido.bind(this);
 
 		this.state = {
@@ -1223,12 +1224,14 @@ class App extends React.Component {
 					titulo={this.props.config.nuevo_pedido.tipopedido.titulo}
 					combo={this.props.config.nuevo_pedido.tipopedido}
 					dataset={this.state.dataset_tipopedidos}
+					onLoad={this.dimensionar}
 				/>);
 			ret.push(
 				<TextField
 					key="profundidad"
 					ref="profundidad"
 					titulo={this.props.config.nuevo_pedido.profundidad.titulo}
+					onLoad={this.dimensionar}
 				/>);
 
 			ret.push(
@@ -1241,6 +1244,7 @@ class App extends React.Component {
 					ref="tabla_nuevo_pedido"
 					setDialogo={this.setDialogo}
 					onResizeFila={this.onResizeFilaNuevoPedido}
+					onLoad={this.dimensionar}
 				/>
 			);
 		}
@@ -1249,11 +1253,14 @@ class App extends React.Component {
 	}
 	dimensionarNuevoPedido(alto, panel) {
 		let tipopedido = ReactDOM.findDOMNode(panel.refs.tipopedido);
-		let profundidad = ReactDOM.findDOMNode(panel.refs.profundidad);
-
-		let alto_form = tipopedido.offsetHeight > profundidad.offsetHeight ? tipopedido.offsetHeight : profundidad.offsetHeight;
-		let alto_tabla = alto - alto_form;
-		panel.refs.tabla_nuevo_pedido.dimensionar(alto_tabla);
+		if (tipopedido) {
+			let profundidad = ReactDOM.findDOMNode(panel.refs.profundidad);
+			if (profundidad) {
+				let alto_form = tipopedido.offsetHeight > profundidad.offsetHeight ? tipopedido.offsetHeight : profundidad.offsetHeight;
+				let alto_tabla = alto - alto_form;
+				panel.refs.tabla_nuevo_pedido.dimensionar(alto_tabla);
+			}
+		}
 	}
 	renderNuevoPedido() {
 
