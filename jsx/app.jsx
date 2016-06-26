@@ -1233,8 +1233,8 @@ class App extends React.Component {
 						for (let i = 0 ; i < tabla_nuevo_pedido.length ; i++) {
 							let item = tabla_nuevo_pedido[i];
 
-							item.tipopedidos = tipopedido;
-							item.profundidadpedidos = profundidad;
+							item.tipopedidos = parseInt(tipopedido);
+							item.profundidadpedidos = parseInt(profundidad);
 							item.procesadopedidos = false;
 
 							delete item.id;
