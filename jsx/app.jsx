@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom'
 
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
-import PanelFormulario from '../web/js/lib/nreactjs/jsx/panel_formulario.jsx'
+import Panel from '../web/js/lib/nreactjs/jsx/panel.jsx'
 import ListaTabla from '../web/js/lib/nreactjs/jsx/lista_tabla.jsx'
 import Dialogo from '../web/js/lib/nreactjs/jsx/dialogo.jsx'
+import Combo from '../web/js/lib/nreactjs/jsx/combo.jsx'
+import TextField from '../web/js/lib/nreactjs/jsx/textfield.jsx'
 
 class App extends React.Component {
 	constructor(props) {
@@ -20,9 +22,14 @@ class App extends React.Component {
 		this.accionMenu = this.accionMenu.bind(this);
 		this.onClickAcciones = this.onClickAcciones.bind(this);
 		this.setDialogo = this.setDialogo.bind(this);
+		this.renderContenidoNuevoPedido = this.renderContenidoNuevoPedido.bind(this);
+		this.onResizeFilaNuevoPedido = this.onResizeFilaNuevoPedido.bind(this);
+		this.dimensionarNuevoPedido = this.dimensionarNuevoPedido.bind(this);
 
 		this.state = {
 			contenido: 'inicio',
+			dataset_tipopedidos: [],
+			cargando_dataset_tipopedidos: false,
 			alto: undefined,
 			dialogo: undefined
 		};
@@ -32,7 +39,35 @@ class App extends React.Component {
 		window.onresize = e => {
 			this.dimensionar();
 		};
+	}
+	componentDidUpdate() {
 
+		if (this.state.contenido == 'nuevo_pedido') {
+			if (!this.state.cargando_dataset_tipopedidos && !this.state.dataset_tipopedidos.length) {
+				this.setState({cargando_dataset_tipopedidos:true},()=>{
+					ajax({
+						metodo: 'get',
+						url: this.props.config.nuevo_pedido.tipopedido.url,
+						params: {
+							_sort: this.props.config.nuevo_pedido.tipopedido.texto,
+							_order: 'ASC'
+						},
+						success: response => {
+							if (this.state.contenido == 'nuevo_pedido') {
+								this.setState({dataset_tipopedidos: response, cargando_dataset_tipopedidos:false});
+							}
+						}
+					});
+				});
+			}
+		} else {
+			if (this.state.dataset_tipopedidos.length) {
+				this.setState({dataset_tipopedidos: [], cargando_dataset_tipopedidos:false});
+			}
+		}
+	}
+	onResizeFilaNuevoPedido(offset, fila, tabla, lista) {
+		console.log(arguments);
 	}
 	parseDataPedido(data, tabla, panel) {
 		return this.getVistaPedido(data).filter(item => {
@@ -1086,7 +1121,7 @@ class App extends React.Component {
 				let ref = this.refs[i];
 
 				if (typeof(ref.dimensionar) === 'function') {
-					ref.dimensionar();
+					ref.dimensionar(alto);
 				}
 			}
 		} );
@@ -1177,11 +1212,55 @@ class App extends React.Component {
 
 		return ret;
 	}
+	renderContenidoNuevoPedido() {
+		let ret = [];
+
+		if (this.state.dataset_tipopedidos.length) {
+			ret.push(
+				<Combo
+					key="tipopedido"
+					ref="tipopedido"
+					titulo={this.props.config.nuevo_pedido.tipopedido.titulo}
+					combo={this.props.config.nuevo_pedido.tipopedido}
+					dataset={this.state.dataset_tipopedidos}
+				/>);
+			ret.push(
+				<TextField
+					key="profundidad"
+					ref="profundidad"
+					titulo={this.props.config.nuevo_pedido.profundidad.titulo}
+				/>);
+
+			ret.push(
+				<ListaTabla
+					id_campo={this.props.config.nuevo_pedido.tabla.id_campo}
+					url={this.props.config.nuevo_pedido.tabla.url}
+					cols={this.props.config.nuevo_pedido.tabla.cols}
+					eliminar={this.props.config.nuevo_pedido.tabla.eliminar}
+					key="tabla_nuevo_pedido"
+					ref="tabla_nuevo_pedido"
+					setDialogo={this.setDialogo}
+					onResizeFila={this.onResizeFilaNuevoPedido}
+				/>
+			);
+		}
+
+		return ret;
+	}
+	dimensionarNuevoPedido(alto, panel) {
+		let tipopedido = ReactDOM.findDOMNode(panel.refs.tipopedido);
+		let profundidad = ReactDOM.findDOMNode(panel.refs.profundidad);
+
+		let alto_form = tipopedido.offsetHeight > profundidad.offsetHeight ? tipopedido.offsetHeight : profundidad.offsetHeight;
+		let alto_tabla = alto - alto_form;
+		panel.refs.tabla_nuevo_pedido.dimensionar(alto_tabla);
+	}
 	renderNuevoPedido() {
-		return <PanelFormulario
-			titulo={this.props.config.nuevo_pedido.titulo}
-			onSubmit={this[this.props.config.nuevo_pedido.guardar]}
-			campos={this.props.config.nuevo_pedido.campos}
+
+		return <Panel
+			contenido={this.renderContenidoNuevoPedido}
+			ref="panel_nuevo_pedido"
+			dimensionar={this.dimensionarNuevoPedido}
 		/>
 	}
 	renderContenido(e) {

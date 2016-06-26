@@ -196,17 +196,35 @@ let options = {
             claseFila: 'claseFilaExcedente'
         },
         nuevo_pedido: {
-            titulo: 'Nuevo Pedido',
             guardar: 'guardarPedido',
-            campos: [{
-                campo: 'tipopedido',
-                tipo: {
-                    tipo: 'object',
-                    url: 'http://localhost:3000/tipos_pedido',
-                    id: 'id',
-                    texto: 'nombretipos_pedido'
-                }
-            }]
+            tipopedido: {
+                titulo: 'Tipo',
+                url: 'http://localhost:3000/tipos_pedido',
+                id: 'id',
+                texto: 'nombretipos_pedido'
+            },
+            profundidad: {
+                titulo: 'Profundidad'
+            },
+            tabla: {
+                id_campo: 'id',
+                cols: [{
+                    texto: 'MATERIAL',
+                    campo: 'materialpedidos',
+                    tipo: {
+                        tipo: 'object',
+                        url: 'http://localhost:3000/materiales',
+                        id: 'id',
+                        texto: 'nombremateriales'
+                    }
+                },{
+                    texto: 'CANTIDAD',
+                    campo: 'cantidadpedidos',
+                    tipo: 'int'
+                }],
+                eliminar: true,
+                guardar: 'guardarNuevoPedido'
+            }
         },
         inicio: [{
             id: 'huerto',
