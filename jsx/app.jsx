@@ -8,6 +8,7 @@ import ListaTabla from '../web/js/lib/nreactjs/jsx/lista_tabla.jsx'
 import Dialogo from '../web/js/lib/nreactjs/jsx/dialogo.jsx'
 import Combo from '../web/js/lib/nreactjs/jsx/combo.jsx'
 import TextField from '../web/js/lib/nreactjs/jsx/textfield.jsx'
+import Boton from '../web/js/lib/nreactjs/jsx/boton.jsx'
 
 class App extends React.Component {
 	constructor(props) {
@@ -26,7 +27,7 @@ class App extends React.Component {
 		this.onResizeFilaNuevoPedido = this.onResizeFilaNuevoPedido.bind(this);
 		this.dimensionar = this.dimensionar.bind(this);
 		this.dimensionarNuevoPedido = this.dimensionarNuevoPedido.bind(this);
-
+		this.crearNuevoPedido = this.crearNuevoPedido.bind(this);
 		this.state = {
 			contenido: 'inicio',
 			dataset_tipopedidos: [],
@@ -1213,6 +1214,9 @@ class App extends React.Component {
 
 		return ret;
 	}
+	crearNuevoPedido() {
+
+	}
 	renderContenidoNuevoPedido() {
 		let ret = [];
 
@@ -1233,6 +1237,12 @@ class App extends React.Component {
 					titulo={this.props.config.nuevo_pedido.profundidad.titulo}
 					onLoad={this.dimensionar}
 				/>);
+			ret.push(
+				<Boton
+					key="aceptar"
+					texto="ACEPTAR"
+					accion={this.crearNuevoPedido}
+				/>);
 
 			ret.push(
 				<ListaTabla
@@ -1245,6 +1255,7 @@ class App extends React.Component {
 					setDialogo={this.setDialogo}
 					onResizeFila={this.onResizeFilaNuevoPedido}
 					onLoad={this.dimensionar}
+					persistir={false}
 				/>
 			);
 		}
