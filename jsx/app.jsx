@@ -136,11 +136,72 @@ class App extends React.Component {
 		return ret;
 	}
 	parseDataNecesita(data, tabla, panel) {
-		let vistaNecesita = this.getVistaNecesita(data);
+		let ret = [];
+		let map = {};
+		let mapas = {};
 
-		let ret = vistaNecesita.filter(item => {
-			return item.haciendomateriales > 0;
-		});
+		let vistaFabricas = this.getVistaFabricas(data);
+		let vistaMaterialesFalta = this.getVistaMaterialesFalta(data);
+
+		let materiales = this.getMapa('materiales','id',mapas,data.materiales);
+
+		let pedidos_dinamicos = this.getPedidosDinamicos(data);
+
+		let parsePedidos = (material,pedidos_dinamicos)=>{
+			let mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
+			let fabrica = mapVistaFabricas[material.fabricamateriales];
+
+			let mapVistaMaterialesFalta = this.getMapa('vistaMaterialesFalta','idmateriales',mapas,vistaMaterialesFalta);
+			let material_falta = mapVistaMaterialesFalta[material.id];
+
+			let obj = map[material.id];
+			if (!obj) {
+				obj = {
+					materialpedidos: material.id,
+					nombremateriales: material.nombremateriales,
+					fabricamateriales: material.fabricamateriales,
+					nombrefabricas: fabrica.nombrefabricas,
+					maximofabricas: fabrica.maximofabricas,
+					haciendofabricas: fabrica.haciendomateriales,
+					stockmateriales: material.stockmateriales,
+					haciendomateriales: material.haciendomateriales,
+					procesadopedidos: 1,
+					faltanecesita: material_falta.dif,
+					cantidadpedidos: 0,
+					faltamateriales: 0,
+					profundidadpedidos: undefined
+				};
+				ret.push(obj);
+				map[material.id] = obj;
+			}
+
+			for (let i = 0 ; i < pedidos_dinamicos.length ; i++) {
+				let pedido = pedidos_dinamicos[i];
+
+				obj.cantidadpedidos += pedido.cantidadpedidos;
+
+				if (typeof(obj.profundidadpedidos) === 'undefined' || obj.profundidadpedidos < pedido.profundidadpedidos) {
+					obj.profundidadpedidos = pedido.profundidadpedidos;
+				}
+			}
+			obj.faltamateriales = obj.cantidadpedidos - obj.stockmateriales - obj.haciendomateriales;
+		};
+
+		for (let i = 0 ; i < data.materiales.length ; i++) {
+			let material = data.materiales[i];
+
+			if (material.haciendomateriales) {
+				let pedidos_dinamicos_material = pedidos_dinamicos.filter(item=>item.materialpedidos==material.id);
+				parsePedidos(material, pedidos_dinamicos_material);
+			}
+		}
+
+
+		for (let i = 0 ; i < ret.length ; i++) {
+			let item = ret[i];
+
+			item.faltamateriales = item.cantidadpedidos - item.stockmateriales - item.haciendomateriales;
+		}
 
 		return ret;
 	}
