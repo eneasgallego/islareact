@@ -341,6 +341,9 @@ class App extends React.Component {
 		return [{
 			texto: 'recoger',
 			tag: 'accionRecogerMaterial'
+		},{
+			texto: 'todo',
+			tag: 'accionRecogerTodoMaterial'
 		}];
 	}
 	accionesExcedente() {
@@ -899,6 +902,22 @@ class App extends React.Component {
 			throw new Error('No hay nada que recoger');
 		}
 	}
+	recogerTodoMaterial(id, bd, callback, error) {
+		let mapas = {};
+
+		let materiales = this.getMapa('materiales','id',mapas,bd.materiales);
+		let material = materiales[id];
+
+		if (material.haciendomateriales > 0) {
+
+			material.stockmateriales += (material.hacemateriales * material.haciendomateriales);
+			material.haciendomateriales = 0;
+
+			this.editar('materiales',material,'id',id,callback, error);
+		} else {
+			throw new Error('No hay nada que recoger');
+		}
+	}
 	venderMaterial(id, bd, callback, error) {
 		let mapas = {};
 
@@ -1058,6 +1077,9 @@ class App extends React.Component {
 	}
 	accionRecogerMaterial(tag, fila, tabla, panel) {
 		this.accion(this.recogerMaterial, [fila.props.datos.materialpedidos], tabla);
+	}
+	accionRecogerTodoMaterial(tag, fila, tabla, panel) {
+		this.accion(this.recogerTodoMaterial, [fila.props.datos.materialpedidos], tabla);
 	}
 	accionVenderMaterial(tag, fila, tabla, panel) {
 		this.accion(this.venderMaterial, [fila.props.datos.materialpedidos], tabla);
