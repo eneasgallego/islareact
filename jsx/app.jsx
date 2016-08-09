@@ -130,12 +130,21 @@ class App extends React.Component {
 		let vistaNecesita = this.getVistaNecesita(data);
 
 		let ret = vistaNecesita.filter(item => {
-			return (!!~item.maximofabricas) && item.stockmateriales < item.cantidadpedidos && item.stockmateriales + item.haciendomateriales < item.cantidadpedidos;
+			return (!!~item.maximofabricas) && item.stockmateriales + item.haciendomateriales < item.cantidadpedidos;
 		});
 
 		return ret;
 	}
 	parseDataNecesita(data, tabla, panel) {
+		let vistaNecesita = this.getVistaNecesita(data, true);
+
+		let ret = vistaNecesita.filter(item => {
+			return item.haciendomateriales > 0;
+		});
+
+		return ret;
+
+/*
 		let ret = [];
 		let map = {};
 		let mapas = {};
@@ -204,6 +213,7 @@ class App extends React.Component {
 		}
 
 		return ret;
+		*/
 	}
 	parseDataExcedente(data, tabla, panel) {
 		return this.getVistaExcedente(data);
@@ -736,7 +746,7 @@ class App extends React.Component {
 
 		return ret;
 	}
-	getVistaNecesita(data) {
+	getVistaNecesita(data,sinpedidos) {
 		let ret = [];
 		let map = {};
 		let mapas = {};
@@ -746,25 +756,18 @@ class App extends React.Component {
 
 		let pedidos_dinamicos = this.getPedidosDinamicos(data);
 
-		for (let i = 0 ; i < pedidos_dinamicos.length ; i++) {
-			let pedido = pedidos_dinamicos[i];
+		let mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
+		let mapVistaMaterialesFalta = this.getMapa('vistaMaterialesFalta','idmateriales',mapas,vistaMaterialesFalta);
 
-			let materiales = this.getMapa('materiales','id',mapas,data.materiales);
-			let material = materiales[pedido.materialpedidos];
+		let calcularPedidos = (material, pedidos)=>{
+			if (sinpedidos || pedidos.length) {
+				let fabrica = mapVistaFabricas[material.fabricamateriales];
+				let material_falta = mapVistaMaterialesFalta[material.id];
 
-			let mapVistaFabricas = this.getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
-			let fabrica = mapVistaFabricas[material.fabricamateriales];
-
-			let mapVistaMaterialesFalta = this.getMapa('vistaMaterialesFalta','idmateriales',mapas,vistaMaterialesFalta);
-			let material_falta = mapVistaMaterialesFalta[material.id];
-
-			if (pedido.cantidadpedidos > 0 && pedido.procesadopedidos) {
-				let id = pedido.materialpedidos;
-
-				let obj = map[id];
+				let obj = map[material.id];
 				if (!obj) {
 					obj = {
-						materialpedidos: id,
+						materialpedidos: material.id,
 						nombremateriales: material.nombremateriales,
 						fabricamateriales: material.fabricamateriales,
 						nombrefabricas: fabrica.nombrefabricas,
@@ -779,16 +782,26 @@ class App extends React.Component {
 						profundidadpedidos: undefined
 					};
 					ret.push(obj);
+					map[material.id] = obj;
 				}
 
-				obj.cantidadpedidos += pedido.cantidadpedidos;
+				for (let i = 0 ; i < pedidos.length ; i++) {
+					let pedido = pedidos[i];
 
-				if (typeof(obj.profundidadpedidos) === 'undefined' || obj.profundidadpedidos < pedido.profundidadpedidos) {
-					obj.profundidadpedidos = pedido.profundidadpedidos;
+					obj.cantidadpedidos += pedido.cantidadpedidos;
+
+					if (typeof(obj.profundidadpedidos) === 'undefined' && obj.stockmateriales + obj.haciendomateriales <= obj.cantidadpedidos) {
+						obj.profundidadpedidos = pedido.profundidadpedidos;
+					}
 				}
-
-				map[id] = obj;
 			}
+		};
+
+		for (let i = 0 ; i < data.materiales.length ; i++) {
+			let material = data.materiales[i];
+			let pedidos = pedidos_dinamicos.filter(item=>item.materialpedidos==material.id).sort((a,b)=>a.profundidadpedidos==b.profundidadpedidos ? 0 : a.profundidadpedidos==b.profundidadpedidos ? -1 : 1);
+
+			calcularPedidos(material, pedidos);
 		}
 
 		for (let i = 0 ; i < ret.length ; i++) {
