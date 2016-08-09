@@ -488,8 +488,8 @@
       "nombremateriales": "Champiñones",
       "fabricamateriales": 18,
       "hacemateriales": 3,
-      "stockmateriales": 2,
-      "haciendomateriales": 6,
+      "stockmateriales": 8,
+      "haciendomateriales": 0,
       "id": 45
     },
     {

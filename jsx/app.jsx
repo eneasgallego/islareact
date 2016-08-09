@@ -923,7 +923,7 @@ class App extends React.Component {
 
 		if (material.haciendomateriales > 0) {
 
-			material.stockmateriales += (material.hacemateriales * material.haciendomateriales);
+			material.stockmateriales += material.haciendomateriales;
 			material.haciendomateriales = 0;
 
 			this.editar('materiales',material,'id',id,callback, error);
