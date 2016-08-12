@@ -127,16 +127,16 @@ class App extends React.Component {
 		return ret;
 	}
 	parseDataNecesitaMateriales(data, tabla, panel) {
-		let vistaNecesita = this.getVistaNecesita(data);
+		let vistaNecesita = this.getVistaNecesita(data,item=>item.stockmateriales + item.haciendomateriales < item.cantidadpedidos);
 
 		let ret = vistaNecesita.filter(item => {
-			return (!!~item.maximofabricas) && item.stockmateriales + item.haciendomateriales < item.cantidadpedidos;
+			return (item.procesadopedidos && !!~item.maximofabricas) && item.stockmateriales + item.haciendomateriales < item.cantidadpedidos;
 		});
 
 		return ret;
 	}
 	parseDataNecesita(data, tabla, panel) {
-		let vistaNecesita = this.getVistaNecesita(data, true);
+		let vistaNecesita = this.getVistaNecesita(data,item=>item.stockmateriales < item.cantidadpedidos, true);
 
 		let ret = vistaNecesita.filter(item => {
 			return item.haciendomateriales > 0;
@@ -219,10 +219,10 @@ class App extends React.Component {
 		return this.getVistaExcedente(data);
 	}
 	parseDataHuerto(data, tabla, panel) {
-		let vistaNecesita = this.getVistaNecesita(data);
+		let vistaNecesita = this.getVistaNecesita(data,item=>item.stockmateriales + item.haciendomateriales < item.cantidadpedidos);
 
 		let ret = vistaNecesita.filter(item => {
-			return (!~item.maximofabricas) && item.stockmateriales < item.cantidadpedidos;
+			return (item.procesadopedidos && !~item.maximofabricas) && item.stockmateriales < item.cantidadpedidos;
 		});
 
 		return ret;
@@ -746,7 +746,7 @@ class App extends React.Component {
 
 		return ret;
 	}
-	getVistaNecesita(data,sinpedidos) {
+	getVistaNecesita(data,calcularProfundidad,sinpedidos) {
 		let ret = [];
 		let map = {};
 		let mapas = {};
@@ -788,10 +788,12 @@ class App extends React.Component {
 				for (let i = 0 ; i < pedidos.length ; i++) {
 					let pedido = pedidos[i];
 
-					obj.cantidadpedidos += pedido.cantidadpedidos;
+					if (pedido.procesadopedidos) {
+						obj.cantidadpedidos += pedido.cantidadpedidos;
 
-					if (typeof(obj.profundidadpedidos) === 'undefined' && obj.stockmateriales + obj.haciendomateriales <= obj.cantidadpedidos) {
-						obj.profundidadpedidos = pedido.profundidadpedidos;
+						if (typeof(obj.profundidadpedidos) === 'undefined' && calcularProfundidad(obj)) {
+							obj.profundidadpedidos = pedido.profundidadpedidos;
+						}
 					}
 				}
 			}
@@ -799,7 +801,7 @@ class App extends React.Component {
 
 		for (let i = 0 ; i < data.materiales.length ; i++) {
 			let material = data.materiales[i];
-			let pedidos = pedidos_dinamicos.filter(item=>item.materialpedidos==material.id).sort((a,b)=>a.profundidadpedidos==b.profundidadpedidos ? 0 : a.profundidadpedidos==b.profundidadpedidos ? -1 : 1);
+			let pedidos = pedidos_dinamicos.filter(item=>item.materialpedidos==material.id).sort((a,b)=>a.profundidadpedidos==b.profundidadpedidos ? 0 : a.profundidadpedidos>b.profundidadpedidos ? -1 : 1);
 
 			calcularPedidos(material, pedidos);
 		}
