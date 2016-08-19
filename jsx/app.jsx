@@ -1324,32 +1324,28 @@ class App extends React.Component {
 			let panel = this.refs.panel_nuevo_pedido;
 			let tipopedido = panel.refs.tipopedido.getValor();
 			if (tipopedido) {
-				let profundidad = panel.refs.profundidad.getValor();
-				if (profundidad.length && !isNaN(profundidad)) {
-					let tabla_nuevo_pedido = panel.refs.tabla_nuevo_pedido.getValor();
-					if (tabla_nuevo_pedido.length) {
-						for (let i = 0 ; i < tabla_nuevo_pedido.length ; i++) {
-							let item = tabla_nuevo_pedido[i];
+				let profundidad = panel.refs.tipopedido.getValorItem().profundidadtipos_pedido;
+				let tabla_nuevo_pedido = panel.refs.tabla_nuevo_pedido.getValor();
+				if (tabla_nuevo_pedido.length) {
+					for (let i = 0 ; i < tabla_nuevo_pedido.length ; i++) {
+						let item = tabla_nuevo_pedido[i];
 
-							item.tipopedidos = parseInt(tipopedido);
-							item.profundidadpedidos = parseInt(profundidad);
-							item.procesadopedidos = false;
+						item.tipopedidos = parseInt(tipopedido);
+						item.profundidadpedidos = parseInt(profundidad);
+						item.procesadopedidos = false;
 
-							delete item.id;
-						}
-
-						let fnPromesa = (item, index, resolve, reject) => {
-							this.insertar('pedidos',item,resolve, reject);
-						} ;
-
-						tabla_nuevo_pedido.promesas(fnPromesa, ()=>{
-							this.accionMenu('inicio');
-						}, this.gestionarError, this);
-					} else {
-						this.setDialogo(dialogo('Debe haber seleccionado algún material.'));
+						delete item.id;
 					}
+
+					let fnPromesa = (item, index, resolve, reject) => {
+						this.insertar('pedidos',item,resolve, reject);
+					} ;
+
+					tabla_nuevo_pedido.promesas(fnPromesa, ()=>{
+						this.accionMenu('inicio');
+					}, this.gestionarError, this);
 				} else {
-					this.setDialogo(dialogo('Profundidad debe ser un número.'));
+					this.setDialogo(dialogo('Debe haber seleccionado algún material.'));
 				}
 			} else {
 				this.setDialogo(dialogo('Hay que seleccionar el Tipo de Pedido.'));
@@ -1369,13 +1365,6 @@ class App extends React.Component {
 					titulo={this.props.config.nuevo_pedido.tipopedido.titulo}
 					combo={this.props.config.nuevo_pedido.tipopedido}
 					dataset={this.state.dataset_tipopedidos}
-					onLoad={this.dimensionar}
-				/>);
-			ret.push(
-				<TextField
-					key="profundidad"
-					ref="profundidad"
-					titulo={this.props.config.nuevo_pedido.profundidad.titulo}
 					onLoad={this.dimensionar}
 				/>);
 			ret.push(
@@ -1406,12 +1395,9 @@ class App extends React.Component {
 	dimensionarNuevoPedido(alto, panel) {
 		let tipopedido = ReactDOM.findDOMNode(panel.refs.tipopedido);
 		if (tipopedido) {
-			let profundidad = ReactDOM.findDOMNode(panel.refs.profundidad);
-			if (profundidad) {
-				let alto_form = tipopedido.offsetHeight > profundidad.offsetHeight ? tipopedido.offsetHeight : profundidad.offsetHeight;
-				let alto_tabla = alto - alto_form;
-				panel.refs.tabla_nuevo_pedido.dimensionar(alto_tabla);
-			}
+			let alto_form = tipopedido.offsetHeight;
+			let alto_tabla = alto - alto_form;
+			panel.refs.tabla_nuevo_pedido.dimensionar(alto_tabla);
 		}
 	}
 	renderNuevoPedido() {

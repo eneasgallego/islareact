@@ -122,6 +122,10 @@ let options = {
                 texto: 'TIPO',
                 campo: 'nombretipos_pedido'
             },{
+                texto: 'PROFUNDIDAD',
+                campo: 'profundidadtipos_pedido',
+                tipo: 'int'
+            },{
                 texto: 'AUX',
                 campo: 'auxtipos_pedido',
                 tipo: 'bool'
@@ -167,10 +171,10 @@ let options = {
             id: 'excedente',
             titulo: 'Excedente',
             url: 'http://localhost:3000/db',
-            orden:  [{
+            orden:  [/*{
                 campo: "eshuerto",
                 desc: false
-            },{
+            },*/{
                 campo: "excedentemateriales",
                 desc: true
             },{
