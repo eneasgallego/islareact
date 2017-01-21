@@ -410,8 +410,7 @@ class App extends React.Component {
 		return ret;
 	}
 	calcularTotal(par) {
-		let ret;
-
+		let ret = par.defecto;
 
 		for (let i = 0 ; i < par.lista.length ; i++) {
 			let item = par.lista[i];
@@ -490,11 +489,11 @@ class App extends React.Component {
 						let material_necesita = materiales_necesita[i];
 
 						let material = materiales[material_necesita.materialnecesitamateriales_necesita];
-						let pedido = ret.buscar(pedido=>pedido.tipopedidos==3 && pedido.materialpedidos==material.id);
+						let pedido = ret.buscar(pedido=>pedido.tipopedidos==6 && pedido.materialpedidos==material.id);
 						let insertar = false;
 						if (!pedido) {
 							pedido = {
-								tipopedidos: 3,
+								tipopedidos: 6,
 								materialpedidos: material.id,
 								procesadopedidos: true,
 								cantidadpedidos: 0,
@@ -696,7 +695,8 @@ class App extends React.Component {
 					lista: materiales_necesita,
 					valor(item) {
 						return (item.cantidadmateriales_necesita - item.stockmaterialesnecesita) <= 0;
-					}
+					},
+					defecto: true
 				}
 			});
 			for (let key in totales) {

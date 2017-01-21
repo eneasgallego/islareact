@@ -230,7 +230,7 @@ let options = {
                 guardar: 'guardarNuevoPedido'
             }
         },
-        inicio: [{
+        inicio: [/*{
             id: 'huerto',
             titulo: 'Huerto',
             url: 'http://localhost:3000/db',
@@ -246,7 +246,7 @@ let options = {
             cols: 'colsNecesitaMateriales',
             acciones: 'accionesNecesitaHuerto',
             claseFila: 'claseFilaNecesita'
-        },{
+        },*/{
             id: 'materiales',
             titulo: 'Materiales',
             url: 'http://localhost:3000/db',
