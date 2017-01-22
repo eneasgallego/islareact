@@ -56,7 +56,7 @@
       "nombremateriales": "Metal",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 16,
+      "stockmateriales": 22,
       "haciendomateriales": 0,
       "id": 1
     },
@@ -81,7 +81,7 @@
       "fabricamateriales": 1,
       "hacemateriales": 1,
       "stockmateriales": 2,
-      "haciendomateriales": 0,
+      "haciendomateriales": 2,
       "id": 4
     },
     {
@@ -104,8 +104,8 @@
       "nombremateriales": "Telas",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 4,
-      "haciendomateriales": 0,
+      "stockmateriales": 0,
+      "haciendomateriales": 4,
       "id": 7
     },
     {
@@ -121,15 +121,15 @@
       "fabricamateriales": 1,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 0,
+      "haciendomateriales": 4,
       "id": 9
     },
     {
       "nombremateriales": "Alimento animales",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 1,
-      "haciendomateriales": 0,
+      "stockmateriales": 0,
+      "haciendomateriales": 5,
       "id": 10
     },
     {
@@ -201,7 +201,7 @@
       "fabricamateriales": 3,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 2,
+      "haciendomateriales": 0,
       "id": 19
     },
     {
@@ -232,7 +232,7 @@
       "nombremateriales": "Verduras",
       "fabricamateriales": 4,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 1,
       "haciendomateriales": 0,
       "id": 23
     },
@@ -240,7 +240,7 @@
       "nombremateriales": "Harina",
       "fabricamateriales": 4,
       "hacemateriales": 1,
-      "stockmateriales": 2,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 24
     },
@@ -256,8 +256,8 @@
       "nombremateriales": "Nata",
       "fabricamateriales": 4,
       "hacemateriales": 1,
-      "stockmateriales": 1,
-      "haciendomateriales": 0,
+      "stockmateriales": 0,
+      "haciendomateriales": 1,
       "id": 26
     },
     {
@@ -337,7 +337,7 @@
       "fabricamateriales": 6,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 0,
+      "haciendomateriales": 1,
       "id": 36
     },
     {
@@ -368,8 +368,8 @@
       "nombremateriales": "Árboles jóvenes",
       "fabricamateriales": 7,
       "hacemateriales": 1,
-      "stockmateriales": 0,
-      "haciendomateriales": 1,
+      "stockmateriales": 1,
+      "haciendomateriales": 0,
       "id": 40
     },
     {
@@ -393,14 +393,14 @@
       "fabricamateriales": 8,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 0,
+      "haciendomateriales": 2,
       "id": 43
     },
     {
       "nombremateriales": "Zapatos",
       "fabricamateriales": 8,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 1,
       "haciendomateriales": 0,
       "id": 44
     },
@@ -1083,6 +1083,46 @@
       "profundidadpedidos": 1,
       "procesadopedidos": true,
       "id": 154
+    },
+    {
+      "materialpedidos": 29,
+      "cantidadpedidos": 2,
+      "tipopedidos": 5,
+      "profundidadpedidos": 1,
+      "procesadopedidos": true,
+      "id": 155
+    },
+    {
+      "materialpedidos": 9,
+      "cantidadpedidos": 4,
+      "tipopedidos": 5,
+      "profundidadpedidos": 1,
+      "procesadopedidos": true,
+      "id": 156
+    },
+    {
+      "materialpedidos": 46,
+      "cantidadpedidos": 2,
+      "tipopedidos": 2,
+      "profundidadpedidos": 1,
+      "procesadopedidos": true,
+      "id": 157
+    },
+    {
+      "materialpedidos": 38,
+      "cantidadpedidos": 1,
+      "tipopedidos": 2,
+      "profundidadpedidos": 1,
+      "procesadopedidos": true,
+      "id": 158
+    },
+    {
+      "materialpedidos": 1,
+      "cantidadpedidos": 7,
+      "tipopedidos": 2,
+      "profundidadpedidos": 1,
+      "procesadopedidos": true,
+      "id": 159
     }
   ]
 }
