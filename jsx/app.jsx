@@ -182,38 +182,7 @@ class App extends React.Component {
 				};
 				ret.push(obj);
 				map[material.id] = obj;
-			}
-
-			for (let i = 0 ; i < pedidos_dinamicos.length ; i++) {
-				let pedido = pedidos_dinamicos[i];
-
-				obj.cantidadpedidos += pedido.cantidadpedidos;
-
-				if (typeof(obj.profundidadpedidos) === 'undefined' || obj.profundidadpedidos < pedido.profundidadpedidos) {
-					obj.profundidadpedidos = pedido.profundidadpedidos;
-				}
-			}
-			obj.faltamateriales = obj.cantidadpedidos - obj.stockmateriales - obj.haciendomateriales;
-		};
-
-		for (let i = 0 ; i < data.materiales.length ; i++) {
-			let material = data.materiales[i];
-
-			if (material.haciendomateriales) {
-				let pedidos_dinamicos_material = pedidos_dinamicos.filter(item=>item.materialpedidos==material.id);
-				parsePedidos(material, pedidos_dinamicos_material);
-			}
-		}
-
-
-		for (let i = 0 ; i < ret.length ; i++) {
-			let item = ret[i];
-
-			item.faltamateriales = item.cantidadpedidos - item.stockmateriales - item.haciendomateriales;
-		}
-
-		return ret;
-		*/
+				*/
 	}
 	parseDataExcedente(data, tabla, panel) {
 		return this.getVistaExcedente(data);
@@ -1012,14 +981,18 @@ class App extends React.Component {
 		});
 
 		let fnPromesa = (pedido, index, resolve, reject) => {
-			let materiales = this.getMapa('materiales','id',mapas,bd.materiales);
-			let material = materiales[pedido.materialpedidos];
-			material.stockmateriales -= pedido.cantidadpedidos
-			if (material.stockmateriales < 0) {
-				material.stockmateriales = 0;
+			if (pedido.novacia_pedido) {
+				resolve();
+			} else {
+				let materiales = this.getMapa('materiales','id',mapas,bd.materiales);
+				let material = materiales[pedido.materialpedidos];
+				material.stockmateriales -= pedido.cantidadpedidos
+				if (material.stockmateriales < 0) {
+					material.stockmateriales = 0;
+				}
+				this.editar('materiales',material,'id',material.id, resolve, reject);
 			}
-			this.editar('materiales',material,'id',material.id, resolve, reject);
-		} ;
+		};
 		let successPromesa = () => {
 			let pedidos_eliminar = bd.pedidos.filter(item => {
 				return item.tipopedidos == id;

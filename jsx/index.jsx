@@ -126,8 +126,8 @@ let options = {
                 campo: 'profundidadtipos_pedido',
                 tipo: 'int'
             },{
-                texto: 'AUX',
-                campo: 'auxtipos_pedido',
+                texto: 'NO VACIA',
+                campo: 'novacia_pedido',
                 tipo: 'bool'
             }]
         },
@@ -165,6 +165,10 @@ let options = {
                 texto: 'PROFUNDIDAD',
                 campo: 'profundidadpedidos',
                 tipo: 'int'
+            },{
+                texto: 'NO VACIA',
+                campo: 'novacia_pedido',
+                tipo: 'bool'
             }]
         },
         excedente: {
