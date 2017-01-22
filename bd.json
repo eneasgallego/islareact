@@ -56,7 +56,7 @@
       "nombremateriales": "Metal",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 22,
+      "stockmateriales": 7,
       "haciendomateriales": 0,
       "id": 1
     },
@@ -80,8 +80,8 @@
       "nombremateriales": "Semillas",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 2,
-      "haciendomateriales": 2,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
       "id": 4
     },
     {
@@ -96,7 +96,7 @@
       "nombremateriales": "Química",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 1,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 6
     },
@@ -105,7 +105,7 @@
       "fabricamateriales": 1,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 4,
+      "haciendomateriales": 0,
       "id": 7
     },
     {
@@ -241,7 +241,7 @@
       "fabricamateriales": 4,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 0,
+      "haciendomateriales": 2,
       "id": 24
     },
     {
@@ -257,7 +257,7 @@
       "fabricamateriales": 4,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 1,
+      "haciendomateriales": 0,
       "id": 26
     },
     {
@@ -337,7 +337,7 @@
       "fabricamateriales": 6,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 1,
+      "haciendomateriales": 0,
       "id": 36
     },
     {
@@ -368,7 +368,7 @@
       "nombremateriales": "Árboles jóvenes",
       "fabricamateriales": 7,
       "hacemateriales": 1,
-      "stockmateriales": 1,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 40
     },
@@ -393,7 +393,7 @@
       "fabricamateriales": 8,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 2,
+      "haciendomateriales": 0,
       "id": 43
     },
     {
@@ -417,7 +417,7 @@
       "fabricamateriales": 9,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 0,
+      "haciendomateriales": 1,
       "id": 46
     },
     {
@@ -1052,38 +1052,6 @@
     }
   ],
   "pedidos": [
-    {
-      "materialpedidos": 1,
-      "cantidadpedidos": 15,
-      "tipopedidos": 3,
-      "profundidadpedidos": 1,
-      "procesadopedidos": true,
-      "id": 151
-    },
-    {
-      "materialpedidos": 40,
-      "cantidadpedidos": 1,
-      "tipopedidos": 3,
-      "profundidadpedidos": 1,
-      "procesadopedidos": true,
-      "id": 152
-    },
-    {
-      "materialpedidos": 43,
-      "cantidadpedidos": 2,
-      "tipopedidos": 3,
-      "profundidadpedidos": 1,
-      "procesadopedidos": true,
-      "id": 153
-    },
-    {
-      "materialpedidos": 6,
-      "cantidadpedidos": 1,
-      "tipopedidos": 3,
-      "profundidadpedidos": 1,
-      "procesadopedidos": true,
-      "id": 154
-    },
     {
       "materialpedidos": 29,
       "cantidadpedidos": 2,
