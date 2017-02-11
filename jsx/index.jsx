@@ -1,14 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-/*
- import Sandbox from './sandbox.jsx'
-
-let texto = "Laya Dueñas";
-
-ReactDOM.render(<Sandbox texto={ texto } />, document.getElementById('react-container'))
-*/
-
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './reducers'
 
 import App from './app.jsx'
 
@@ -321,9 +316,13 @@ let options = {
     }
 };
 
+const store = createStore(reducer)
+
 ReactDOM.render(
-    <App    menu={options.menu}
-            config={options.config}
-    />,
+    <Provider store={store}>
+        <App    menu={options.menu}
+                config={options.config}
+        />
+    </Provider>,
     document.getElementById('react-container')
 );

@@ -358,14 +358,6 @@ class App extends React.Component {
 			tag: 'accionProcesarPedido'
 		}];
 	}
-	cargarBD(callback, error) {
-		ajax({
-			metodo: 'get',
-			url: 'http://localhost:3000/db',
-			success: callback,
-			error: error
-		});
-	}
 	calcularTotales(par) {
 		let ret = {};
 
@@ -1026,9 +1018,6 @@ class App extends React.Component {
 		} ;
 
 		pedidos_filtrados.promesas(fnPromesa, callback, error, this);
-	}
-	gestionarError(err) {
-		throw err;
 	}
 	accion(accion, par_accion, tabla) {
 		this.cargarBD(data => {
