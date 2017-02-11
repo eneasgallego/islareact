@@ -1,6 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import { connect } from 'react-redux'
+import { fetchBD } from '../actions'
+
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
 import Panel from '../web/js/lib/nreactjs/jsx/panel.jsx'
@@ -11,6 +14,15 @@ import TextField from '../web/js/lib/nreactjs/jsx/textfield.jsx'
 import Boton from '../web/js/lib/nreactjs/jsx/boton.jsx'
 
 class App extends React.Component {
+	static propTypes = {
+		contenido: React.PropTypes.string.isRequired,
+		dataset_tipopedidos: React.PropTypes.array.isRequired,
+		cargando_dataset_tipopedidos: React.PropTypes.bool.isRequired,
+		alto: React.PropTypes.number,
+		url: React.PropTypes.string.isRequired,
+		bd: PropTypes.object.isRequired,
+		dispatch: PropTypes.func.isRequired
+	}
 	constructor(props) {
 		super(props);
 
@@ -41,6 +53,14 @@ class App extends React.Component {
 		window.onresize = e => {
 			this.dimensionar();
 		};
+		const { dispatch, config } = this.props
+		dispatch(fetchBD(config.url))
+	}
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.config && this.props.config && nextProps.config.url !== this.props.config.url) {
+			const { dispatch, config } = nextProps
+			dispatch(fetchBD(config.url))
+		}
 	}
 	componentDidUpdate() {
 
@@ -1019,38 +1039,52 @@ class App extends React.Component {
 
 		pedidos_filtrados.promesas(fnPromesa, callback, error, this);
 	}
+	gestionarError(err) {
+		throw err;
+	}
+	cargarBD() {
+		return new Promise((resolve, reject)=>{
+			ajax({
+				metodo: 'get',
+				url: 'http://localhost:3000/db',
+				success: resolve,
+				error: reject
+			});
+		});
+	}
 	accion(accion, par_accion, tabla) {
-		this.cargarBD(data => {
-			let fn = typeof(accion) === 'string' ? this[accion] : accion;
+		this.cargarBD()
+		.then(data => {
+				let fn = typeof(accion) === 'string' ? this[accion] : accion;
 
-			if (typeof(fn) === 'function') {
-				if (! (par_accion instanceof Array)) {
-					par_accion = [];
+				if (typeof(fn) === 'function') {
+					if (! (par_accion instanceof Array)) {
+						par_accion = [];
+					}
+					par_accion.push(data);
+					par_accion.push(() => {
+						tabla.setState({velo: false}, () => {
+							this.refrescarInicio();
+						} );
+					} );
+					par_accion.push(this.gestionarError);
+					try {
+						tabla.setState({velo: true}, () => {
+							fn.apply(this, par_accion);
+						} );
+					} catch (err) {
+						tabla.setState({velo: false}, () => {
+							this.setDialogo({
+								titulo: 'Error',
+								puedeCerrar: true,
+								contenido: err.message
+							});
+						} );
+					}
+				} else {
+					this.gestionarError('Acción ' + accion + ' inválida');
 				}
-				par_accion.push(data);
-				par_accion.push(() => {
-					tabla.setState({velo: false}, () => {
-						this.refrescarInicio();
-					} );
-				} );
-				par_accion.push(this.gestionarError);
-				try {
-					tabla.setState({velo: true}, () => {
-						fn.apply(this, par_accion);
-					} );
-				} catch (err) {
-					tabla.setState({velo: false}, () => {
-						this.setDialogo({
-							titulo: 'Error',
-							puedeCerrar: true,
-							contenido: err.message
-						});
-					} );
-				}
-			} else {
-				this.gestionarError('Acción ' + accion + ' inválida');
-			}
-		} , this.gestionarError);
+			}).catch(this.gestionarError);
 	}
 	accionRecogerMaterial(tag, fila, tabla, panel) {
 		this.accion(this.recogerMaterial, [fila.props.datos.materialpedidos], tabla);
@@ -1422,6 +1456,7 @@ class App extends React.Component {
 	render() {
 		return (
 			<div>
+				<div>{this.state.bd}</div>
 				<header>
 					<Menu ref="menu" children={this.props.menu} accion={this.accionMenu}/>
 				</header>
@@ -1430,11 +1465,20 @@ class App extends React.Component {
 				</main>
 				{this.renderDialogo()}
 			</div>
+
 		);
     }
 }
 
-export default App
+const mapStateToProps = state => {
+	const bd = state.bd || {}
+
+	return {
+		bd
+	}
+}
+
+export default connect(mapStateToProps)(App)
 
 /*
 ReactDOM.render(

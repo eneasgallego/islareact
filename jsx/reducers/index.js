@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import isla from './todos'
+import isla from './isla.js'
 //import visibilityFilter from './visibilityFilter'
 
 const islaApp = combineReducers({
