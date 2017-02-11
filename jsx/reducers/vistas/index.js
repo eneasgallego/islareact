@@ -7,6 +7,8 @@ import pedidos_dinamicos from './pedidos_dinamicos.js'
 import inicioPedidos from './inicioPedidos.js'
 import inicioNecesita from './inicioNecesita.js'
 import vistaNecesita from './vistaNecesita.js'
+import inicioPedido from './inicioPedido.js'
+import vistaPedido from './vistaPedido.js'
 
 export default {
     inicioNecesitaMateriales: inicioNecesitaMateriales,
@@ -18,4 +20,6 @@ export default {
     inicioPedidos: inicioPedidos,
     inicioNecesita: inicioNecesita,
     vistaNecesita: vistaNecesita,
+    inicioPedido: inicioPedido,
+    vistaPedido: vistaPedido,
 }

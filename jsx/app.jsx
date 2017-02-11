@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { connect } from 'react-redux'
-import { fetchBD } from './actions'
+import { fetchBD, cambiarVerPedido } from './actions'
 
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
@@ -56,6 +56,7 @@ class App extends React.Component {
 			const { dispatch, config } = nextProps
 			dispatch(fetchBD(config.url))
 		}
+		this.dimensionar();
 	}
 	componentDidUpdate() {
 
@@ -1112,10 +1113,13 @@ class App extends React.Component {
 		this.accion(this.procesarPedido, [fila.props.datos.idpedidos], tabla);
 	}
 	accionVerPedido(tag, fila, tabla, panel) {
-		this.setState({ pedido_ver: fila.props.datos }, () => {
+		this.props.dispatch(cambiarVerPedido(fila.props.datos))
+
+/*		this.setState({ pedido_ver: fila.props.datos }, () => {
 			this.refs.pedido.refs.tabla.refrescar();
 			this.refs.pedido.dimensionar();
 		} );
+		*/
 	}
 	claseFilaNecesita(datos) {
 		let clase;
@@ -1256,26 +1260,28 @@ class App extends React.Component {
 			);
 		}
 
-		if (this.state.pedido_ver) {
+		if (this.props.pedido_ver) {
 			let params = {
-				idtipos_pedido: this.state.pedido_ver.idtipos_pedido
+				idtipos_pedido: this.props.pedido_ver.idtipos_pedido
 			};
 			ret.push(
 				<PanelTabla
 					ref={this.props.config.inicio_pedido.id}
 					key={this.props.config.inicio_pedido.id}
 					id={this.props.config.inicio_pedido.id}
-					titulo={this.state.pedido_ver.nombretipos_pedido}
-					url={this.props.config.inicio_pedido.url}
+					titulo={this.props.pedido_ver.nombretipos_pedido}
+					url2={this.props.config.inicio_pedido.url}
 					params={params}
 					orden={this.props.config.inicio_pedido.orden}
 					id_campo={this.props.config.inicio_pedido.id_campo}
 					cols={this[this.props.config.inicio_pedido.cols]()}
 					acciones={this[this.props.config.inicio_pedido.acciones]()}
-					parseData={this[this.props.config.inicio_pedido.parseData]}
+					parseData2={this[this.props.config.inicio_pedido.parseData]}
 					claseFila={this[this.props.config.inicio_pedido.claseFila]}
 					onClickAcciones={this.onClickAcciones}
 					filtros={false}
+					bd={this.props.bd}
+					filas={this.props.bd[this.props.config.inicio_pedido.source]}
 				/>
 			);
 		}
@@ -1466,10 +1472,8 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => {
-	const bd = state.isla && state.isla.bd ? state.isla.bd : {};
-
 	return {
-		bd
+		...state.isla
 	}
 }
 

@@ -315,6 +315,7 @@ let options = {
             },
             id_campo: 'idpedidos',
             parseData: 'parseDataPedido',
+            source: 'inicioPedido',
             cols: 'colsPedido',
             acciones: 'accionesPedido',
             claseFila: 'claseFilaPedido'
