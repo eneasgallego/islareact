@@ -4,6 +4,7 @@ import vistaFabricas from './vistaFabricas.js'
 import vistaMaterialesFalta from './vistaMaterialesFalta.js'
 import vistaMaterialesNecesita from './vistaMaterialesNecesita.js'
 import pedidos_dinamicos from './pedidos_dinamicos.js'
+import inicioPedidos from './inicioPedidos.js'
 
 export default {
     inicioNecesitaMateriales: inicioNecesitaMateriales,
@@ -12,4 +13,5 @@ export default {
     vistaMaterialesFalta: vistaMaterialesFalta,
     vistaMaterialesNecesita: vistaMaterialesNecesita,
     pedidos_dinamicos: pedidos_dinamicos,
+    inicioPedidos: inicioPedidos,
 }
