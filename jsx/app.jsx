@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { connect } from 'react-redux'
-import { fetchBD } from '../actions'
+import { fetchBD } from './actions'
 
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
@@ -15,13 +15,8 @@ import Boton from '../web/js/lib/nreactjs/jsx/boton.jsx'
 
 class App extends React.Component {
 	static propTypes = {
-		contenido: React.PropTypes.string.isRequired,
-		dataset_tipopedidos: React.PropTypes.array.isRequired,
-		cargando_dataset_tipopedidos: React.PropTypes.bool.isRequired,
-		alto: React.PropTypes.number,
-		url: React.PropTypes.string.isRequired,
-		bd: PropTypes.object.isRequired,
-		dispatch: PropTypes.func.isRequired
+		bd: React.PropTypes.object.isRequired,
+		dispatch: React.PropTypes.func.isRequired
 	}
 	constructor(props) {
 		super(props);
@@ -1246,15 +1241,16 @@ class App extends React.Component {
 					key={config.id}
 					id={config.id}
 					titulo={config.titulo}
-					url={config.url}
+					url2={config.url}
 					orden={config.orden}
 					id_campo={config.id_campo}
 					cols={this[config.cols]()}
 					acciones={this[config.acciones]()}
 					claseFila={this[config.claseFila]}
-					parseData={this[config.parseData]}
+					parseData2={this[config.parseData]}
 					onClickAcciones={this.onClickAcciones}
 					filtros={false}
+					data={this.props.bd[config.source]}
 				/>
 			);
 		}
@@ -1456,7 +1452,6 @@ class App extends React.Component {
 	render() {
 		return (
 			<div>
-				<div>{this.state.bd}</div>
 				<header>
 					<Menu ref="menu" children={this.props.menu} accion={this.accionMenu}/>
 				</header>
@@ -1465,13 +1460,12 @@ class App extends React.Component {
 				</main>
 				{this.renderDialogo()}
 			</div>
-
 		);
     }
 }
 
 const mapStateToProps = state => {
-	const bd = state.bd || {}
+	const bd = state.isla && state.isla.bd ? state.isla.bd : {};
 
 	return {
 		bd

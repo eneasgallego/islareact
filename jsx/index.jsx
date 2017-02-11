@@ -10,7 +10,6 @@ import reducer from './reducers'
 import App from './app.jsx'
 
 let options = {
-    url: 'http://localhost:3000/db',
     menu: [{
         texto: 'Inicio',
         tag: 'inicio'
@@ -41,6 +40,7 @@ let options = {
         }]
     }],
     config: {
+        url: 'http://localhost:3000/db',
         fabricas: {
             id_campo: 'id',
             url: 'http://localhost:3000/fabricas',
@@ -269,6 +269,7 @@ let options = {
                 desc: true
             }],
             parseData: 'parseDataNecesitaMateriales',
+            source: 'inicioNecesitaMateriales',
             id_campo: 'materialpedidos',
             cols: 'colsNecesitaMateriales',
             acciones: 'accionesNecesitaMateriales',
@@ -318,6 +319,9 @@ let options = {
         }
     }
 };
+
+const middleware = [ thunk ]
+middleware.push(createLogger())
 
 const store = createStore(
     reducer,
