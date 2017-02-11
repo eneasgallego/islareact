@@ -300,6 +300,7 @@ let options = {
                 desc: true
             }],
             parseData: 'parseDataNecesita',
+            source: 'inicioNecesita',
             id_campo: 'materialpedidos',
             cols: 'colsNecesita',
             acciones: 'accionesNecesita',
