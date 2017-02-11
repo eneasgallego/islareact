@@ -1250,7 +1250,8 @@ class App extends React.Component {
 					parseData2={this[config.parseData]}
 					onClickAcciones={this.onClickAcciones}
 					filtros={false}
-					data={this.props.bd[config.source]}
+					bd={this.props.bd}
+					filas={this.props.bd[config.source]}
 				/>
 			);
 		}
