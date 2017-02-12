@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { connect } from 'react-redux'
-import { fetchBD, verPedido, recogerMaterial } from './actions'
+import { fetchBD, verPedido, recogerMaterial, recogerTodoMaterial } from './actions'
 
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
@@ -1089,7 +1089,10 @@ class App extends React.Component {
 		//this.accion(this.recogerMaterial, [fila.props.datos.materialpedidos], tabla);
 	}
 	accionRecogerTodoMaterial(tag, fila, tabla, panel) {
-		this.accion(this.recogerTodoMaterial, [fila.props.datos.materialpedidos], tabla);
+		let material = this.props.bd.materiales.find(material=>material.id == fila.props.datos.materialpedidos)
+		material && this.props.dispatch(recogerTodoMaterial(material))
+
+//		this.accion(this.recogerTodoMaterial, [fila.props.datos.materialpedidos], tabla);
 	}
 	accionVenderMaterial(tag, fila, tabla, panel) {
 		this.accion(this.venderMaterial, [fila.props.datos.materialpedidos], tabla);

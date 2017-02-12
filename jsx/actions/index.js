@@ -72,3 +72,18 @@ export const recogerMaterial = material => dispatch => {
         throw new Error('No hay nada que recoger');
     }
 }
+export const RECOGER_TODO_MATERIAL = 'RECOGER_TODO_MATERIAL'
+const _recogerTodoMaterial = material => ({
+    type: RECOGER_TODO_MATERIAL,
+    material: material
+})
+export const recogerTodoMaterial = material => dispatch => {
+    if (material.haciendomateriales > 0) {
+        material.stockmateriales += material.haciendomateriales;
+        material.haciendomateriales = 0;
+
+        dispatch(editarBD('materiales', material, material.id));
+    } else {
+        throw new Error('No hay nada que recoger');
+    }
+}

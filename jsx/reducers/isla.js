@@ -5,6 +5,7 @@ import {
     ACTUALIZAR_BD,
     EDITAR,
     RECOGER_MATERIAL,
+    RECOGER_TODO_MATERIAL,
     editarBD,
 } from '../actions'
 
@@ -75,9 +76,14 @@ const actualizarBD = (bd, tabla)=>{
       const dependencias = vista.dependencias;
       if (!!~dependencias.indexOf(tabla)) {
         ret.push(vista)
-        ret = ret.concat(getVistasActualizar(vista.key).filter(vista=>!~ret.indexOf(vista)));
+        const vistasActualizar = getVistasActualizar(vista.key);
+        const vistasFiltradas = vistasActualizar.filter(vista=>!~ret.indexOf(vista))
+        ret.push.apply(ret, vistasFiltradas);
+        //ret.concat(vistasFiltradas);
       }
     }
+
+    ret.sort((a,b)=>(!!~a.dependencias.indexOf(b.key)) ? 1 : !!~b.dependencias.indexOf(a.key) ? -1 : 0);
 
     return ret;
   }
@@ -141,6 +147,10 @@ const isla = (state = {
         ...state
       }
     case RECOGER_MATERIAL:
+      return {
+        ...state
+      }
+    case RECOGER_TODO_MATERIAL:
       return {
         ...state
       }
