@@ -3,6 +3,9 @@ import {
     LOAD_RESPONSE,
     VER_PEDIDO,
     ACTUALIZAR_BD,
+    EDITAR,
+    RECOGER_MATERIAL,
+    editarBD,
 } from '../actions'
 
 import vistas from './vistas'
@@ -72,7 +75,7 @@ const actualizarBD = (bd, tabla)=>{
       const dependencias = vista.dependencias;
       if (!!~dependencias.indexOf(tabla)) {
         ret.push(vista)
-        ret = ret.concat(getVistasActualizar(vista.key));
+        ret = ret.concat(getVistasActualizar(vista.key).filter(vista=>!~ret.indexOf(vista)));
       }
     }
 
@@ -80,14 +83,27 @@ const actualizarBD = (bd, tabla)=>{
   }
   const vistasActualizar = getVistasActualizar(tabla);
   while(vistasActualizar.length) {
-    const vista = vistasActualizar.pop();
+    const vista = vistasActualizar.shift();
     ret = {
       ...ret,
-      ...generarVista(bd, vista, true)
+      ...generarVista(ret, vista, true)
     }
   }
 
   return ret;
+}
+
+const recogerMaterial = (id, bd) => {
+  let material = bd.materiales.find(material=>material.id==id)
+
+  if (material.haciendomateriales > 0) {
+    material.haciendomateriales -= material.hacemateriales;
+    material.stockmateriales += material.hacemateriales;
+
+    editarBD('materiales', material, id);
+  } else {
+    throw new Error('No hay nada que recoger');
+  }
 }
 
 const isla = (state = {
@@ -120,9 +136,17 @@ const isla = (state = {
         ...state,
         bd: actualizarBD(state.bd,action.tabla)
       }
+    case EDITAR:
+      return {
+        ...state
+      }
+    case RECOGER_MATERIAL:
+      return {
+        ...state
+      }
     default:
       return state
-    }
+  }
 }
 
 export default isla;

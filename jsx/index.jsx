@@ -232,23 +232,7 @@ let options = {
                 guardar: 'guardarNuevoPedido'
             }
         },
-        inicio: [/*{
-            id: 'huerto',
-            titulo: 'Huerto',
-            url: 'http://localhost:3000/db',
-            orden:  [{
-                campo: "profundidadpedidos",
-                desc: true
-            },{
-                campo: "faltamateriales",
-                desc: true
-            }],
-            id_campo: 'materialpedidos',
-            parseData: 'parseDataHuerto',
-            cols: 'colsNecesitaMateriales',
-            acciones: 'accionesNecesitaHuerto',
-            claseFila: 'claseFilaNecesita'
-        },*/{
+        inicio: [{
             id: 'materiales',
             titulo: 'Materiales',
             url: 'http://localhost:3000/db',

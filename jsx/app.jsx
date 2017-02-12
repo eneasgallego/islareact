@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { connect } from 'react-redux'
-import { fetchBD, cambiarVerPedido } from './actions'
+import { fetchBD, verPedido, recogerMaterial } from './actions'
 
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
@@ -1083,7 +1083,10 @@ class App extends React.Component {
 			}).catch(this.gestionarError);
 	}
 	accionRecogerMaterial(tag, fila, tabla, panel) {
-		this.accion(this.recogerMaterial, [fila.props.datos.materialpedidos], tabla);
+		let material = this.props.bd.materiales.find(material=>material.id == fila.props.datos.materialpedidos)
+		material && this.props.dispatch(recogerMaterial(material))
+
+		//this.accion(this.recogerMaterial, [fila.props.datos.materialpedidos], tabla);
 	}
 	accionRecogerTodoMaterial(tag, fila, tabla, panel) {
 		this.accion(this.recogerTodoMaterial, [fila.props.datos.materialpedidos], tabla);
@@ -1113,7 +1116,7 @@ class App extends React.Component {
 		this.accion(this.procesarPedido, [fila.props.datos.idpedidos], tabla);
 	}
 	accionVerPedido(tag, fila, tabla, panel) {
-		this.props.dispatch(cambiarVerPedido(fila.props.datos))
+		this.props.dispatch(verPedido(fila.props.datos))
 
 /*		this.setState({ pedido_ver: fila.props.datos }, () => {
 			this.refs.pedido.refs.tabla.refrescar();
