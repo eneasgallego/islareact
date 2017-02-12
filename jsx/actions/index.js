@@ -81,3 +81,9 @@ export const hacerMaterial = (material, cantidad) => ({
     material: material,
     cantidad: cantidad
 })
+
+export const PROCESAR_PEDIDO = 'PROCESAR_PEDIDO'
+export const procesarPedido = pedido => ({
+    type: PROCESAR_PEDIDO,
+    pedido: pedido
+})

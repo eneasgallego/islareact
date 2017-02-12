@@ -6,7 +6,8 @@ import {
     EDITAR,
     RECOGER_MATERIAL,
     RECOGER_TODO_MATERIAL,
-    HACER_MATERIAL
+    HACER_MATERIAL,
+    PROCESAR_PEDIDO
 } from '../actions'
 
 import vistas from './vistas'
@@ -162,7 +163,15 @@ const hacerMaterial = (material, cantidad, bd) => {
 
   return ret;
 }
+const procesarPedido = pedido => {
+  let ret = [];
+  if (!pedido.procesadopedidos) {
+    pedido.procesadopedidos = true;
+    ret.push(['pedidos',pedido,pedido.id]);
+  }
 
+  return ret;
+}
 const _manageToEdit = (oldToEdit, newToEdit) => {
   let ret = [];
   ret.push.apply(ret,oldToEdit)
@@ -219,6 +228,11 @@ const isla = (state = {
       return {
         ...state,
         toEdit: _manageToEdit(state.toEdit, hacerMaterial(action.material, action.cantidad, state.bd))
+      }
+    case PROCESAR_PEDIDO:
+      return {
+        ...state,
+        toEdit: _manageToEdit(state.toEdit, procesarPedido(action.pedido))
       }
     default:
       return state

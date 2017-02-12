@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { connect } from 'react-redux'
-import { fetchBD, verPedido, editarBD, recogerMaterial, recogerTodoMaterial, hacerMaterial } from './actions'
+import { fetchBD, verPedido, editarBD, recogerMaterial, recogerTodoMaterial, hacerMaterial, procesarPedido } from './actions'
 
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
@@ -1119,7 +1119,10 @@ class App extends React.Component {
 		this.accion(this.procesarPedidos, [fila.props.datos.idtipos_pedido], tabla);
 	}
 	accionProcesarPedido(tag, fila, tabla, panel) {
-		this.accion(this.procesarPedido, [fila.props.datos.idpedidos], tabla);
+		let pedido = this.props.bd.pedidos.find(pedido=>pedido.id == fila.props.datos.idpedidos)
+		pedido && this.props.dispatch(procesarPedido(pedido))
+
+		//this.accion(this.procesarPedido, [fila.props.datos.idpedidos], tabla);
 	}
 	accionVerPedido(tag, fila, tabla, panel) {
 		this.props.dispatch(verPedido(fila.props.datos))
