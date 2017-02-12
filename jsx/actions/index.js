@@ -87,3 +87,8 @@ export const procesarPedido = pedido => ({
     type: PROCESAR_PEDIDO,
     pedido: pedido
 })
+export const PROCESAR_PEDIDOS = 'PROCESAR_PEDIDOS'
+export const procesarPedidos = tipo => ({
+    type: PROCESAR_PEDIDOS,
+    tipo: tipo
+})

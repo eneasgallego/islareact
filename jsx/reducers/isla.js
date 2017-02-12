@@ -7,7 +7,8 @@ import {
     RECOGER_MATERIAL,
     RECOGER_TODO_MATERIAL,
     HACER_MATERIAL,
-    PROCESAR_PEDIDO
+    PROCESAR_PEDIDO,
+    PROCESAR_PEDIDOS
 } from '../actions'
 
 import vistas from './vistas'
@@ -172,6 +173,17 @@ const procesarPedido = pedido => {
 
   return ret;
 }
+const procesarPedidos = (tipo, pedidos) => {
+  let ret = [];
+
+  let pedidos_filtrados = pedidos.filter(item => item.tipopedidos == tipo);
+
+  pedidos_filtrados.forEach(item => {
+    ret.push.apply(ret, procesarPedido(item));
+  });
+
+  return ret;
+}
 const _manageToEdit = (oldToEdit, newToEdit) => {
   let ret = [];
   ret.push.apply(ret,oldToEdit)
@@ -233,6 +245,11 @@ const isla = (state = {
       return {
         ...state,
         toEdit: _manageToEdit(state.toEdit, procesarPedido(action.pedido))
+      }
+    case PROCESAR_PEDIDOS:
+      return {
+        ...state,
+        toEdit: _manageToEdit(state.toEdit, procesarPedidos(action.tipo, state.bd.pedidos))
       }
     default:
       return state
