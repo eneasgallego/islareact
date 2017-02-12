@@ -4,11 +4,13 @@ import {
     VER_PEDIDO,
     ACTUALIZAR_BD,
     EDITAR,
+    ELIMINAR,
     RECOGER_MATERIAL,
     RECOGER_TODO_MATERIAL,
     HACER_MATERIAL,
     PROCESAR_PEDIDO,
-    PROCESAR_PEDIDOS
+    PROCESAR_PEDIDOS,
+    CERRAR_PEDIDO
 } from '../actions'
 
 import vistas from './vistas'
@@ -106,7 +108,10 @@ const recogerMaterial = material => {
     material.haciendomateriales -= material.hacemateriales;
     material.stockmateriales += material.hacemateriales;
 
-    return [['materiales', material, material.id]]
+    return [{
+      accion: EDITAR,
+      toEdit: ['materiales', material, material.id]
+    }]
   } else {
     throw new Error('No hay nada que recoger');
   }
@@ -118,7 +123,10 @@ const recogerTodoMaterial = material => {
     material.stockmateriales += material.haciendomateriales;
     material.haciendomateriales = 0;
 
-    return [['materiales', material, material.id]]
+    return [{
+      accion: EDITAR,
+      toEdit: ['materiales', material, material.id]
+    }]
   } else {
     throw new Error('No hay nada que recoger');
   }
@@ -143,14 +151,20 @@ const hacerMaterial = (material, cantidad, bd) => {
       if (!material_necesita_falta) {
         material.haciendomateriales += (material.hacemateriales * cantidad);
 
-        ret.push(['materiales', material, material.id])
+        ret.push({
+          accion: EDITAR,
+          toEdit: ['materiales', material, material.id]
+        })
 
         materiales_necesita.forEach((material_necesita) => {
           let dif = material_necesita.stockmaterialesnecesita - material_necesita.cantidadmateriales_necesita;
           dif *= cantidad;
           let auxMaterial = bd.materiales.find(material=>material.id==material_necesita.materialnecesitamateriales_necesita);
           auxMaterial.stockmateriales = dif;
-          ret.push(['materiales', auxMaterial, auxMaterial.id])
+          ret.push({
+            accion: EDITAR,
+            toEdit: ['materiales', auxMaterial, auxMaterial.id]
+          })
         });
       } else {
         throw new Error('Falta ' + material_necesita_falta.nombrematerialesnecesita + '.');
@@ -168,7 +182,10 @@ const procesarPedido = pedido => {
   let ret = [];
   if (!pedido.procesadopedidos) {
     pedido.procesadopedidos = true;
-    ret.push(['pedidos',pedido,pedido.id]);
+    ret.push({
+      accion: EDITAR,
+      toEdit: ['pedidos',pedido,pedido.id]
+    });
   }
 
   return ret;
@@ -180,6 +197,37 @@ const procesarPedidos = (tipo, pedidos) => {
 
   pedidos_filtrados.forEach(item => {
     ret.push.apply(ret, procesarPedido(item));
+  });
+
+  return ret;
+}
+const cerrarPedido = (tipo, bd) => {
+  let ret = [];
+
+  let vistaPedido = bd.vistaPedido;
+  let pedidos = vistaPedido.filter(item => item.tipopedidos == tipo);
+
+  pedidos.forEach(pedido => {
+    if (!pedido.novacia_pedido) {
+      let material = bd.materiales.find(material=>material.id==pedido.materialpedidos);
+      material.stockmateriales -= pedido.cantidadpedidos
+      if (material.stockmateriales < 0) {
+        material.stockmateriales = 0;
+      }
+      ret.push({
+        accion: EDITAR,
+        toEdit: ['materiales',material,material.id]
+      });
+    }
+  });
+
+  let pedidos_eliminar = bd.pedidos.filter(pedido => pedido.tipopedidos == tipo);
+  pedidos_eliminar.forEach(pedido => {
+    bd.pedidos.splice(bd.pedidos.indexOf(pedido), 1);
+    ret.push({
+      accion: ELIMINAR,
+      toEdit: ['pedidos',pedido.id]
+    });
   });
 
   return ret;
@@ -226,6 +274,11 @@ const isla = (state = {
         ...state,
         toEdit: action.toEdit
       }
+    case ELIMINAR:
+      return {
+        ...state,
+        toEdit: action.toEdit
+      }
     case RECOGER_MATERIAL:
       return {
         ...state,
@@ -250,6 +303,11 @@ const isla = (state = {
       return {
         ...state,
         toEdit: _manageToEdit(state.toEdit, procesarPedidos(action.tipo, state.bd.pedidos))
+      }
+    case CERRAR_PEDIDO:
+      return {
+        ...state,
+        toEdit: _manageToEdit(state.toEdit, cerrarPedido(action.tipo, state.bd))
       }
     default:
       return state

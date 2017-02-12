@@ -15,16 +15,35 @@ export const fetchBD = url => dispatch => {
 }
 
 export const EDITAR = 'EDITAR'
+export const ELIMINAR = 'ELIMINAR'
+const _routeBD = (dispatch, toEdit)=>{
+    let obj = toEdit.shift();
+    let fn, fn2;
+    if (obj.accion == EDITAR) {
+        fn = editarBD;
+        fn2 = _editar;
+    } else if (obj.accion == ELIMINAR) {
+        fn = eliminarBD;
+        fn2 = _eliminar;
+    }
+    fn && dispatch(fn.apply(this, obj.toEdit));
+    dispatch(fn2(toEdit));
+}
 const _editar = toEdit => {
     return {
         type: EDITAR,
         toEdit: toEdit
     }
 }
+const _eliminar = toEdit => {
+    return {
+        type: ELIMINAR,
+        toEdit: toEdit
+    }
+}
 export const editarBD = (tabla, data, id) => dispatch => {
     if (tabla instanceof Array) {
-        dispatch(editarBD.apply(this, tabla.shift()));
-        dispatch(_editar(tabla));
+        _routeBD(dispatch, tabla);
     } else {
         let url = 'http://localhost:3000/' + tabla + '/' + id;
         let body = [];
@@ -41,6 +60,20 @@ export const editarBD = (tabla, data, id) => dispatch => {
             method: 'PUT',
             headers: myHeaders,
             body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(json => dispatch(_actualizarBD(tabla)))
+            .catch(err => {throw err})
+    }
+}
+export const eliminarBD = (tabla, id) => dispatch => {
+    if (tabla instanceof Array) {
+        _routeBD(dispatch, tabla);
+    } else {
+        let url = 'http://localhost:3000/' + tabla + '/' + id;
+
+        return fetch(url, {
+            method: 'DELETE'
         })
             .then(response => response.json())
             .then(json => dispatch(_actualizarBD(tabla)))
@@ -90,5 +123,10 @@ export const procesarPedido = pedido => ({
 export const PROCESAR_PEDIDOS = 'PROCESAR_PEDIDOS'
 export const procesarPedidos = tipo => ({
     type: PROCESAR_PEDIDOS,
+    tipo: tipo
+})
+export const CERRAR_PEDIDO = 'CERRAR_PEDIDO'
+export const cerrarPedido = tipo => ({
+    type: CERRAR_PEDIDO,
     tipo: tipo
 })
