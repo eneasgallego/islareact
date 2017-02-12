@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { connect } from 'react-redux'
-import { fetchBD, verPedido, recogerMaterial, recogerTodoMaterial } from './actions'
+import { fetchBD, verPedido, editarBD, recogerMaterial, recogerTodoMaterial, hacerMaterial } from './actions'
 
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
@@ -52,10 +52,10 @@ class App extends React.Component {
 		dispatch(fetchBD(config.url))
 	}
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.config && this.props.config && nextProps.config.url !== this.props.config.url) {
-			const { dispatch, config } = nextProps
-			dispatch(fetchBD(config.url))
-		}
+		const { dispatch, config, toEdit } = nextProps
+		config && this.props.config && config.url !== this.props.config.url && dispatch(fetchBD(config.url));
+		toEdit && toEdit instanceof Array && toEdit.length && dispatch(editarBD(toEdit));
+
 		this.dimensionar();
 	}
 	componentDidUpdate() {
@@ -1101,7 +1101,10 @@ class App extends React.Component {
 		this.accion(this.ganarMaterial, [fila.props.datos.materialpedidos], tabla);
 	}
 	accionHacerMaterial(tag, fila, tabla, panel) {
-		this.accion(this.hacerMaterial, [fila.props.datos.materialpedidos, 1], tabla);
+		let material = this.props.bd.materiales.find(material=>material.id == fila.props.datos.materialpedidos)
+		material && this.props.dispatch(hacerMaterial(material, 1))
+
+		//this.accion(this.hacerMaterial, [fila.props.datos.materialpedidos, 1], tabla);
 	}
 	accionHacerMaterial3(tag, fila, tabla, panel) {
 		this.accion(this.hacerMaterial, [fila.props.datos.materialpedidos, 3], tabla);

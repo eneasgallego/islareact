@@ -15,30 +15,37 @@ export const fetchBD = url => dispatch => {
 }
 
 export const EDITAR = 'EDITAR'
-const _editar = () => ({
-    type: EDITAR
-})
-export const editarBD = (tabla, data, id) => dispatch => {
-    //dispatch(_editar())
-    let url = 'http://localhost:3000/' + tabla + '/' + id;
-    let body = [];
-
-    for (let key in data) {
-        body.push(key + '=' + data[key]);
+const _editar = toEdit => {
+    return {
+        type: EDITAR,
+        toEdit: toEdit
     }
-    body = encodeURI(body.join('&'));
+}
+export const editarBD = (tabla, data, id) => dispatch => {
+    if (tabla instanceof Array) {
+        dispatch(editarBD.apply(this, tabla.shift()));
+        dispatch(_editar(tabla));
+    } else {
+        let url = 'http://localhost:3000/' + tabla + '/' + id;
+        let body = [];
 
-    var myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
+        for (let key in data) {
+            body.push(key + '=' + data[key]);
+        }
+        body = encodeURI(body.join('&'));
 
-    return fetch(url, {
-        method: 'PUT',
-        headers: myHeaders,
-        body: JSON.stringify(data)
-    })
-        .then(response => response.json())
-        .then(json => dispatch(_actualizarBD(tabla)))
-        .catch(err => {throw err})
+        var myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+
+        return fetch(url, {
+            method: 'PUT',
+            headers: myHeaders,
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(json => dispatch(_actualizarBD(tabla)))
+            .catch(err => {throw err})
+    }
 }
 
 export const ACTUALIZAR_BD = 'ACTUALIZAR_BD'
@@ -58,32 +65,19 @@ export const verPedido = pedido => dispatch => {
 }
 
 export const RECOGER_MATERIAL = 'RECOGER_MATERIAL'
-const _recogerMaterial = material => ({
+export const recogerMaterial = material => ({
     type: RECOGER_MATERIAL,
     material: material
 })
-export const recogerMaterial = material => dispatch => {
-    if (material.haciendomateriales > 0) {
-        material.haciendomateriales -= material.hacemateriales;
-        material.stockmateriales += material.hacemateriales;
-
-        dispatch(editarBD('materiales', material, material.id));
-    } else {
-        throw new Error('No hay nada que recoger');
-    }
-}
 export const RECOGER_TODO_MATERIAL = 'RECOGER_TODO_MATERIAL'
-const _recogerTodoMaterial = material => ({
+export const recogerTodoMaterial = material => ({
     type: RECOGER_TODO_MATERIAL,
     material: material
 })
-export const recogerTodoMaterial = material => dispatch => {
-    if (material.haciendomateriales > 0) {
-        material.stockmateriales += material.haciendomateriales;
-        material.haciendomateriales = 0;
 
-        dispatch(editarBD('materiales', material, material.id));
-    } else {
-        throw new Error('No hay nada que recoger');
-    }
-}
+export const HACER_MATERIAL = 'HACER_MATERIAL'
+export const hacerMaterial = (material, cantidad) => ({
+    type: HACER_MATERIAL,
+    material: material,
+    cantidad: cantidad
+})

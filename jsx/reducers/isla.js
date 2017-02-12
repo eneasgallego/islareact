@@ -6,7 +6,7 @@ import {
     EDITAR,
     RECOGER_MATERIAL,
     RECOGER_TODO_MATERIAL,
-    editarBD,
+    HACER_MATERIAL
 } from '../actions'
 
 import vistas from './vistas'
@@ -99,17 +99,75 @@ const actualizarBD = (bd, tabla)=>{
   return ret;
 }
 
-const recogerMaterial = (id, bd) => {
-  let material = bd.materiales.find(material=>material.id==id)
-
+const recogerMaterial = material => {
   if (material.haciendomateriales > 0) {
     material.haciendomateriales -= material.hacemateriales;
     material.stockmateriales += material.hacemateriales;
 
-    editarBD('materiales', material, id);
+    return [['materiales', material, material.id]]
   } else {
     throw new Error('No hay nada que recoger');
   }
+
+  return [];
+}
+const recogerTodoMaterial = material => {
+  if (material.haciendomateriales > 0) {
+    material.stockmateriales += material.haciendomateriales;
+    material.haciendomateriales = 0;
+
+    return [['materiales', material, material.id]]
+  } else {
+    throw new Error('No hay nada que recoger');
+  }
+
+  return [];
+}
+const hacerMaterial = (material, cantidad, bd) => {
+  let ret = [];
+
+  let vistaFabricas = bd.vistaFabricas;
+  let fabrica = vistaFabricas.find(fabrica=>fabrica.fabricamateriales==material.fabricamateriales);
+
+  if (fabrica.maximofabricas >= 0) {
+    if (fabrica.haciendomateriales < fabrica.maximofabricas) {
+      let materiales_necesita = bd.vistaMaterialesNecesita.filter(item => {
+        return item.materialmateriales_necesita == material.id;
+      });
+
+      let material_necesita_falta = materiales_necesita.find(item => {
+        return item.cantidadmateriales_necesita - item.stockmaterialesnecesita > 0;
+      });
+      if (!material_necesita_falta) {
+        material.haciendomateriales += (material.hacemateriales * cantidad);
+
+        ret.push(['materiales', material, material.id])
+
+        materiales_necesita.forEach((material_necesita) => {
+          let dif = material_necesita.stockmaterialesnecesita - material_necesita.cantidadmateriales_necesita;
+          dif *= cantidad;
+          let auxMaterial = bd.materiales.find(material=>material.id==material_necesita.materialnecesitamateriales_necesita);
+          auxMaterial.stockmateriales = dif;
+          ret.push(['materiales', auxMaterial, auxMaterial.id])
+        });
+      } else {
+        throw new Error('Falta ' + material_necesita_falta.nombrematerialesnecesita + '.');
+      }
+    } else {
+      throw new Error('Fábrica completa.');
+    }
+  } else {
+    material.stockmateriales += (material.hacemateriales * cantidad);
+  }
+
+  return ret;
+}
+
+const _manageToEdit = (oldToEdit, newToEdit) => {
+  let ret = [];
+  ret.push.apply(ret,oldToEdit)
+  ret.push.apply(ret,newToEdit)
+  return ret;
 }
 
 const isla = (state = {
@@ -144,15 +202,23 @@ const isla = (state = {
       }
     case EDITAR:
       return {
-        ...state
+        ...state,
+        toEdit: action.toEdit
       }
     case RECOGER_MATERIAL:
       return {
-        ...state
+        ...state,
+        toEdit: _manageToEdit(state.toEdit, recogerMaterial(action.material))
       }
     case RECOGER_TODO_MATERIAL:
       return {
-        ...state
+        ...state,
+        toEdit: _manageToEdit(state.toEdit, recogerTodoMaterial(action.material))
+      }
+    case HACER_MATERIAL:
+      return {
+        ...state,
+        toEdit: _manageToEdit(state.toEdit, hacerMaterial(action.material, action.cantidad, state.bd))
       }
     default:
       return state
