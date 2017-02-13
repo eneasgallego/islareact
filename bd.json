@@ -85,23 +85,23 @@
       "nombremateriales": "Semillas",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 1,
-      "haciendomateriales": 5,
+      "stockmateriales": 6,
+      "haciendomateriales": 1,
       "id": 4
     },
     {
       "nombremateriales": "Mineral",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 1,
-      "haciendomateriales": 7,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
       "id": 5
     },
     {
       "nombremateriales": "Química",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 3,
+      "stockmateriales": 1,
       "haciendomateriales": 1,
       "id": 6
     },
@@ -134,7 +134,7 @@
       "fabricamateriales": 1,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 5,
+      "haciendomateriales": 8,
       "id": 10
     },
     {
@@ -157,8 +157,8 @@
       "nombremateriales": "Tablas",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 0,
-      "haciendomateriales": 2,
+      "stockmateriales": 1,
+      "haciendomateriales": 1,
       "id": 13
     },
     {
@@ -166,7 +166,7 @@
       "fabricamateriales": 2,
       "hacemateriales": 1,
       "stockmateriales": 2,
-      "haciendomateriales": 0,
+      "haciendomateriales": 2,
       "id": 14
     },
     {
@@ -174,7 +174,7 @@
       "fabricamateriales": 2,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 0,
+      "haciendomateriales": 2,
       "id": 15
     },
     {
@@ -189,7 +189,7 @@
       "nombremateriales": "Pintura",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 1,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 17
     },
@@ -229,8 +229,8 @@
       "nombremateriales": "Escalera",
       "fabricamateriales": 3,
       "hacemateriales": 1,
-      "stockmateriales": 2,
-      "haciendomateriales": 1,
+      "stockmateriales": 3,
+      "haciendomateriales": 0,
       "id": 22
     },
     {
@@ -293,7 +293,7 @@
       "nombremateriales": "Silla",
       "fabricamateriales": 5,
       "hacemateriales": 1,
-      "stockmateriales": 2,
+      "stockmateriales": 1,
       "haciendomateriales": 0,
       "id": 30
     },
@@ -317,8 +317,8 @@
       "nombremateriales": "Armario",
       "fabricamateriales": 5,
       "hacemateriales": 1,
-      "stockmateriales": 0,
-      "haciendomateriales": 1,
+      "stockmateriales": 1,
+      "haciendomateriales": 0,
       "id": 33
     },
     {
@@ -469,7 +469,7 @@
       "nombremateriales": "Traje",
       "fabricamateriales": 8,
       "hacemateriales": 1,
-      "stockmateriales": 0,
+      "stockmateriales": 1,
       "haciendomateriales": 0,
       "id": 52
     },
