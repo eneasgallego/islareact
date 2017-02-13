@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { connect } from 'react-redux'
-import { fetchBD, verPedido, editarBD, recogerMaterial, recogerTodoMaterial, hacerMaterial, procesarPedido, procesarPedidos, cerrarPedido } from './actions'
+import { fetchBD, verPedido, editarBD, recogerMaterial, recogerTodoMaterial, hacerMaterial, procesarPedido, procesarPedidos, cerrarPedido, venderMaterial, ganarMaterial } from './actions'
 
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
@@ -1095,10 +1095,16 @@ class App extends React.Component {
 //		this.accion(this.recogerTodoMaterial, [fila.props.datos.materialpedidos], tabla);
 	}
 	accionVenderMaterial(tag, fila, tabla, panel) {
-		this.accion(this.venderMaterial, [fila.props.datos.materialpedidos], tabla);
+		let material = this.props.bd.materiales.find(material=>material.id == fila.props.datos.materialpedidos)
+		material && this.props.dispatch(venderMaterial(material))
+
+		//this.accion(this.venderMaterial, [fila.props.datos.materialpedidos], tabla);
 	}
 	accionGanarMaterial(tag, fila, tabla, panel) {
-		this.accion(this.ganarMaterial, [fila.props.datos.materialpedidos], tabla);
+		let material = this.props.bd.materiales.find(material=>material.id == fila.props.datos.materialpedidos)
+		material && this.props.dispatch(ganarMaterial(material))
+
+		//this.accion(this.ganarMaterial, [fila.props.datos.materialpedidos], tabla);
 	}
 	accionHacerMaterial(tag, fila, tabla, panel) {
 		let material = this.props.bd.materiales.find(material=>material.id == fila.props.datos.materialpedidos)
@@ -1314,13 +1320,15 @@ class App extends React.Component {
 				key={config.id}
 				id={config.id}
 				titulo={config.titulo}
-				url={config.url}
+				url2={config.url}
 				orden={config.orden}
 				id_campo={config.id_campo}
 				cols={this[config.cols]()}
 				acciones={this[config.acciones]()}
 				claseFila={this[config.claseFila]}
-				parseData={this[config.parseData]}
+				parseData2={this[config.parseData]}
+				bd={this.props.bd}
+				filas={this.props.bd[config.source]}
 				onClickAcciones={this.onClickAcciones}
 			/>
 		);

@@ -8,6 +8,8 @@ import {
     RECOGER_MATERIAL,
     RECOGER_TODO_MATERIAL,
     HACER_MATERIAL,
+    VENDER_MATERIAL,
+    GANAR_MATERIAL,
     PROCESAR_PEDIDO,
     PROCESAR_PEDIDOS,
     CERRAR_PEDIDO
@@ -178,6 +180,30 @@ const hacerMaterial = (material, cantidad, bd) => {
 
   return ret;
 }
+const venderMaterial = material => {
+  if (material.stockmateriales > 0) {
+
+    material.stockmateriales--;
+
+    return [{
+      accion: EDITAR,
+      toEdit: ['materiales', material, material.id]
+    }]
+  } else {
+    throw new Error('No hay nada que vender');
+  }
+
+  return [];
+}
+const ganarMaterial = material => {
+  material.stockmateriales++;
+
+  return [{
+    accion: EDITAR,
+    toEdit: ['materiales', material, material.id]
+  }]
+}
+
 const procesarPedido = pedido => {
   let ret = [];
   if (!pedido.procesadopedidos) {
@@ -293,6 +319,16 @@ const isla = (state = {
       return {
         ...state,
         toEdit: _manageToEdit(state.toEdit, hacerMaterial(action.material, action.cantidad, state.bd))
+      }
+      case VENDER_MATERIAL:
+        return {
+          ...state,
+          toEdit: _manageToEdit(state.toEdit, venderMaterial(action.material))
+        }
+    case GANAR_MATERIAL:
+      return {
+        ...state,
+        toEdit: _manageToEdit(state.toEdit, ganarMaterial(action.material))
       }
     case PROCESAR_PEDIDO:
       return {

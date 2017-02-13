@@ -9,6 +9,7 @@ import inicioNecesita from './inicioNecesita.js'
 import vistaNecesita from './vistaNecesita.js'
 import inicioPedido from './inicioPedido.js'
 import vistaPedido from './vistaPedido.js'
+import vistaExcedente from './vistaExcedente.js'
 
 export default {
     inicioNecesitaMateriales: inicioNecesitaMateriales,
@@ -22,4 +23,5 @@ export default {
     vistaNecesita: vistaNecesita,
     inicioPedido: inicioPedido,
     vistaPedido: vistaPedido,
+    vistaExcedente: vistaExcedente,
 }

@@ -107,12 +107,21 @@ export const recogerTodoMaterial = material => ({
     type: RECOGER_TODO_MATERIAL,
     material: material
 })
-
 export const HACER_MATERIAL = 'HACER_MATERIAL'
 export const hacerMaterial = (material, cantidad) => ({
     type: HACER_MATERIAL,
     material: material,
     cantidad: cantidad
+})
+export const VENDER_MATERIAL = 'VENDER_MATERIAL'
+export const venderMaterial = material => ({
+    type: VENDER_MATERIAL,
+    material: material
+})
+export const GANAR_MATERIAL = 'GANAR_MATERIAL'
+export const ganarMaterial = material => ({
+    type: GANAR_MATERIAL,
+    material: material
 })
 
 export const PROCESAR_PEDIDO = 'PROCESAR_PEDIDO'

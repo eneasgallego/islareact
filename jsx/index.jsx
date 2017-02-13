@@ -173,10 +173,7 @@ let options = {
             id: 'excedente',
             titulo: 'Excedente',
             url: 'http://localhost:3000/db',
-            orden:  [/*{
-                campo: "eshuerto",
-                desc: false
-            },*/{
+            orden:  [{
                 campo: "excedentemateriales",
                 desc: true
             },{
@@ -196,6 +193,7 @@ let options = {
                 desc: false
             }],
             parseData: 'parseDataExcedente',
+            source: 'vistaExcedente',
             id_campo: 'idmateriales',
             cols: 'colsExcedente',
             acciones: 'accionesExcedente',
