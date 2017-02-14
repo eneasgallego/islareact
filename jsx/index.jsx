@@ -11,7 +11,7 @@ import App from './app.jsx'
 
 let options = {
     menu: [{
-        texto: 'Inicio',
+        texto: 'Dashboard',
         tag: 'inicio'
     },{
         texto: 'Excedente',
@@ -43,7 +43,6 @@ let options = {
         url: 'http://localhost:3000/db',
         fabricas: {
             id_campo: 'id',
-            url: 'http://localhost:3000/fabricas',
             eliminar: true,
             cols: [{
                 texto: 'FABRICA',
@@ -56,7 +55,6 @@ let options = {
         },
         materiales: {
             id_campo: 'id',
-            url: 'http://localhost:3000/materiales',
             eliminar: true,
             cols: [{
                 texto: 'MATERIAL',
@@ -86,7 +84,6 @@ let options = {
         },
         materiales_necesita: {
             id_campo: 'id',
-            url: 'http://localhost:3000/materiales_necesita',
             eliminar: true,
             cols: [{
                 texto: 'MATERIAL',
@@ -114,7 +111,6 @@ let options = {
         },
         tipos_pedido: {
             id_campo: 'id',
-            url: 'http://localhost:3000/tipos_pedido',
             eliminar: true,
             cols: [{
                 texto: 'TIPO',
@@ -131,7 +127,6 @@ let options = {
         },
         pedidos: {
             id_campo: 'id',
-            url: 'http://localhost:3000/pedidos',
             eliminar: true,
             cols: [{
                 texto: 'TIPO',
@@ -172,7 +167,6 @@ let options = {
         excedente: {
             id: 'excedente',
             titulo: 'Excedente',
-            url: 'http://localhost:3000/db',
             orden:  [{
                 campo: "excedentemateriales",
                 desc: true
@@ -192,7 +186,6 @@ let options = {
                 campo: "nombremateriales",
                 desc: false
             }],
-            parseData: 'parseDataExcedente',
             source: 'vistaExcedente',
             id_campo: 'idmateriales',
             cols: 'colsExcedente',
@@ -233,7 +226,6 @@ let options = {
         inicio: [{
             id: 'materiales',
             titulo: 'Materiales',
-            url: 'http://localhost:3000/db',
             orden:  [{
                 campo(item) {
                     return ((item.stockmateriales < item.cantidadpedidos) &&
@@ -250,7 +242,6 @@ let options = {
                 campo: "faltamateriales",
                 desc: true
             }],
-            parseData: 'parseDataNecesitaMateriales',
             source: 'inicioNecesitaMateriales',
             id_campo: 'materialpedidos',
             cols: 'colsNecesitaMateriales',
@@ -259,13 +250,11 @@ let options = {
         },{
             id: 'pedidos',
             titulo: 'Pedidos',
-            url: 'http://localhost:3000/db',
             orden: {
                 campo: "nombretipos_pedido",
                 desc: false
             },
             id_campo: 'idtipos_pedido',
-            parseData: 'parseDataPedidos',
             source: 'inicioPedidos',
             cols: 'colsPedidos',
             acciones: 'accionesPedidos',
@@ -273,7 +262,6 @@ let options = {
         },{
             id: 'necesita',
             titulo: 'Necesita',
-            url: 'http://localhost:3000/db',
             orden:  [{
                 campo: "profundidadpedidos",
                 desc: true
@@ -281,7 +269,6 @@ let options = {
                 campo: "haciendomateriales",
                 desc: true
             }],
-            parseData: 'parseDataNecesita',
             source: 'inicioNecesita',
             id_campo: 'materialpedidos',
             cols: 'colsNecesita',
@@ -290,13 +277,11 @@ let options = {
         }],
         inicio_pedido: {
             id: 'pedido',
-            url: 'http://localhost:3000/db',
             orden: {
                 campo: "nombremateriales",
                 desc: false
             },
             id_campo: 'idpedidos',
-            parseData: 'parseDataPedido',
             source: 'inicioPedido',
             cols: 'colsPedido',
             acciones: 'accionesPedido',

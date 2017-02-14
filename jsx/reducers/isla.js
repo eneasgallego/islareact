@@ -4,6 +4,8 @@ import {
     VER_PEDIDO,
     ACTUALIZAR_BD,
     EDITAR,
+    INSERTAR,
+    INSERTAR_RESPONSE,
     ELIMINAR,
     RECOGER_MATERIAL,
     RECOGER_TODO_MATERIAL,
@@ -12,7 +14,9 @@ import {
     GANAR_MATERIAL,
     PROCESAR_PEDIDO,
     PROCESAR_PEDIDOS,
-    CERRAR_PEDIDO
+    CERRAR_PEDIDO,
+    GUARDAR_BD,
+    NUEVA_FILA
 } from '../actions'
 
 import vistas from './vistas'
@@ -258,6 +262,32 @@ const cerrarPedido = (tipo, bd) => {
 
   return ret;
 }
+const insertarBD = (bd, tabla, id) => {
+  let tablaBD = bd[tabla];
+  let obj = tablaBD.find(obj=>obj.id==undefined);
+  obj.id = id;
+  return bd;
+}
+const guardarBD = (bd, tabla, id, campo, valor, persistir) => {
+  let ret = [];
+
+  let tablaBD = bd[tabla];
+  let obj = tablaBD.find(obj=>obj.id==id);
+  obj[campo] = valor;
+  persistir && ret.push({
+    accion: id ? EDITAR : INSERTAR,
+    toEdit: [tabla, obj, id]
+  })
+
+  return {
+    bd: bd,
+    toEdit: ret
+  };
+}
+const nuevaFila = (bd, tabla, obj) => {
+  bd[tabla].unshift(obj);
+  return bd;
+}
 const _manageToEdit = (oldToEdit, newToEdit) => {
   let ret = [];
   ret.push.apply(ret,oldToEdit)
@@ -294,6 +324,16 @@ const isla = (state = {
       return {
         ...state,
         bd: actualizarBD(state.bd,action.tabla)
+      }
+    case INSERTAR:
+      return {
+        ...state,
+        toEdit: action.toEdit
+      }
+    case INSERTAR_RESPONSE:
+      return {
+        ...state,
+        bd: insertarBD(state.bd, action.tabla, action.id)
       }
     case EDITAR:
       return {
@@ -344,6 +384,20 @@ const isla = (state = {
       return {
         ...state,
         toEdit: _manageToEdit(state.toEdit, cerrarPedido(action.tipo, state.bd))
+      }
+    case GUARDAR_BD:
+      let estado = guardarBD(state.bd, action.tabla, action.id, action.campo, action.valor, action.persistir);
+      const toEdit = _manageToEdit(state.toEdit, estado.toEdit);
+
+      return {
+        ...state,
+        bd: estado.bd,
+        toEdit: toEdit
+      }
+    case NUEVA_FILA:
+      return {
+        ...state,
+        bd: nuevaFila(state.bd, action.tabla, action.obj)
       }
     default:
       return state

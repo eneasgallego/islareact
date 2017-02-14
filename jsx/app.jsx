@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { connect } from 'react-redux'
-import { fetchBD, verPedido, editarBD, recogerMaterial, recogerTodoMaterial, hacerMaterial, procesarPedido, procesarPedidos, cerrarPedido, venderMaterial, ganarMaterial } from './actions'
+import { fetchBD, verPedido, nuevaFila, editarBD, guardarBD, recogerMaterial, recogerTodoMaterial, hacerMaterial, procesarPedido, procesarPedidos, cerrarPedido, venderMaterial, ganarMaterial } from './actions'
 
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
@@ -35,8 +35,11 @@ class App extends React.Component {
 		this.dimensionar = this.dimensionar.bind(this);
 		this.dimensionarNuevoPedido = this.dimensionarNuevoPedido.bind(this);
 		this.crearNuevoPedido = this.crearNuevoPedido.bind(this);
+		this.onAccionListaTabla = this.onAccionListaTabla.bind(this);
+		this.onNuevaFilaListaTabla = this.onNuevaFilaListaTabla.bind(this);
+
 		this.state = {
-			contenido: 'inicio',
+			contenido: '',
 			dataset_tipopedidos: [],
 			cargando_dataset_tipopedidos: false,
 			alto: undefined,
@@ -1253,6 +1256,21 @@ class App extends React.Component {
 			this[tag].apply(this, arguments);
 		}
 	}
+	onNuevaFilaListaTabla(tabla, obj) {
+		const { dispatch } = this.props
+		dispatch(nuevaFila(tabla, obj))
+	}
+	onAccionListaTabla(accion, tabla, id, campo, valor, persistir) {
+		switch (accion) {
+			case 'GUARDAR':
+				this.guardar(tabla, id, campo, valor, persistir)
+				break;
+		}
+	}
+	guardar(tabla, id, campo, valor, persistir) {
+		const { dispatch } = this.props
+		dispatch(guardarBD(tabla, id, campo, valor, persistir))
+	}
 	setDialogo(dialogo) {
 		this.setState({dialogo:dialogo});
 	}
@@ -1434,23 +1452,28 @@ class App extends React.Component {
 	renderContenido(e) {
 		let ret = '';
 
-		if (this.state.contenido == 'inicio') {
-			ret = this.renderInicio();
-		} else if (this.state.contenido == 'excedente') {
-			ret = this.renderExcedente();
-		} else if (this.state.contenido == 'nuevo_pedido') {
-			ret = this.renderNuevoPedido();
-		} else {
-			ret = <ListaTabla	id_campo={this.props.config[this.state.contenido].id_campo}
-								url_editar={this.props.config[this.state.contenido].url_editar}
-								url_crear={this.props.config[this.state.contenido].url_crear}
-								url={this.props.config[this.state.contenido].url}
-								cols={this.props.config[this.state.contenido].cols}
-								eliminar={this.props.config[this.state.contenido].eliminar}
-								key={this.state.contenido}
-								ref={this.state.contenido}
-								setDialogo={this.setDialogo}
-					/>;
+		if (this.state.contenido) {
+			if (this.state.contenido == 'inicio') {
+				ret = this.renderInicio();
+			} else if (this.state.contenido == 'excedente') {
+				ret = this.renderExcedente();
+			} else if (this.state.contenido == 'nuevo_pedido') {
+				ret = this.renderNuevoPedido();
+			} else {
+				ret = <ListaTabla
+					id={this.state.contenido}
+					id_campo={this.props.config[this.state.contenido].id_campo}
+					cols={this.props.config[this.state.contenido].cols}
+					eliminar={this.props.config[this.state.contenido].eliminar}
+					key={this.state.contenido}
+					ref={this.state.contenido}
+					setDialogo={this.setDialogo}
+					bd={this.props.bd}
+					filas={this.props.bd[this.state.contenido]}
+					onAccion={this.onAccionListaTabla}
+					onNuevaFila={this.onNuevaFilaListaTabla}
+				/>;
+			}
 		}
 
 		return ret;

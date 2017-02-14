@@ -14,12 +14,17 @@ export const fetchBD = url => dispatch => {
         .then(json => dispatch(_loadResponse(json)))
 }
 
+export const INSERTAR = 'INSERTAR'
+export const INSERTAR_RESPONSE = 'INSERTAR_RESPONSE'
 export const EDITAR = 'EDITAR'
 export const ELIMINAR = 'ELIMINAR'
 const _routeBD = (dispatch, toEdit)=>{
     let obj = toEdit.shift();
     let fn, fn2;
-    if (obj.accion == EDITAR) {
+    if (obj.accion == INSERTAR) {
+        fn = insertarBD;
+        fn2 = _insertar;
+    } else if (obj.accion == EDITAR) {
         fn = editarBD;
         fn2 = _editar;
     } else if (obj.accion == ELIMINAR) {
@@ -28,6 +33,17 @@ const _routeBD = (dispatch, toEdit)=>{
     }
     fn && dispatch(fn.apply(this, obj.toEdit));
     dispatch(fn2(toEdit));
+}
+const _insertarResponse = (tabla, id) => ({
+    type: INSERTAR_RESPONSE,
+    tabla, tabla,
+    id: id
+})
+const _insertar = toEdit => {
+    return {
+        type: INSERTAR,
+        toEdit: toEdit
+    }
 }
 const _editar = toEdit => {
     return {
@@ -39,6 +55,31 @@ const _eliminar = toEdit => {
     return {
         type: ELIMINAR,
         toEdit: toEdit
+    }
+}
+export const insertarBD = (tabla, data) => dispatch => {
+    if (tabla instanceof Array) {
+        _routeBD(dispatch, tabla);
+    } else {
+        let url = 'http://localhost:3000/' + tabla;
+        let body = [];
+
+        for (let key in data) {
+            body.push(key + '=' + data[key]);
+        }
+        body = encodeURI(body.join('&'));
+
+        var myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+
+        return fetch(url, {
+            method: 'POST',
+            headers: myHeaders,
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(json => dispatch(_insertarResponse(tabla, json.id)))
+            .catch(err => {throw err})
     }
 }
 export const editarBD = (tabla, data, id) => dispatch => {
@@ -138,4 +179,20 @@ export const CERRAR_PEDIDO = 'CERRAR_PEDIDO'
 export const cerrarPedido = tipo => ({
     type: CERRAR_PEDIDO,
     tipo: tipo
+})
+
+export const GUARDAR_BD = 'GUARDAR_BD'
+export const guardarBD = (tabla, id, campo, valor, persistir) => ({
+    type: GUARDAR_BD,
+    tabla: tabla,
+    id: id,
+    campo: campo,
+    valor: valor,
+    persistir: persistir
+})
+export const NUEVA_FILA = 'NUEVA_FILA'
+export const nuevaFila = (tabla, obj) => ({
+    type: NUEVA_FILA,
+    tabla: tabla,
+    obj: obj
 })
