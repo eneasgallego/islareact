@@ -64,7 +64,7 @@ let options = {
                 campo: 'fabricamateriales',
                 tipo: {
                     tipo: 'object',
-                    url: 'http://localhost:3000/fabricas',
+                    dataset: 'fabricas',
                     id: 'id',
                     texto: 'nombrefabricas'
                 }
@@ -90,7 +90,7 @@ let options = {
                 campo: 'materialmateriales_necesita',
                 tipo: {
                     tipo: 'object',
-                    url: 'http://localhost:3000/materiales',
+                    dataset: 'materiales',
                     id: 'id',
                     texto: 'nombremateriales'
                 }
@@ -99,7 +99,7 @@ let options = {
                 campo: 'materialnecesitamateriales_necesita',
                 tipo: {
                     tipo: 'object',
-                    url: 'http://localhost:3000/materiales',
+                    dataset: 'materiales',
                     id: 'id',
                     texto: 'nombremateriales'
                 }
@@ -133,7 +133,7 @@ let options = {
                 campo: 'tipopedidos',
                 tipo: {
                     tipo: 'object',
-                    url: 'http://localhost:3000/tipos_pedido',
+                    dataset: 'tipos_pedido',
                     id: 'id',
                     texto: 'nombretipos_pedido'
                 }
@@ -142,7 +142,7 @@ let options = {
                 campo: 'materialpedidos',
                 tipo: {
                     tipo: 'object',
-                    url: 'http://localhost:3000/materiales',
+                    dataset: 'materiales',
                     id: 'id',
                     texto: 'nombremateriales'
                 }
