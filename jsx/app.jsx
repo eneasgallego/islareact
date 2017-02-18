@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { connect } from 'react-redux'
-import { fetchBD, verPedido, nuevaFila, editarBD, guardarBD, recogerMaterial, recogerTodoMaterial, hacerMaterial, procesarPedido, procesarPedidos, cerrarPedido, venderMaterial, ganarMaterial } from './actions'
+import { fetchBD, verPedido, eliminarFilaBD, nuevaFila, editarBD, guardarBD, recogerMaterial, recogerTodoMaterial, hacerMaterial, procesarPedido, procesarPedidos, cerrarPedido, venderMaterial, ganarMaterial } from './actions'
 
 import Menu from '../web/js/lib/nreactjs/jsx/menu.jsx'
 import PanelTabla from '../web/js/lib/nreactjs/jsx/panel_tabla.jsx'
@@ -37,6 +37,7 @@ class App extends React.Component {
 		this.crearNuevoPedido = this.crearNuevoPedido.bind(this);
 		this.onAccionListaTabla = this.onAccionListaTabla.bind(this);
 		this.onNuevaFilaListaTabla = this.onNuevaFilaListaTabla.bind(this);
+		this.onEliminarListaTabla = this.onEliminarListaTabla.bind(this);
 
 		this.state = {
 			contenido: '',
@@ -1260,6 +1261,10 @@ class App extends React.Component {
 		const { dispatch } = this.props
 		dispatch(nuevaFila(tabla, obj))
 	}
+	onEliminarListaTabla(tabla, id, persistir) {
+		const { dispatch } = this.props
+		dispatch(eliminarFilaBD(tabla, id, persistir))
+	}
 	onAccionListaTabla(accion, tabla, id, campo, valor, persistir) {
 		switch (accion) {
 			case 'GUARDAR':
@@ -1472,6 +1477,7 @@ class App extends React.Component {
 					filas={this.props.bd[this.state.contenido]}
 					onAccion={this.onAccionListaTabla}
 					onNuevaFila={this.onNuevaFilaListaTabla}
+					onEliminar={this.onEliminarListaTabla}
 				/>;
 			}
 		}

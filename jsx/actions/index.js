@@ -196,3 +196,10 @@ export const nuevaFila = (tabla, obj) => ({
     tabla: tabla,
     obj: obj
 })
+export const ELIMINAR_BD = 'ELIMINAR_BD'
+export const eliminarFilaBD = (tabla, id, persistir) => ({
+    type: ELIMINAR_BD,
+    tabla: tabla,
+    id: id,
+    persistir: persistir
+})

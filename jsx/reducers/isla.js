@@ -16,7 +16,8 @@ import {
     PROCESAR_PEDIDOS,
     CERRAR_PEDIDO,
     GUARDAR_BD,
-    NUEVA_FILA
+    NUEVA_FILA,
+    ELIMINAR_BD
 } from '../actions'
 
 import vistas from './vistas'
@@ -288,6 +289,27 @@ const nuevaFila = (bd, tabla, obj) => {
   bd[tabla].unshift(obj);
   return bd;
 }
+const eliminarBD = (bd, tabla, id, persistir) => {
+  let ret = [];
+
+  let filas = bd[tabla];
+  let indice = filas.indexOf(filas.find(item => {
+    return (item.id == id);
+  }));
+  if (!!~indice) {
+    filas.splice(indice, 1);
+  }
+
+  persistir && ret.push({
+    accion: ELIMINAR,
+    toEdit: [tabla, id]
+  })
+
+  return {
+    bd: bd,
+    toEdit: ret
+  };
+}
 const _manageToEdit = (oldToEdit, newToEdit) => {
   let ret = [];
   ret.push.apply(ret,oldToEdit)
@@ -398,6 +420,15 @@ const isla = (state = {
       return {
         ...state,
         bd: nuevaFila(state.bd, action.tabla, action.obj)
+      }
+    case ELIMINAR_BD:
+      let estadoEliminar = eliminarBD(state.bd, action.tabla, action.id, action.persistir);
+      const toEditEliminar = _manageToEdit(state.toEdit, estadoEliminar.toEdit);
+
+      return {
+        ...state,
+        bd: estadoEliminar.bd,
+        toEdit: toEditEliminar
       }
     default:
       return state
