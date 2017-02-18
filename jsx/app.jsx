@@ -1300,7 +1300,7 @@ class App extends React.Component {
 					onClickAcciones={this.onClickAcciones}
 					filtros={false}
 					bd={this.props.bd}
-					filas={this.props.bd[config.source]}
+					filas={this.props.bd[config.source].slice()}
 				/>
 			);
 		}
