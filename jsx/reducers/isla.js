@@ -90,17 +90,30 @@ const actualizarBD = (bd, tabla)=>{
         const vistasActualizar = getVistasActualizar(vista.key);
         const vistasFiltradas = vistasActualizar.filter(vista=>!~ret.indexOf(vista))
         ret.push.apply(ret, vistasFiltradas);
-        //ret.concat(vistasFiltradas);
       }
     }
-
-    ret.sort((a,b)=>(!!~a.dependencias.indexOf(b.key)) ? 1 : !!~b.dependencias.indexOf(a.key) ? -1 : 0);
 
     return ret;
   }
   const vistasActualizar = getVistasActualizar(tabla);
-  while(vistasActualizar.length) {
-    const vista = vistasActualizar.shift();
+  debugger;
+  const ordenarVistas = vistas=>{
+    for (let i = 0 ; i < vistas.length - 1 ; i++) {
+      for (let j = i + 1 ; j < vistas.length ; j++) {
+        const vista = vistas[i];
+        const vista2 = vistas[j];
+        if (!!~vista.dependencias.indexOf(vista2.key)) {
+          vistas[i] = vista2;
+          vistas[j] = vista;
+        }
+      }
+    }
+    return vistas;
+  }
+  const vistasOrdenar = ordenarVistas(vistasActualizar);
+  //vistasActualizar.sort((a,b)=>(!!~a.dependencias.indexOf(b.key)) ? 1 : !!~b.dependencias.indexOf(a.key) ? -1 : 0);
+  while(vistasOrdenar.length) {
+    const vista = vistasOrdenar.shift();
     ret = {
       ...ret,
       ...generarVista(ret, vista, true)
