@@ -56,9 +56,14 @@ class App extends React.Component {
 		dispatch(fetchBD(config.url))
 	}
 	componentWillReceiveProps(nextProps) {
-		const { dispatch, config, toEdit } = nextProps
+		const { dispatch, config, toEdit, error } = nextProps
 		config && this.props.config && config.url !== this.props.config.url && dispatch(fetchBD(config.url));
 		toEdit && toEdit instanceof Array && toEdit.length && dispatch(editarBD(toEdit));
+		error && this.setDialogo({
+			titulo: 'Error',
+			puedeCerrar: true,
+			contenido: error.message
+		});
 
 		this.dimensionar();
 	}

@@ -334,117 +334,124 @@ const isla = (state = {
   isFetching: false,
   bd: {}
 }, action={}) => {
-  switch (action.type) {
-    case LOAD:
-      return {
-        ...state,
-        isFetching: true
-      }
-    case LOAD_RESPONSE:
-      return {
-        ...state,
-        isFetching: false,
-        bd: generarVistas(action.data)
-      }
-    case VER_PEDIDO:
-      return {
-        ...state,
-        bd: {
-          ...state.bd,
-          idVerPedido: action.pedido
-        },
-        pedido_ver: action.pedido
-      }
-    case ACTUALIZAR_BD:
-      return {
-        ...state,
-        bd: actualizarBD(state.bd,action.tabla)
-      }
-    case INSERTAR:
-      return {
-        ...state,
-        toEdit: action.toEdit
-      }
-    case INSERTAR_RESPONSE:
-      return {
-        ...state,
-        bd: insertarBD(state.bd, action.tabla, action.id)
-      }
-    case EDITAR:
-      return {
-        ...state,
-        toEdit: action.toEdit
-      }
-    case ELIMINAR:
-      return {
-        ...state,
-        toEdit: action.toEdit
-      }
-    case RECOGER_MATERIAL:
-      return {
-        ...state,
-        toEdit: _manageToEdit(state.toEdit, recogerMaterial(action.material))
-      }
-    case RECOGER_TODO_MATERIAL:
-      return {
-        ...state,
-        toEdit: _manageToEdit(state.toEdit, recogerTodoMaterial(action.material))
-      }
-    case HACER_MATERIAL:
-      return {
-        ...state,
-        toEdit: _manageToEdit(state.toEdit, hacerMaterial(action.material, action.cantidad, state.bd))
-      }
+  try {
+    switch (action.type) {
+      case LOAD:
+        return {
+          ...state,
+          isFetching: true
+        }
+      case LOAD_RESPONSE:
+        return {
+          ...state,
+          isFetching: false,
+          bd: generarVistas(action.data)
+        }
+      case VER_PEDIDO:
+        return {
+          ...state,
+          bd: {
+            ...state.bd,
+            idVerPedido: action.pedido
+          },
+          pedido_ver: action.pedido
+        }
+      case ACTUALIZAR_BD:
+        return {
+          ...state,
+          bd: actualizarBD(state.bd, action.tabla)
+        }
+      case INSERTAR:
+        return {
+          ...state,
+          toEdit: action.toEdit
+        }
+      case INSERTAR_RESPONSE:
+        return {
+          ...state,
+          bd: insertarBD(state.bd, action.tabla, action.id)
+        }
+      case EDITAR:
+        return {
+          ...state,
+          toEdit: action.toEdit
+        }
+      case ELIMINAR:
+        return {
+          ...state,
+          toEdit: action.toEdit
+        }
+      case RECOGER_MATERIAL:
+        return {
+          ...state,
+          toEdit: _manageToEdit(state.toEdit, recogerMaterial(action.material))
+        }
+      case RECOGER_TODO_MATERIAL:
+        return {
+          ...state,
+          toEdit: _manageToEdit(state.toEdit, recogerTodoMaterial(action.material))
+        }
+      case HACER_MATERIAL:
+        return {
+          ...state,
+          toEdit: _manageToEdit(state.toEdit, hacerMaterial(action.material, action.cantidad, state.bd))
+        }
       case VENDER_MATERIAL:
         return {
           ...state,
           toEdit: _manageToEdit(state.toEdit, venderMaterial(action.material))
         }
-    case GANAR_MATERIAL:
-      return {
-        ...state,
-        toEdit: _manageToEdit(state.toEdit, ganarMaterial(action.material))
-      }
-    case PROCESAR_PEDIDO:
-      return {
-        ...state,
-        toEdit: _manageToEdit(state.toEdit, procesarPedido(action.pedido))
-      }
-    case PROCESAR_PEDIDOS:
-      return {
-        ...state,
-        toEdit: _manageToEdit(state.toEdit, procesarPedidos(action.tipo, state.bd.pedidos))
-      }
-    case CERRAR_PEDIDO:
-      return {
-        ...state,
-        toEdit: _manageToEdit(state.toEdit, cerrarPedido(action.tipo, state.bd))
-      }
-    case GUARDAR_BD:
-      let estado = guardarBD(state.bd, action.tabla, action.id, action.campo, action.valor, action.persistir);
-      const toEdit = _manageToEdit(state.toEdit, estado.toEdit);
+      case GANAR_MATERIAL:
+        return {
+          ...state,
+          toEdit: _manageToEdit(state.toEdit, ganarMaterial(action.material))
+        }
+      case PROCESAR_PEDIDO:
+        return {
+          ...state,
+          toEdit: _manageToEdit(state.toEdit, procesarPedido(action.pedido))
+        }
+      case PROCESAR_PEDIDOS:
+        return {
+          ...state,
+          toEdit: _manageToEdit(state.toEdit, procesarPedidos(action.tipo, state.bd.pedidos))
+        }
+      case CERRAR_PEDIDO:
+        return {
+          ...state,
+          toEdit: _manageToEdit(state.toEdit, cerrarPedido(action.tipo, state.bd))
+        }
+      case GUARDAR_BD:
+        let estado = guardarBD(state.bd, action.tabla, action.id, action.campo, action.valor, action.persistir);
+        const toEdit = _manageToEdit(state.toEdit, estado.toEdit);
 
-      return {
-        ...state,
-        bd: estado.bd,
-        toEdit: toEdit
-      }
-    case NUEVA_FILA:
-      return {
-        ...state,
-        bd: nuevaFila(state.bd, action.tabla, action.obj)
-      }
-    case ELIMINAR_BD:
-      let estadoEliminar = eliminarBD(state.bd, action.tabla, action.id, action.persistir);
-      const toEditEliminar = _manageToEdit(state.toEdit, estadoEliminar.toEdit);
+        return {
+          ...state,
+          bd: estado.bd,
+          toEdit: toEdit
+        }
+      case NUEVA_FILA:
+        return {
+          ...state,
+          bd: nuevaFila(state.bd, action.tabla, action.obj)
+        }
+      case ELIMINAR_BD:
+        let estadoEliminar = eliminarBD(state.bd, action.tabla, action.id, action.persistir);
+        const toEditEliminar = _manageToEdit(state.toEdit, estadoEliminar.toEdit);
 
-      return {
-        ...state,
-        bd: estadoEliminar.bd,
-        toEdit: toEditEliminar
-      }
-    default:
-      return state
+        return {
+          ...state,
+          bd: estadoEliminar.bd,
+          toEdit: toEditEliminar
+        }
+      default:
+        return state
+    }
+  } catch (e) {
+    return {
+      ...state,
+      error: e
+    }
   }
 }
 
