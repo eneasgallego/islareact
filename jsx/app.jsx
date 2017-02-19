@@ -59,11 +59,12 @@ class App extends React.Component {
 		const { dispatch, config, toEdit, error } = nextProps
 		config && this.props.config && config.url !== this.props.config.url && dispatch(fetchBD(config.url));
 		toEdit && toEdit instanceof Array && toEdit.length && dispatch(editarBD(toEdit));
-		error && this.setDialogo({
+
+		error && (this.setDialogo({
 			titulo: 'Error',
 			puedeCerrar: true,
 			contenido: error.message
-		});
+		}) || console.error(error));
 
 		this.dimensionar();
 	}
@@ -1428,7 +1429,7 @@ class App extends React.Component {
 			ret.push(
 				<ListaTabla
 					id_campo={this.props.config.nuevo_pedido.tabla.id_campo}
-					url={this.props.config.nuevo_pedido.tabla.url}
+					bd={this.props.bd}
 					cols={this.props.config.nuevo_pedido.tabla.cols}
 					eliminar={this.props.config.nuevo_pedido.tabla.eliminar}
 					key="tabla_nuevo_pedido"

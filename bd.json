@@ -62,7 +62,7 @@
       "fabricamateriales": 1,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 0,
+      "haciendomateriales": 1,
       "id": 1
     },
     {
@@ -189,7 +189,7 @@
       "nombremateriales": "Pintura",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 1,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 17
     },
@@ -237,8 +237,8 @@
       "nombremateriales": "Verduras",
       "fabricamateriales": 4,
       "hacemateriales": 1,
-      "stockmateriales": 10,
-      "haciendomateriales": 1,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
       "id": 23
     },
     {
@@ -269,8 +269,8 @@
       "nombremateriales": "Maiz",
       "fabricamateriales": 4,
       "hacemateriales": 1,
-      "stockmateriales": 9,
-      "haciendomateriales": 2,
+      "stockmateriales": 0,
+      "haciendomateriales": 0,
       "id": 27
     },
     {
@@ -293,8 +293,8 @@
       "nombremateriales": "Silla",
       "fabricamateriales": 5,
       "hacemateriales": 1,
-      "stockmateriales": 0,
-      "haciendomateriales": 1,
+      "stockmateriales": 1,
+      "haciendomateriales": 0,
       "id": 30
     },
     {
@@ -413,7 +413,7 @@
       "nombremateriales": "Reloj",
       "fabricamateriales": 8,
       "hacemateriales": 1,
-      "stockmateriales": 1,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 45
     },
@@ -501,8 +501,8 @@
       "nombremateriales": "Sofa",
       "fabricamateriales": 5,
       "hacemateriales": 1,
-      "stockmateriales": 0,
-      "haciendomateriales": 1,
+      "stockmateriales": 1,
+      "haciendomateriales": 0,
       "id": 56
     },
     {
@@ -1300,7 +1300,7 @@
       "tipopedidos": 8,
       "materialpedidos": 8,
       "cantidadpedidos": 5,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -10,
       "novacia_pedido": true,
       "id": 226
@@ -1318,7 +1318,7 @@
       "tipopedidos": 8,
       "materialpedidos": 10,
       "cantidadpedidos": 5,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "profundidadpedidos": -10,
       "novacia_pedido": true,
       "id": 228
@@ -1519,9 +1519,10 @@
       "cantidadpedidos": 2,
       "tipopedidos": 8,
       "profundidadpedidos": -10,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "id": 252,
-      "novacia_pedido": "undefined"
+      "novacia_pedido": "undefined",
+      "undefined": false
     },
     {
       "materialpedidos": 34,
@@ -1536,9 +1537,10 @@
       "cantidadpedidos": 2,
       "tipopedidos": 8,
       "profundidadpedidos": -10,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "id": 254,
-      "novacia_pedido": "undefined"
+      "novacia_pedido": "undefined",
+      "undefined": false
     },
     {
       "materialpedidos": 36,
@@ -1595,7 +1597,8 @@
       "profundidadpedidos": -10,
       "procesadopedidos": false,
       "id": 261,
-      "novacia_pedido": "undefined"
+      "novacia_pedido": "undefined",
+      "undefined": false
     },
     {
       "materialpedidos": 50,
@@ -1666,9 +1669,10 @@
       "cantidadpedidos": 2,
       "tipopedidos": 8,
       "profundidadpedidos": -10,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "id": 270,
-      "novacia_pedido": "undefined"
+      "novacia_pedido": "undefined",
+      "undefined": false
     },
     {
       "materialpedidos": 56,
@@ -1684,7 +1688,8 @@
       "tipopedidos": 8,
       "profundidadpedidos": -10,
       "procesadopedidos": false,
-      "id": 298
+      "id": 298,
+      "undefined": false
     },
     {
       "materialpedidos": 58,
@@ -1746,24 +1751,6 @@
       "profundidadpedidos": 0,
       "procesadopedidos": true,
       "id": 357,
-      "novacia_pedido": "undefined"
-    },
-    {
-      "materialpedidos": 27,
-      "cantidadpedidos": 11,
-      "tipopedidos": 3,
-      "profundidadpedidos": 0,
-      "procesadopedidos": true,
-      "id": 358,
-      "novacia_pedido": "undefined"
-    },
-    {
-      "materialpedidos": 23,
-      "cantidadpedidos": 11,
-      "tipopedidos": 3,
-      "profundidadpedidos": 0,
-      "procesadopedidos": true,
-      "id": 359,
       "novacia_pedido": "undefined"
     },
     {

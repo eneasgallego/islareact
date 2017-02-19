@@ -210,7 +210,7 @@ let options = {
                     campo: 'materialpedidos',
                     tipo: {
                         tipo: 'object',
-                        url: 'http://localhost:3000/materiales',
+                        dataset: 'materiales',
                         id: 'id',
                         texto: 'nombremateriales'
                     }
