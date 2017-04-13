@@ -1,3 +1,5 @@
+/*
+
 import { ajax } from '../componentes/base';
 
 export const CARGAR_DATASET_TIPOPEDIDOS_START = 'CARGAR_DATASET_TIPOPEDIDOS_START';
@@ -55,3 +57,5 @@ export const dimensionar = menu => ({
     type: DIMENSIONAR,
     menu
 });
+
+    */

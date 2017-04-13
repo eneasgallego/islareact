@@ -1,4 +1,5 @@
-import { getState } from '../componentes/base';
+/*
+ import { getState } from '../componentes/base';
 
 import { NUMERO_DEFECTO, FIRST_INDEX } from '../constantes';
 
@@ -148,3 +149,4 @@ export default (state = {}, action = {}) => {
         return state;
     }
 };
+*/

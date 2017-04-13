@@ -1,4 +1,5 @@
-import { ajax } from '../componentes/base';
+/*
+ import { ajax } from '../componentes/base';
 
 import { FIRST_INDEX } from '../constantes';
 
@@ -103,3 +104,4 @@ export const cargarCombosTabla = (id, cols, combosDataset) => dispatch => new Pr
     }
     resolve();
 });
+*/

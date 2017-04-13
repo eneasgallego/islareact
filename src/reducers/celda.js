@@ -1,4 +1,5 @@
-import { getState } from '../componentes/base';
+/*
+ import { getState } from '../componentes/base';
 
 import {
     ORDER_EQUAL, ORDER_UP, ORDER_DOWN,
@@ -100,3 +101,4 @@ export default (state = {}, action = {}) => {
         return state;
     }
 };
+*/

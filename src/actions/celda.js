@@ -1,4 +1,6 @@
-export const SET_ORDEN_CELDA = 'SET_ORDEN_CELDA';
+/*
+
+ export const SET_ORDEN_CELDA = 'SET_ORDEN_CELDA';
 export const setOrdenCelda = (id, orden, ordenDesc) => ({
     type: SET_ORDEN_CELDA,
     id,
@@ -55,3 +57,4 @@ export const filtrarCelda = (id, valor, onFiltrado) => ({
     valor,
     onFiltrado
 });
+*/

@@ -1,4 +1,5 @@
-import {
+/*
+ import {
     CARGAR_DATASET_TIPOPEDIDOS_START,
     CARGAR_DATASET_TIPOPEDIDOS_SUCCESS,
     CARGAR_DATASET_TIPOPEDIDOS_ERROR,
@@ -7,6 +8,7 @@ import {
     CAMBIAR_CONTENIDO,
     DIMENSIONAR
 } from '../actions/app';
+*/
 
 const options = {
     menu: [{
@@ -276,21 +278,13 @@ const options = {
     }
 };
 
-const _dimensionar = menu => window.innerHeight - menu.offsetHeight;
+// const _dimensionar = menu => window.innerHeight - menu.offsetHeight;
 
 export default (state = {
-    contenido:                  'inicio',
-    datasetTipopedidos:         [],
-    cargandoDatasetTipopedidos: false,
-    velo:                       false,
-    alto:                       undefined,
-    dialogo:                    undefined,
-    pedidoVer:                  undefined,
-    config:                     options.config,
-    menu:                       options.menu,
-    combosDataset:              {}
+    menu: options.menu
 }, action = {}) => {
     switch (action.type) {
+        /*
     case CARGAR_DATASET_TIPOPEDIDOS_START:
         return {
             ...state,
@@ -327,6 +321,7 @@ export default (state = {
             ...state,
             alto: _dimensionar(action.menu)
         };
+     */
     default:
         return state;
     }

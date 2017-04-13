@@ -1,4 +1,5 @@
-import { getState } from '../componentes/base';
+/*
+ import { getState } from '../componentes/base';
 
 import {
     FIJAR_FILTRO_FILA
@@ -22,3 +23,4 @@ export default (state = {}, action = {}) => {
         return state;
     }
 };
+*/

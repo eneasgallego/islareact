@@ -15,7 +15,7 @@ export const NUMERO_DEFECTO = 0;
 export const INIT_PROFUNDIDAD = 0;
 export const UP_PROFUNDIDAD = 1;
 
-export const FIRST_INDEX = 0;
+export const INIT_INDEX = 0;
 
 export const INIT_ID = 1;
 
