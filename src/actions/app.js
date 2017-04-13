@@ -4,6 +4,12 @@ export const cambiarContenido = contenido => ({
     contenido
 });
 
+export const DIMENSIONAR = 'DIMENSIONAR';
+export const dimensionar = menu => ({
+    type: DIMENSIONAR,
+    menu
+});
+
 /*
 
 import { ajax } from '../componentes/base';
