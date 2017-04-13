@@ -1,3 +1,9 @@
+export const CAMBIAR_CONTENIDO = 'CAMBIAR_CONTENIDO';
+export const cambiarContenido = contenido => ({
+    type: CAMBIAR_CONTENIDO,
+    contenido
+});
+
 /*
 
 import { ajax } from '../componentes/base';
@@ -44,12 +50,6 @@ export const CAMBIAR_PEDIDO_VER = 'CAMBIAR_PEDIDO_VER';
 export const cambiarPedidoVer = pedidoVer => ({
     type: CAMBIAR_PEDIDO_VER,
     pedidoVer
-});
-
-export const CAMBIAR_CONTENIDO = 'CAMBIAR_CONTENIDO';
-export const cambiarContenido = contenido => ({
-    type: CAMBIAR_CONTENIDO,
-    contenido
 });
 
 export const DIMENSIONAR = 'DIMENSIONAR';

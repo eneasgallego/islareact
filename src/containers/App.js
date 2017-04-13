@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 
+import { cambiarContenido } from '../actions/app';
+
 import Menu from '../componentes/menu/Menu';
 
 /* Private functions */
@@ -15,13 +17,19 @@ class App extends Component {
         menu: PropTypes.array.isRequired
     }
     getDefaultProps: _getDefaultProps
+
+    /* Lifecycle */
+    componentWillMount() {
+        this.handlerAccionMenu = this.handlerAccionMenu.bind(this);
+    }
+
     /* Handlers */
     handlerAccionMenu(tag) {
-        /* eneas */
-        console.log(tag);
+        const { dispatch } = this.props;
 
-        return this;
+        dispatch(cambiarContenido(tag));
     }
+
     /* Render */
     render() {
         const { menu } = this.props;
