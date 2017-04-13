@@ -4,16 +4,25 @@ import { connect } from 'react-redux';
 
 import Menu from '../componentes/menu/Menu';
 
+/* Private functions */
+const _getDefaultProps = () => ({
+    menu: []
+});
+
 class App extends Component {
+    /* Properties */
     static propTypes = {
         menu: PropTypes.array.isRequired
     }
-
-    handlerAccionMenu() {
+    getDefaultProps: _getDefaultProps
+    /* Handlers */
+    handlerAccionMenu(tag) {
         /* eneas */
+        console.log(tag);
+
         return this;
     }
-
+    /* Render */
     render() {
         const { menu } = this.props;
 

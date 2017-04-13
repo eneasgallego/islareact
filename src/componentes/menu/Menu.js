@@ -2,9 +2,15 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
 import { INIT_INDEX } from '../../utils/constantes';
+import { emptyFunction } from '../../utils/utils';
 
 import MenuItem from './MenuItem';
 
+/* Private functions */
+const _getDefaultProps = () => ({
+    menu:   [],
+    accion: emptyFunction
+});
 const _renderItemMenu = (item, accion) => {
     const { tag, texto, menu } = item;
 
@@ -29,12 +35,15 @@ const _renderMenu = (menu, accion) => {
 };
 
 class Menu extends Component {
+    /* Properties */
     static propTypes = {
         menu:      PropTypes.array.isRequired,
         accion:    PropTypes.func.isRequired,
         className: PropTypes.string
     }
+    getDefaultProps: _getDefaultProps
 
+    /* Render */
     render() {
         const { className, menu, accion } = this.props;
 

@@ -2,26 +2,18 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
 class Boton extends Component {
+    /* Properties */
     static propTypes = {
-        texto:   PropTypes.string.isRequired,
-        onClick: PropTypes.func.isRequired
+        texto: PropTypes.string.isRequired
     }
 
-    handlerClick(e) {
-        const { onClick } = this.props;
-
-        e.preventDefault();
-
-        onClick();
-    }
-
+    /* Render */
     render() {
         const { texto } = this.props;
 
         return (
             <a
                 href="#!"
-                onClick={this.handlerClick}
             >
 				{texto}
             </a>

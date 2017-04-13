@@ -1,4 +1,4 @@
-import { FIRST_INDEX, NUMERO_DEFECTO } from '../constantes';
+import { FIRST_INDEX, NUMERO_DEFECTO } from './constantes';
 const FIELD_CAMPO = 0, FIELD_VALOR = 1, NOT_FOUND = -1, STATE_COMPLETE = 4, STATUS_SUCCESS = 200, STATUS_CACHED = 304, STATUS_CREATED = 201;
 /* eslint-disable no-extend-native */
 
@@ -243,3 +243,4 @@ export const getState = (state, id, initState, newState) => {
 export const getMapStateToProps = componente => (state, props) => ({
     ...state[componente][props.id]
 });
+export const emptyFunction = () => { /* Empty Function */ };
