@@ -27,7 +27,8 @@ const _getDefaultProps = () => ({
 });
 const _getInitialState = () => ({
     altoTabla: undefined,
-    altoBody:  undefined
+    altoBody:  undefined,
+    anchos:    []
 });
 const _getDatosHeader = cols => {
     const datos = {};
@@ -72,9 +73,8 @@ const _renderVelo = () => (
         <div className="velo-imagen" />
     </div>
 );
-const _calcAltoTabla = dom => {
-    let altoTabla = dom.offsetHeight;
-    const domMenu = dom.querySelector('.menu-tabla');
+const _calcAltoTabla = (alto, domMenu) => {
+    let altoTabla = alto;
 
     if (domMenu) {
         altoTabla -= domMenu.offsetHeight;
@@ -82,11 +82,11 @@ const _calcAltoTabla = dom => {
 
     return altoTabla;
 };
-const _calcAltoBody = (dom, domDiv) => ({alto_body: domDiv.offsetHeight - domDiv.querySelector('thead').offsetHeight});
+const _calcAltoBody = (alto, domDiv) => alto - domDiv.querySelector('thead').offsetHeight;
 
-const _calcAlto = function *_calcAlto(dom) {
-    yield _calcAltoTabla(dom);
-    yield _calcAltoBody(dom, dom.querySelector('.tabla-div'));
+const _calcAlto = function *_calcAlto(alto, dom) {
+    yield _calcAltoTabla(alto, dom.querySelector('.menu-tabla'));
+    yield _calcAltoBody(alto, dom.querySelector('.tabla-div'));
 };
 
 const _handlerAccionMenu = () => { /**/ };
@@ -109,11 +109,13 @@ class Tabla extends Component {
 
     /* Lifecycle */
     componentWillMount() {
+        this.handlerResizeCelda = this.handlerResizeCelda.bind(this);
+
         this.setState(_getInitialState());
     }
     componentWillReceiveProps(nextProps) {
         const { alto } = this.props,
-            calcAlto = _calcAlto(ReactDOM.findDOMNode(this));
+            calcAlto = _calcAlto(nextProps.alto, ReactDOM.findDOMNode(this));
 
         alto !== nextProps.alto && this.setState({
             altoTabla: calcAlto.next().value,
@@ -122,8 +124,13 @@ class Tabla extends Component {
     }
 
     /* Methods */
-    dimensionar(alto) {
-        this.setState({alto}/* , this.calcAltoTabla */);
+    handlerResizeCelda(offset) {
+        const { anchos } = this.state;
+
+        if (!anchos[offset.index] || anchos[offset.index] < offset.width) {
+            anchos[offset.index] = offset.width;
+            this.setState({anchos: anchos.slice()});
+        }
     }
 
     /* Render */
@@ -136,7 +143,8 @@ class Tabla extends Component {
             onClickAcciones,
             cols,
             acciones
-        } = this.props;
+        } = this.props,
+            { anchos } = this.state;
 
         return filas.filter(_filtrar.bind(null, filtros))
             .sort((a, b) => _ordenarFila.bind(null, orden))
@@ -148,14 +156,14 @@ class Tabla extends Component {
                     onClickAcciones={onClickAcciones}
                     cols={cols}
                     acciones={acciones}
+                    anchos={anchos}
+                    onResizeCelda={this.handlerResizeCelda}
 //                    guardar={this.guardar}
 //                    id_campo={this.props.id_campo}
 //                    onResize={this.onResizeFila}
-//                    onResizeCelda={this.onResizeCelda}
 //                    onClickCelda={this.onClickCelda}
 //                    onChangeValor={this.onChangeValor}
 //                    combos_dataset={this.state.combos_dataset}
-//                    anchos={this.state.anchos}
 //                    filtros={false}
                 />
             ));
@@ -163,7 +171,7 @@ class Tabla extends Component {
     renderTabla() {
         const
             { cols, orden, acciones } = this.props,
-            { altoTabla, altoBody } = this.state;
+            { altoTabla, altoBody, anchos } = this.state;
 
         return (
             <div
@@ -178,14 +186,14 @@ class Tabla extends Component {
                             cols={cols}
                             orden={orden}
                             acciones={acciones}
+                            anchos={anchos}
+                            onResizeCelda={this.handlerResizeCelda}
 //                            filtros={filtros}
     //                    ref={this.refFilas}
     //                    onResize={this.onResizeFila}
-    //                    onResizeCelda={this.onResizeCelda}
     //                    onClickCelda={this.onClickCeldaHeader}
     //                    onChangeDesc={this.ordenar}
     //                    combos_dataset={this.state.combos_dataset}
-    //                    anchos={this.state.anchos}
     //                    onFiltrado={this.onFiltrado}
                         />
                     </thead>

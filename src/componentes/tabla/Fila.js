@@ -18,18 +18,17 @@ const _getDefaultProps = () => ({
     onClickAcciones: emptyFunction,
     cols:            [],
     filtros:         false,
-    orden:           []
+    orden:           [],
+    anchos:          [],
+    onResizeCelda:   emptyFunction
 });
 const _claseFila = (header, claseFila, datos) => `${header ?
     'header' :
     ''} ${claseFila ?
         claseFila(datos) :
         ''}`;
-const _renderAcciones = (acciones, cols, header, onClickAcciones) => {
-    debugger;
-
-    return acciones && acciones.length ?
-    [header ?
+const _renderAcciones = (acciones, cols, header, onClickAcciones) => acciones && acciones.length ?
+[header ?
             <th key={cols.length}></th> :
             <td key={cols.length}>
                 <Menu
@@ -38,7 +37,7 @@ const _renderAcciones = (acciones, cols, header, onClickAcciones) => {
                 />
             </td>] :
         [];
-};
+
 const _orden = (orden, campo) => orden ?
     orden.indice('campo', campo) + _SUM_MOSTRAR_ORDEN :
     ORDER_EQUAL;
@@ -53,7 +52,9 @@ class Fila extends Component {
         cols:            PropTypes.array.isRequired,
         filtros:         PropTypes.bool,
         orden:           PropTypes.array,
-        acciones:        PropTypes.array
+        acciones:        PropTypes.array,
+        anchos:          PropTypes.array.isRequired,
+        onResizeCelda:   PropTypes.func.isRequired
     }
     getDefaultProps: _getDefaultProps
 
@@ -66,8 +67,11 @@ class Fila extends Component {
             onClickAcciones,
             filtros,
             orden,
-            datos
+            datos,
+            anchos,
+            onResizeCelda
         } = this.props;
+
 
         return cols.map((col, index) => (
                 <Celda
@@ -79,20 +83,21 @@ class Fila extends Component {
                         undefined}
                     orden={_orden(orden, col.campo)}
                     datos={datos[col.campo]}
+                    ancho={anchos[index]}
+                    onResize={onResizeCelda}
 //                    campo={col.campo}
 //                    guardar={this.guardar}
 //                    onClick={this.props.onClickCelda}
 //                    onChangeValor={this.onChangeValor}
 //                    onChangeDesc={this.onChangeDesc}
 //                    combos_dataset={this.props.combos_dataset}
-//                    ancho={this.props.anchos[i]}
 //                    orden_desc={this.orden(col.campo) && this.props.orden.desc}
 //                    mostrarFiltro={this.mostrarFiltro}
 //                    onFiltroFijado={this.onFiltroFijado}
 //                    onFiltrado={this.onFiltrado}
-//                    onResize={this.onResizeCelda}
-            />)
-        ).concatenar(_renderAcciones(acciones, cols, header, onClickAcciones));
+            />
+            )).concatenar(_renderAcciones(acciones, cols, header, onClickAcciones));
+
     }
     render() {
         const {

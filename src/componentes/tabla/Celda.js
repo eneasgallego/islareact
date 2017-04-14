@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { PropTypes } from 'prop-types';
 
 import { emptyFunction } from '../../utils/utils';
@@ -12,7 +13,8 @@ const _getDefaultProps = () => ({
     mostrarFiltro: emptyFunction,
     combosDataset: {},
     campo:         '',
-    datos:         ''
+    datos:         '',
+    onResize:      emptyFunction
 });
 const _renderStyle = (ancho, tipo) => ({
     width: ancho ?
@@ -41,17 +43,38 @@ const _renderIconoOrden = orden => typeof orden === 'undefined' ?
 class Celda extends Component {
     /* Properties */
     static propTypes = {
-        header: PropTypes.bool,
-        ancho:  PropTypes.number,
-        tipo:   PropTypes.object.isRequired,
-        filtro: PropTypes.object,
-        orden:  PropTypes.number,
+        header:   PropTypes.bool,
+        ancho:    PropTypes.number,
+        tipo:     PropTypes.object.isRequired,
+        filtro:   PropTypes.object,
+        orden:    PropTypes.number,
 //        mostrarFiltro: PropTypes.func.isRequired,
 //        combosDataset: PropTypes.object.isRequired,
 //        campo:  PropTypes.string.isRequired,
-        datos:  PropTypes.any.isRequired
+        datos:    PropTypes.any.isRequired,
+        onResize: PropTypes.func.isRequired
     }
     getDefaultProps: _getDefaultProps
+
+    /* Lifecycle */
+    componentDidMount() {
+        window.addEventListener('resize', this.handlerResize);
+        this.handlerResize();
+    }
+
+    /* Handlers */
+    handlerResize() {
+        const { onResize } = this.props,
+            dom = ReactDOM.findDOMNode(this);
+
+        onResize({
+            width:  dom.offsetWidth,
+            height: dom.offsetHeight,
+            top:    dom.offsetTop,
+            left:   dom.offsetLeft,
+            index:  dom.cellIndex
+        });
+    }
 
     /* Render */
     renderFiltros() {
