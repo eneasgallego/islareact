@@ -232,23 +232,6 @@ const options = {
                 guardar:  'guardarNuevoPedido'
             }
         },
-        inicio: [{
-            id:     'necesita',
-            titulo: 'Necesita',
-            url:    'http://localhost:3000/db',
-            orden:  [{
-                campo: 'profundidadpedidos',
-                desc:  true
-            },{
-                campo: 'haciendomateriales',
-                desc:  true
-            }],
-            parseData: 'parseDataNecesita',
-            id_campo:  'materialpedidos',
-            cols:      'colsNecesita',
-            acciones:  'accionesNecesita',
-            claseFila: 'claseFilaNecesita'
-        }],
         inicio_pedido: {
             id:    'pedido',
             url:   'http://localhost:3000/db',
