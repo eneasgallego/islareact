@@ -4,9 +4,13 @@ import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 
 import { cambiarContenido, dimensionar } from '../actions/App';
-import { ID_INICIO_MATERIALES } from '../actions/Tabla';
+import {
+    ID_INICIO_MATERIALES,
+    ID_INICIO_PEDIDOS
+} from '../actions/Tabla';
 
 import PanelTablaInicioMateriales from './PanelTablaInicioMateriales';
+import PanelTablaInicioPedidos from './PanelTablaInicioPedidos';
 
 import Menu from '../componentes/menu/Menu';
 
@@ -18,7 +22,10 @@ const _getDefaultProps = () => ({
 const _renderStyle = alto => alto ?
     {height: `${alto}px`} :
     {};
-const _renderInicio = alto => [<PanelTablaInicioMateriales key={ID_INICIO_MATERIALES} alto={alto} />];
+const _renderInicio = alto => [
+    <PanelTablaInicioMateriales key={ID_INICIO_MATERIALES} alto={alto} />,
+    <PanelTablaInicioPedidos key={ID_INICIO_PEDIDOS} alto={alto} />
+];
 const _renderContenido = (contenido, alto) => contenido === 'inicio' ?
     _renderInicio(alto) :
     null;

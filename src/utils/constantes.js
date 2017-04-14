@@ -20,3 +20,5 @@ export const INIT_INDEX = 0;
 export const INIT_ID = 1;
 
 export const PROCESADO_PEDIDO = 1;
+export const PROCESADO_PEDIDO_NO = 0;
+export const PROCESADO_PEDIDO_ALGUNO = -1;

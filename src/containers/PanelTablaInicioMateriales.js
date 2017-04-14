@@ -144,9 +144,7 @@ class PanelTablaInicioMateriales extends Component {
                 alto={alto}
                 velo={cargando}
                 acciones={_getAcciones()}
-//                url="http://localhost:3000/db"
 //                idCampo="materialpedidos"
-//                parseData={_parseData}
             >
             </PanelTabla>
         );
