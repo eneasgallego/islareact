@@ -1,7 +1,7 @@
 import { calcularTotales } from './utils';
-import getVistaMaterialesNecesita from './vistaMaterialesNecesita';
+import getVistaMaterialesNecesita from './VistaMaterialesNecesita';
 
-import { NO_NECESITA, FIRST_INDEX } from '../constantes';
+import { NO_NECESITA, INIT_INDEX } from '../utils/constantes';
 
 export default data => {
     const ret = [];
@@ -9,7 +9,7 @@ export default data => {
 
     const vistaMaterialesNecesita = getVistaMaterialesNecesita(data);
 
-    for (let i = FIRST_INDEX; i < data.materiales.length; i++) {
+    for (let i = INIT_INDEX; i < data.materiales.length; i++) {
         const material = data.materiales[i];
 
         const { id } = material;

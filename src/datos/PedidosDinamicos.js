@@ -1,6 +1,6 @@
 import { getMapa } from './utils';
 
-import { NO_NECESITA, UP_PROFUNDIDAD, FIRST_INDEX, NUMERO_DEFECTO, INIT_ID } from '../constantes';
+import { NO_NECESITA, UP_PROFUNDIDAD, INIT_INDEX, NUMERO_DEFECTO, INIT_ID } from '../utils/constantes';
 
 const TIPO_OTROS = 6;
 
@@ -11,7 +11,7 @@ export default data => {
     const cantidadMaterialPedidos = idMaterial => {
         let num = NUMERO_DEFECTO;
 
-        for (let i = FIRST_INDEX; i < ret.length; i++) {
+        for (let i = INIT_INDEX; i < ret.length; i++) {
             const _pedido = ret[i];
 
             if (_pedido.procesadopedidos && _pedido.materialpedidos === idMaterial) {
@@ -34,7 +34,7 @@ export default data => {
 
     const materiales = getMapa('materiales','id',mapas,data.materiales);
     const hacerMaterialNecesita = (materialPadre, profundidad, cantidad) => {
-        const materialesNecesita = data.materialesNecesita.filter(materialNecesita => materialNecesita.materialmateriales_necesita === materialPadre.id);
+        const materialesNecesita = data.materiales_necesita.filter(materialNecesita => materialNecesita.materialmateriales_necesita === materialPadre.id);
 
         if (materialesNecesita.length) {
             const stock = materialPadre.stockmateriales;
@@ -48,7 +48,7 @@ export default data => {
                 if (pedidoNecesita > cantidad) {
                     pedidoNecesita = cantidad;
                 }
-                for (let i = FIRST_INDEX; i < materialesNecesita.length; i++) {
+                for (let i = INIT_INDEX; i < materialesNecesita.length; i++) {
                     const materialNecesita = materialesNecesita[i];
 
                     const material = materiales[materialNecesita.materialnecesitamateriales_necesita];
@@ -81,7 +81,7 @@ export default data => {
         }
     };
 
-    for (let i = FIRST_INDEX; i < data.pedidos.length; i++) {
+    for (let i = INIT_INDEX; i < data.pedidos.length; i++) {
         const pedido = data.pedidos[i];
 
         if (pedido.procesadopedidos) {

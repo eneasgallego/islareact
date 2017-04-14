@@ -1,13 +1,13 @@
 import { getMapa } from './utils';
 
-import { FIRST_INDEX } from '../constantes';
+import { INIT_INDEX } from '../utils/constantes';
 
 export default data => {
     const ret = [];
     const map = {};
     const mapas = {};
 
-    for (let i = FIRST_INDEX; i < data.materiales_necesita.length; i++) {
+    for (let i = INIT_INDEX; i < data.materiales_necesita.length; i++) {
         const materialNecesita = data.materiales_necesita[i];
 
         const materiales = getMapa('materiales','id',mapas,data.materiales);

@@ -7,7 +7,7 @@ import {
 //    CARGAR_DATASET_TIPOPEDIDOS_ERROR,
 //    LIMPIAR_DATASET_TIPOPEDIDOS_ERROR,
 //    CAMBIAR_PEDIDO_VER,
-} from '../actions/app';
+} from '../actions/App';
 
 
 const options = {

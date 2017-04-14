@@ -1,7 +1,14 @@
-import { FIRST_INDEX, NUMERO_DEFECTO } from './constantes';
+import { INIT_INDEX, NUMERO_DEFECTO } from './constantes';
 const FIELD_CAMPO = 0, FIELD_VALOR = 1, NOT_FOUND = -1, STATE_COMPLETE = 4, STATUS_SUCCESS = 200, STATUS_CACHED = 304, STATUS_CREATED = 201;
-/* eslint-disable no-extend-native */
 
+/* eslint-disable no-extend-native */
+Array.prototype.concatenar = function concatenar(nuevo) {
+    /* eslint-enable no-extend-native */
+    this.push.apply(this, nuevo);
+
+    return this;
+};
+/* eslint-disable no-extend-native */
 Array.prototype.promesas = function promesas(fn, success, error, ref) {
 /* eslint-enable no-extend-native */
     const array = this;
@@ -46,7 +53,7 @@ Array.prototype.buscar = function buscar() {
         valor = arguments[FIELD_VALOR];
     }
 
-    for (let i = FIRST_INDEX; i < this.length; i++) {
+    for (let i = INIT_INDEX; i < this.length; i++) {
         const item = this[i];
 
         if 	((campo && item[campo] === valor) ||
@@ -70,7 +77,7 @@ Array.prototype.indice = function indice() {
         valor = arguments[FIELD_VALOR];
     }
 
-    for (let i = FIRST_INDEX; i < this.length; i++) {
+    for (let i = INIT_INDEX; i < this.length; i++) {
         const item = this[i];
 
         if 	((campo && item[campo] === valor) ||
@@ -87,7 +94,7 @@ Array.prototype.crearMapa = function crearMapa(id) {
 /* eslint-enable no-extend-native */
     const ret = {};
 
-    for (let i = FIRST_INDEX; i < this.length; i++) {
+    for (let i = INIT_INDEX; i < this.length; i++) {
         const item = this[i];
 
         ret[item[id]] = item;
@@ -100,7 +107,7 @@ Array.prototype.calcular = function calcular(a, b) {
 /* eslint-enable no-extend-native */
     let ret = NUMERO_DEFECTO;
 
-    for (let i = FIRST_INDEX; i < this.length; i++) {
+    for (let i = INIT_INDEX; i < this.length; i++) {
         const item = this[i];
 
         const val = typeof a === 'undefined' ?
@@ -195,7 +202,7 @@ export const parseFiltro = (filtro, tipo) => {
     return ret;
 };
 export const parseCols = cols => {
-    for (let i = FIRST_INDEX; i < cols.length; i++) {
+    for (let i = INIT_INDEX; i < cols.length; i++) {
         cols[i].tipo = parseTipo(cols[i].tipo ?
             cols[i].tipo :
             'string');
@@ -221,7 +228,7 @@ export const parseCampo = campo => {
 export const parseCampos = campos => {
     const ret = [];
 
-    for (let i = FIRST_INDEX; i < campos.length; i++) {
+    for (let i = INIT_INDEX; i < campos.length; i++) {
         ret.push(parseCampo(campos[i]));
     }
 
@@ -244,3 +251,6 @@ export const getMapStateToProps = componente => (state, props) => ({
     ...state[componente][props.id]
 });
 export const emptyFunction = () => { /* Empty Function */ };
+export const renderStyleAlto = alto => alto ?
+    {height: `${alto}px`} :
+    {};

@@ -1,17 +1,28 @@
 import React, { Component } from 'react';
-// import { PropTypes } from 'prop-types';
-// import { connect } from 'react-redux'
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 
-/*
 import {
-    limpiarDatasetTipopedidosError,
-    } from './actions/app'
-*/
-import PanelTabla from './componentes/panel_tabla';
-import { parseCols } from './componentes/base';
+    ID_INICIO_MATERIALES,
+    cambiarOrdenTabla,
+    cargarFilasTabla
+} from '../actions/Tabla';
 
-import getVistaNecesita from './datos/vistaNecesita';
+import PanelTabla from '../componentes/panel/PanelTabla';
+import { parseCols } from '../utils/utils';
 
+import getVistaNecesita from '../datos/VistaNecesita';
+
+/* Constanst */
+const _ID = ID_INICIO_MATERIALES;
+
+/* Private functions */
+const _getDefaultProps = () => ({
+    filas:    [],
+    filtros:  [],
+    orden:    [],
+    cargando: false
+});
 const _parseData = data => {
     const vistaNecesita = getVistaNecesita(data,item => item.stockmateriales + item.haciendomateriales < item.cantidadpedidos);
 
@@ -79,9 +90,25 @@ const _getClaseFila = datos => {
 };
 
 class PanelTablaInicioMateriales extends Component {
+    /* Properties */
     static propTypes = {
-        alto: React.PropTypes.number
+        filas:    PropTypes.array.isRequired,
+        filtros:  PropTypes.array.isRequired,
+        orden:    PropTypes.array.isRequired,
+        alto:     PropTypes.number,
+        cargando: PropTypes.bool
     }
+    getDefaultProps: _getDefaultProps
+
+    /* Lifecycle */
+    componentWillMount() {
+        const { dispatch } = this.props;
+
+        dispatch(cambiarOrdenTabla(_ID, _getOrden()));
+        dispatch(cargarFilasTabla(_ID, 'http://localhost:3000/db', {}, _parseData));
+    }
+
+    /* Handlers */
     handlerClickAcciones(tag) {
         if (typeof this[tag] === 'function') {
             this[tag].apply(this, arguments);
@@ -93,34 +120,42 @@ class PanelTablaInicioMateriales extends Component {
         this.accion(this.hacerMaterial, [fila.props.datos.materialpedidos, HACER_MATERIAL], tabla);
     }
 
+    /* Render */
     render() {
-        const { alto } = this.props;
+        const {
+            filas,
+            filtros,
+            orden,
+            alto,
+            cargando
+        } = this.props;
 
         return (
             <PanelTabla
-                ref="materiales"
-                id="materiales"
+                id={_ID}
+                ref={_ID}
                 titulo="Materiales"
-                url="http://localhost:3000/db"
-                orden={_getOrden()}
-                idCampo="materialpedidos"
                 cols={_getCols()}
-                acciones={_getAcciones()}
+                filas={filas}
+                filtros={filtros}
+                orden={orden}
                 claseFila={_getClaseFila}
-                parseData={_parseData}
                 onClickAcciones={this.handlerClickAcciones}
-                filtros={false}
                 alto={alto}
-            />
+                velo={cargando}
+                acciones={_getAcciones()}
+//                url="http://localhost:3000/db"
+//                idCampo="materialpedidos"
+//                parseData={_parseData}
+            >
+            </PanelTabla>
         );
+
     }
 }
-/*
-const mapStateToProps = state => {
-    return {
-        ...state.panelTablaInicio
-    }
-}
-*/
-// export default connect(mapStateToProps)(PanelTablaInicioMateriales)
-export default PanelTablaInicioMateriales;
+
+const mapStateToProps = state => ({
+    ...state.panelTablaInicioMateriales
+});
+
+export default connect(mapStateToProps)(PanelTablaInicioMateriales);

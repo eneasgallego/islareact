@@ -1,13 +1,13 @@
 import { getMapa } from './utils';
-import getVistaFabricas from './vistaFabricas';
-import getVistaMaterialesFalta from './vistaMaterialesFalta';
-import getPedidosDinamicos from './pedidosDinamicos';
+import getVistaFabricas from './VistaFabricas';
+import getVistaMaterialesFalta from './VistaMaterialesFalta';
+import getPedidosDinamicos from './PedidosDinamicos';
 
 import {
     ORDER_EQUAL, ORDER_UP, ORDER_DOWN,
-    FIRST_INDEX,
+    INIT_INDEX,
     PROCESADO_PEDIDO, NUMERO_DEFECTO
-} from '../constantes';
+} from '../utils/constantes';
 
 export default (data,calcularProfundidad,sinpedidos) => {
     const ret = [];
@@ -49,7 +49,7 @@ export default (data,calcularProfundidad,sinpedidos) => {
                 map[material.id] = obj;
             }
 
-            for (let i = FIRST_INDEX; i < pedidos.length; i++) {
+            for (let i = INIT_INDEX; i < pedidos.length; i++) {
                 const pedido = pedidos[i];
 
                 if (pedido.procesadopedidos) {
@@ -63,7 +63,7 @@ export default (data,calcularProfundidad,sinpedidos) => {
         }
     };
 
-    for (let i = FIRST_INDEX; i < data.materiales.length; i++) {
+    for (let i = INIT_INDEX; i < data.materiales.length; i++) {
         const material = data.materiales[i];
         const pedidos = pedidosDinamicos.filter(item => item.materialpedidos === material.id).sort((a,b) => a.profundidadpedidos === b.profundidadpedidos ?
             ORDER_EQUAL :
@@ -74,7 +74,7 @@ export default (data,calcularProfundidad,sinpedidos) => {
         calcularPedidos(material, pedidos);
     }
 
-    for (let i = FIRST_INDEX; i < ret.length; i++) {
+    for (let i = INIT_INDEX; i < ret.length; i++) {
         const item = ret[i];
 
         item.faltamateriales = item.cantidadpedidos - item.stockmateriales - item.haciendomateriales;

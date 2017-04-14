@@ -1,4 +1,4 @@
-import { FIRST_INDEX, NUMERO_DEFECTO } from '../constantes';
+import { INIT_INDEX, NUMERO_DEFECTO } from '../utils/constantes';
 
 export const getMapa = (mapa, id, mapas, lista) => {
     let ret = mapas[mapa];
@@ -12,7 +12,7 @@ export const getMapa = (mapa, id, mapas, lista) => {
 const calcularTotal = par => {
     let ret = par.defecto;
 
-    for (let i = FIRST_INDEX; i < par.lista.length; i++) {
+    for (let i = INIT_INDEX; i < par.lista.length; i++) {
         const item = par.lista[i];
 
         let valor;

@@ -1,13 +1,13 @@
 import { getMapa } from './utils';
 
-import { FIRST_INDEX, NUMERO_DEFECTO } from '../constantes';
+import { INIT_INDEX, NUMERO_DEFECTO } from '../utils/constantes';
 
 export default data => {
     const ret = [];
     const map = {};
     const mapas = {};
 
-    for (let i = FIRST_INDEX; i < data.materiales.length; i++) {
+    for (let i = INIT_INDEX; i < data.materiales.length; i++) {
         const material = data.materiales[i];
 
         const fabricas = getMapa('fabricas','id',mapas,data.fabricas);
