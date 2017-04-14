@@ -233,19 +233,6 @@ const options = {
             }
         },
         inicio: [{
-            id:     'pedidos',
-            titulo: 'Pedidos',
-            url:    'http://localhost:3000/db',
-            orden:  {
-                campo: 'nombretipos_pedido',
-                desc:  false
-            },
-            id_campo:  'idtipos_pedido',
-            parseData: 'parseDataPedidos',
-            cols:      'colsPedidos',
-            acciones:  'accionesPedidos',
-            claseFila: 'claseFilaPedidos'
-        },{
             id:     'necesita',
             titulo: 'Necesita',
             url:    'http://localhost:3000/db',

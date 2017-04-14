@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import app from './App';
 import panelTablaInicioMateriales from './PanelTablaInicioMateriales';
 import panelTablaInicioPedidos from './PanelTablaInicioPedidos';
+import panelTablaInicioNecesita from './PanelTablaInicioNecesita';
 // import tabla from './tabla';
 // import fila from './fila';
 // import celda from './celda';
@@ -11,7 +12,8 @@ import panelTablaInicioPedidos from './PanelTablaInicioPedidos';
 const rootReducer = combineReducers({
     app,
     panelTablaInicioMateriales,
-    panelTablaInicioPedidos
+    panelTablaInicioPedidos,
+    panelTablaInicioNecesita
 });
 
 export default rootReducer;

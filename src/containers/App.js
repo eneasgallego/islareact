@@ -6,11 +6,13 @@ import { connect } from 'react-redux';
 import { cambiarContenido, dimensionar } from '../actions/App';
 import {
     ID_INICIO_MATERIALES,
-    ID_INICIO_PEDIDOS
+    ID_INICIO_PEDIDOS,
+    ID_INICIO_NECESITA
 } from '../actions/Tabla';
 
 import PanelTablaInicioMateriales from './PanelTablaInicioMateriales';
 import PanelTablaInicioPedidos from './PanelTablaInicioPedidos';
+import PanelTablaInicioNecesita from './PanelTablaInicioNecesita';
 
 import Menu from '../componentes/menu/Menu';
 
@@ -24,7 +26,8 @@ const _renderStyle = alto => alto ?
     {};
 const _renderInicio = alto => [
     <PanelTablaInicioMateriales key={ID_INICIO_MATERIALES} alto={alto} />,
-    <PanelTablaInicioPedidos key={ID_INICIO_PEDIDOS} alto={alto} />
+    <PanelTablaInicioPedidos key={ID_INICIO_PEDIDOS} alto={alto} />,
+    <PanelTablaInicioNecesita key={ID_INICIO_NECESITA} alto={alto} />
 ];
 const _renderContenido = (contenido, alto) => contenido === 'inicio' ?
     _renderInicio(alto) :
