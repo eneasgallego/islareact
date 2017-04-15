@@ -1,37 +1,16 @@
-import React, { Component } from 'react';
-import { PropTypes } from 'prop-types';
+import PanelTablaInicio from './PanelTablaInicio';
 import { connect } from 'react-redux';
 
-import {
-    ID_INICIO_MATERIALES,
-    cambiarOrdenTabla,
-    cargarFilasTabla
-} from '../actions/Tabla';
+import { ID_INICIO_MATERIALES } from '../actions/Tabla';
 
-import PanelTabla from '../componentes/panel/PanelTabla';
-import { parseCols } from '../utils/utils';
-
-import getVistaNecesita from '../datos/VistaNecesita';
+import { parseCols, getClaseFilaMateriales } from '../utils/utils';
 
 import { ORDER_UP, ORDER_DOWN } from '../utils/constantes';
 
-/* Constanst */
-const _ID = ID_INICIO_MATERIALES;
+import getVistaNecesita from '../datos/VistaNecesita';
 
 /* Private functions */
-const _getDefaultProps = () => ({
-    filas:    [],
-    filtros:  [],
-    orden:    [],
-    cargando: false
-});
-const _parseData = data => {
-    const vistaNecesita = getVistaNecesita(data,item => item.stockmateriales + item.haciendomateriales < item.cantidadpedidos);
-
-    const ret = vistaNecesita.filter(item => (item.procesadopedidos && !!~item.maximofabricas) && item.stockmateriales + item.haciendomateriales < item.cantidadpedidos);
-
-    return ret;
-};
+const _parseData = data => getVistaNecesita(data,item => item.stockmateriales + item.haciendomateriales < item.cantidadpedidos).filter(item => (item.procesadopedidos && !!~item.maximofabricas) && item.stockmateriales + item.haciendomateriales < item.cantidadpedidos);
 const _getCols = () => parseCols([{
     texto: 'PROF',
     campo: 'profundidadpedidos'
@@ -48,10 +27,10 @@ const _getCols = () => parseCols([{
 const _getOrden = () => [{
     campo(item) {
         return item.stockmateriales < item.cantidadpedidos &&
-            item.stockmateriales + item.haciendomateriales < item.cantidadpedidos &&
+        item.stockmateriales + item.haciendomateriales < item.cantidadpedidos &&
 //            item.maximofabricas !== maximoFabricas &&
-            item.haciendofabricas < item.maximofabricas &&
-            item.faltanecesita ?
+        item.haciendofabricas < item.maximofabricas &&
+        item.faltanecesita ?
             ORDER_UP :
             ORDER_DOWN;
     },
@@ -67,91 +46,24 @@ const _getAcciones = () => [{
     texto: 'hacer',
     tag:   'accionHacerMaterial'
 }];
-const _getClaseFila = datos => {
-    let clase;
 
-    if (datos.stockmateriales >= datos.cantidadpedidos) {
-        clase = 'bueno';
-    } else if (datos.stockmateriales + datos.haciendomateriales >= datos.cantidadpedidos) {
-        clase = 'medio';
-    } else if (datos.haciendofabricas < datos.maximofabricas) {
-        clase = 'malo';
-    }
+class PanelTablaInicioMateriales extends PanelTablaInicio {
+    constructor(props) {
+        super(props);
 
-    if (clase === 'malo') {
-        if (!datos.faltanecesita) {
-            clase = 'nulo';
-        }
-    }
-
-    return clase;
-};
-
-class PanelTablaInicioMateriales extends Component {
-    /* Properties */
-    static propTypes = {
-        filas:    PropTypes.array.isRequired,
-        filtros:  PropTypes.array.isRequired,
-        orden:    PropTypes.array.isRequired,
-        alto:     PropTypes.number,
-        cargando: PropTypes.bool
-    }
-    getDefaultProps: _getDefaultProps
-
-    /* Lifecycle */
-    componentWillMount() {
-        const { dispatch } = this.props;
-
-        dispatch(cambiarOrdenTabla(_ID, _getOrden()));
-        dispatch(cargarFilasTabla(_ID, 'http://localhost:3000/db', {}, _parseData));
-    }
-
-    /* Handlers */
-    handlerClickAcciones(tag) {
-        if (typeof this[tag] === 'function') {
-            this[tag].apply(this, arguments);
-        }
-    }
-    accionHacerMaterial(tag, fila, tabla, panel) {
-        const HACER_MATERIAL = 1;
-
-        this.accion(this.hacerMaterial, [fila.props.datos.materialpedidos, HACER_MATERIAL], tabla);
-    }
-
-    /* Render */
-    render() {
-        const {
-            filas,
-            filtros,
-            orden,
-            alto,
-            cargando
-        } = this.props;
-
-        return (
-            <PanelTabla
-                id={_ID}
-                ref={_ID}
-                titulo="Materiales"
-                cols={_getCols()}
-                filas={filas}
-                filtros={filtros}
-                orden={orden}
-                claseFila={_getClaseFila}
-                onClickAcciones={this.handlerClickAcciones}
-                alto={alto}
-                velo={cargando}
-                acciones={_getAcciones()}
-//                idCampo="materialpedidos"
-            >
-            </PanelTabla>
-        );
-
+        this.id = ID_INICIO_MATERIALES;
+        this.getClaseFila = getClaseFilaMateriales;
+        this.parseData = _parseData;
+        this.cols = _getCols();
+        this.orden = _getOrden();
+        this.acciones = _getAcciones();
+        this.titulo = 'Materiales';
     }
 }
 
 const mapStateToProps = state => ({
     ...state.panelTablaInicioMateriales
 });
+
 
 export default connect(mapStateToProps)(PanelTablaInicioMateriales);

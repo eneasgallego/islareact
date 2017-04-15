@@ -1,4 +1,7 @@
+import { PropTypes } from 'prop-types';
+
 import { INIT_INDEX, NUMERO_DEFECTO } from './constantes';
+
 const FIELD_CAMPO = 0, FIELD_VALOR = 1, NOT_FOUND = -1, STATE_COMPLETE = 4, STATUS_SUCCESS = 200, STATUS_CACHED = 304, STATUS_CREATED = 201;
 
 /* eslint-disable no-extend-native */
@@ -254,3 +257,29 @@ export const emptyFunction = () => { /* Empty Function */ };
 export const renderStyleAlto = alto => alto ?
     {height: `${alto}px`} :
     {};
+export const getClaseFilaMateriales = datos => {
+    let clase;
+
+    if (datos.stockmateriales >= datos.cantidadpedidos) {
+        clase = 'bueno';
+    } else if (datos.stockmateriales + datos.haciendomateriales >= datos.cantidadpedidos) {
+        clase = 'medio';
+    } else if (datos.haciendofabricas < datos.maximofabricas) {
+        clase = 'malo';
+    }
+
+    if (clase === 'malo') {
+        if (!datos.faltanecesita) {
+            clase = 'nulo';
+        }
+    }
+
+    return clase;
+};
+export const getPropTypesTabla = () => ({
+    filas:    PropTypes.array.isRequired,
+    filtros:  PropTypes.array.isRequired,
+    orden:    PropTypes.array.isRequired,
+    alto:     PropTypes.number,
+    cargando: PropTypes.bool
+});
