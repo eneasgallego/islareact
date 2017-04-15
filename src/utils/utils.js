@@ -257,29 +257,20 @@ export const emptyFunction = () => { /* Empty Function */ };
 export const renderStyleAlto = alto => alto ?
     {height: `${alto}px`} :
     {};
-export const getClaseFilaMateriales = datos => {
-    let clase;
-
-    if (datos.stockmateriales >= datos.cantidadpedidos) {
-        clase = 'bueno';
-    } else if (datos.stockmateriales + datos.haciendomateriales >= datos.cantidadpedidos) {
-        clase = 'medio';
-    } else if (datos.haciendofabricas < datos.maximofabricas) {
-        clase = 'malo';
-    }
-
-    if (clase === 'malo') {
-        if (!datos.faltanecesita) {
-            clase = 'nulo';
-        }
-    }
-
-    return clase;
-};
+export const getClaseFilaMateriales = datos => datos.stockmateriales >= datos.cantidadpedidos ?
+        'bueno' :
+    datos.stockmateriales + datos.haciendomateriales >= datos.cantidadpedidos ?
+        'medio' :
+    datos.haciendofabricas < datos.maximofabricas ?
+        datos.faltanecesita ?
+            'malo' :
+            'nulo' :
+        '';
 export const getPropTypesTabla = () => ({
     filas:    PropTypes.array.isRequired,
     filtros:  PropTypes.array.isRequired,
     orden:    PropTypes.array.isRequired,
     alto:     PropTypes.number,
-    cargando: PropTypes.bool
+    cargando: PropTypes.bool,
+    params:   PropTypes.object
 });

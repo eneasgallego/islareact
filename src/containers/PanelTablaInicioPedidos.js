@@ -36,23 +36,15 @@ const _getAcciones = () => [{
     texto: 'cerrar',
     tag:   'accionCerrarPedido'
 }];
-const _getClaseFila = datos => {
-    let clase;
-
-    if (datos.faltapedidos) {
-        if (datos.procesadopedidos === PROCESADO_PEDIDO) {
-            clase = 'malo';
-        } else if (datos.procesadopedidos === PROCESADO_PEDIDO_ALGUNO) {
-            clase = 'huerto';
-        }
-    } else if (datos.procesadopedidos === PROCESADO_PEDIDO) {
-        clase = 'bueno';
-    } else if (datos.procesadopedidos === PROCESADO_PEDIDO_ALGUNO) {
-        clase = 'medio';
-    }
-
-    return clase;
-};
+const _getClaseFila = datos => datos.faltapedidos ?
+    datos.procesadopedidos === PROCESADO_PEDIDO ?
+        'malo' :
+    datos.procesadopedidos === PROCESADO_PEDIDO_ALGUNO && 'huerto' :
+    datos.procesadopedidos === PROCESADO_PEDIDO ?
+        'bueno' :
+    datos.procesadopedidos === PROCESADO_PEDIDO_ALGUNO ?
+        'medio' :
+        '';
 
 class PanelTablaInicioPedidos extends PanelTablaInicio {
     constructor(props) {
@@ -66,6 +58,8 @@ class PanelTablaInicioPedidos extends PanelTablaInicio {
         this.acciones = _getAcciones();
         this.titulo = 'Pedidos';
     }
+
+    /* Handlers */
     handlerVerPedido(pedido) {
         const { dispatch } = this.props;
 

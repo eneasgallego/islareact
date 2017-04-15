@@ -20,12 +20,17 @@ class PanelTablaInicio extends Component {
 
     /* Lifecycle */
     componentWillMount() {
-        const { dispatch } = this.props;
+        const { dispatch, params } = this.props;
 
         dispatch(cambiarOrdenTabla(this.id, this.orden));
-        dispatch(cargarFilasTabla(this.id, 'http://localhost:3000/db', {}, this.parseData));
+        dispatch(cargarFilasTabla(this.id, 'http://localhost:3000/db', params || {}, this.parseData));
 
         this.handlerClickAcciones = this.handlerClickAcciones.bind(this);
+    }
+    componentWillReceiveProps(nextProps) {
+        const { dispatch, params } = this.props;
+
+        nextProps.params !== params && dispatch(cargarFilasTabla(this.id, 'http://localhost:3000/db', nextProps.params || {}, this.parseData));
     }
 
     /* Handlers */

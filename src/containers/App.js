@@ -7,12 +7,14 @@ import { cambiarContenido, dimensionar } from '../actions/App';
 import {
     ID_INICIO_MATERIALES,
     ID_INICIO_PEDIDOS,
-    ID_INICIO_NECESITA
+    ID_INICIO_NECESITA,
+    ID_INICIO_PEDIDO
 } from '../actions/Tabla';
 
 import PanelTablaInicioMateriales from './PanelTablaInicioMateriales';
 import PanelTablaInicioPedidos from './PanelTablaInicioPedidos';
 import PanelTablaInicioNecesita from './PanelTablaInicioNecesita';
+import PanelTablaInicioPedido from './PanelTablaInicioPedido';
 
 import Menu from '../componentes/menu/Menu';
 
@@ -26,10 +28,10 @@ const _renderStyle = alto => alto ?
     {};
 const _renderInicio = (alto, verPedido) => [
     <PanelTablaInicioMateriales key={ID_INICIO_MATERIALES} alto={alto} />,
-    <PanelTablaInicioPedidos key={ID_INICIO_PEDIDOS} alto={alto} />,
-    <PanelTablaInicioNecesita key={ID_INICIO_NECESITA} alto={alto} />
+    <PanelTablaInicioNecesita key={ID_INICIO_NECESITA} alto={alto} />,
+    <PanelTablaInicioPedidos key={ID_INICIO_PEDIDOS} alto={alto} />
 ].concatenar(verPedido ?
-        [`VER PEDIDO: ${verPedido.nombretipos_pedido}`] :
+        [<PanelTablaInicioPedido key={ID_INICIO_PEDIDO} alto={alto} params={{ idTiposPedido: verPedido.idtipos_pedido }} />] :
         []);
 const _renderContenido = (contenido, alto, verPedido) => contenido === 'inicio' ?
     _renderInicio(alto, verPedido) :

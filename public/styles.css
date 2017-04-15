@@ -560,12 +560,16 @@ main {
   max-width: 64px;
 }
 
-#pedidos {
+#inicio_pedidos {
   min-width: 250px;
 }
 
-#pedido {
-  min-width: 560px;
+#inicio_pedido {
+  min-width: 600px;
+}
+
+#inicio_necesita {
+  min-width: 520px;
 }
 
 #excedente {
