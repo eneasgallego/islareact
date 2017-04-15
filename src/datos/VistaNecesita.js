@@ -71,6 +71,8 @@ export default (data,calcularProfundidad,sinpedidos) => {
                 ORDER_DOWN :
                 ORDER_UP);
 
+        // debugger;
+
         calcularPedidos(material, pedidos);
     }
 

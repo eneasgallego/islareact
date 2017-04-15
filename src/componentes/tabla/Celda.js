@@ -51,7 +51,7 @@ class Celda extends Component {
 //        mostrarFiltro: PropTypes.func.isRequired,
 //        combosDataset: PropTypes.object.isRequired,
 //        campo:  PropTypes.string.isRequired,
-        datos:    PropTypes.any.isRequired,
+        datos:    PropTypes.any,
         onResize: PropTypes.func.isRequired
     }
     getDefaultProps: _getDefaultProps

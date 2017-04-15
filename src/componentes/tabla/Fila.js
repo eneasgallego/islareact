@@ -72,8 +72,10 @@ class Fila extends Component {
             onResizeCelda
         } = this.props;
 
+        return cols.map((col, index) => {
+            const dato = datos[col.campo];
 
-        return cols.map((col, index) => (
+            return (
                 <Celda
                     key={index}
                     header={header}
@@ -82,7 +84,7 @@ class Fila extends Component {
                         col.filtro :
                         undefined}
                     orden={_orden(orden, col.campo)}
-                    datos={datos[col.campo]}
+                    datos={dato}
                     ancho={anchos[index]}
                     onResize={onResizeCelda}
 //                    campo={col.campo}
@@ -96,7 +98,8 @@ class Fila extends Component {
 //                    onFiltroFijado={this.onFiltroFijado}
 //                    onFiltrado={this.onFiltrado}
             />
-            )).concatenar(_renderAcciones(acciones, cols, header, onClickAcciones));
+            );
+        }).concatenar(_renderAcciones(acciones, cols, header, onClickAcciones));
 
     }
     render() {

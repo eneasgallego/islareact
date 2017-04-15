@@ -4,7 +4,7 @@ import { PropTypes } from 'prop-types';
 
 import {
     INIT_PROFUNDIDAD, UP_PROFUNDIDAD,
-    ORDER_UP, ORDER_DOWN,
+    ORDER_UP, ORDER_DOWN, ORDER_EQUAL,
     INIT_INDEX
 } from '../../utils/constantes';
 
@@ -57,11 +57,14 @@ const _getValorOrdenar = (campo, datos) => isNaN(_getCalcOrdenar(campo, datos)) 
     datos[campo] :
     _getCalcOrdenar(campo, datos);
 
-const _ordenarFila = (orden, a, b, prof = INIT_PROFUNDIDAD) => ((valA, valB, desc) => ((valA === valB) && _ordenarFila(orden, a, b, prof + UP_PROFUNDIDAD)) ||
-    (desc && valA < valB) ||
-    (!desc && valA > valB) ?
-        ORDER_UP :
-        ORDER_DOWN)(_getValorOrdenar(orden[prof].campo, a), _getValorOrdenar(orden[prof].campo, b), orden[prof].desc);
+const _ordenarFila = (orden, a, b, prof = INIT_PROFUNDIDAD) => orden[prof] ?
+        ((valA, valB, desc) => valA === valB && _ordenarFila(orden, a, b, prof + UP_PROFUNDIDAD) ?
+                ORDER_EQUAL :
+                (desc && valA < valB) ||
+                (!desc && valA > valB) ?
+                    ORDER_UP :
+                ORDER_DOWN)(_getValorOrdenar(orden[prof].campo, a), _getValorOrdenar(orden[prof].campo, b), orden[prof].desc) :
+        ORDER_EQUAL;
 
 const _filtrar = (filtros, fila) => filtros.every(filtro => filtro.valor &&
             typeof filtro.valor === 'string' ?
@@ -146,18 +149,18 @@ class Tabla extends Component {
         } = this.props,
             { anchos } = this.state;
 
-        return filas.filter(_filtrar.bind(null, filtros))
-            .sort((a, b) => _ordenarFila.bind(null, orden))
-            .map((fila, index) => (
-                <Fila
-                    key={index}
-                    claseFila={claseFila}
-                    datos={fila}
-                    onClickAcciones={onClickAcciones}
-                    cols={cols}
-                    acciones={acciones}
-                    anchos={anchos}
-                    onResizeCelda={this.handlerResizeCelda}
+        const filter = filas.filter(_filtrar.bind(null, filtros));
+        const sort = filter.sort(_ordenarFila.bind(filter, orden));
+        const map = sort.map((fila, index) => (
+            <Fila
+                key={index}
+                claseFila={claseFila}
+                datos={fila}
+                onClickAcciones={onClickAcciones}
+                cols={cols}
+                acciones={acciones}
+                anchos={anchos}
+                onResizeCelda={this.handlerResizeCelda}
 //                    guardar={this.guardar}
 //                    id_campo={this.props.id_campo}
 //                    onResize={this.onResizeFila}
@@ -165,8 +168,10 @@ class Tabla extends Component {
 //                    onChangeValor={this.onChangeValor}
 //                    combos_dataset={this.state.combos_dataset}
 //                    filtros={false}
-                />
-            ));
+        />
+        ));
+
+        return map;
     }
     renderTabla() {
         const

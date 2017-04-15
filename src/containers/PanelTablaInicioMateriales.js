@@ -13,6 +13,8 @@ import { parseCols } from '../utils/utils';
 
 import getVistaNecesita from '../datos/VistaNecesita';
 
+import { ORDER_UP, ORDER_DOWN } from '../utils/constantes';
+
 /* Constanst */
 const _ID = ID_INICIO_MATERIALES;
 
@@ -45,17 +47,13 @@ const _getCols = () => parseCols([{
 }]);
 const _getOrden = () => [{
     campo(item) {
-        const maximoFabricas = -1,
-            ordenArr = 1,
-            ordenAba = 0;
-
         return item.stockmateriales < item.cantidadpedidos &&
             item.stockmateriales + item.haciendomateriales < item.cantidadpedidos &&
-            item.maximofabricas !== maximoFabricas &&
+//            item.maximofabricas !== maximoFabricas &&
             item.haciendofabricas < item.maximofabricas &&
             item.faltanecesita ?
-                ordenArr :
-                ordenAba;
+            ORDER_UP :
+            ORDER_DOWN;
     },
     desc: true
 },{
