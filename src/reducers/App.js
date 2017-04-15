@@ -1,7 +1,8 @@
 
 import {
      CAMBIAR_CONTENIDO,
-    DIMENSIONAR
+    DIMENSIONAR,
+    CAMBIAR_VER_PEDIDO
 //    CARGAR_DATASET_TIPOPEDIDOS_START,
 //    CARGAR_DATASET_TIPOPEDIDOS_SUCCESS,
 //    CARGAR_DATASET_TIPOPEDIDOS_ERROR,
@@ -264,6 +265,11 @@ export default (state = {
         return {
             ...state,
             alto: _dimensionar(action.menu)
+        };
+    case CAMBIAR_VER_PEDIDO:
+        return {
+            ...state,
+            verPedido: action.pedido
         };
         /*
     case CARGAR_DATASET_TIPOPEDIDOS_START:

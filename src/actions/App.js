@@ -10,6 +10,12 @@ export const dimensionar = menu => ({
     menu
 });
 
+export const CAMBIAR_VER_PEDIDO = 'CAMBIAR_VER_PEDIDO';
+export const cambiarVerPedido = pedido => ({
+    type: CAMBIAR_VER_PEDIDO,
+    pedido
+});
+
 /*
 
 import { ajax } from '../componentes/base';

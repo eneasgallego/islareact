@@ -58,13 +58,17 @@ class Fila extends Component {
     }
     getDefaultProps: _getDefaultProps
 
+    /* Lifecycle */
+    componentWillMount() {
+        this.handlerAcciones = this.handlerAcciones.bind(this);
+    }
+
     /* Render */
     renderCeldas() {
         const {
             cols,
             header,
             acciones,
-            onClickAcciones,
             filtros,
             orden,
             datos,
@@ -99,8 +103,15 @@ class Fila extends Component {
 //                    onFiltrado={this.onFiltrado}
             />
             );
-        }).concatenar(_renderAcciones(acciones, cols, header, onClickAcciones));
+        }).concatenar(_renderAcciones(acciones, cols, header, this.handlerAcciones));
 
+    }
+
+    /* Handlers */
+    handlerAcciones(tag) {
+        const { onClickAcciones, datos } = this.props;
+
+        onClickAcciones && onClickAcciones(tag, datos);
     }
     render() {
         const {

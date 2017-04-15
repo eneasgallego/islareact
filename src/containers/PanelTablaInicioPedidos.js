@@ -2,6 +2,7 @@ import PanelTablaInicio from './PanelTablaInicio';
 import { connect } from 'react-redux';
 
 import { ID_INICIO_PEDIDOS } from '../actions/Tabla';
+import { cambiarVerPedido } from '../actions/App';
 
 import { getInitialState } from '../reducers/Tabla';
 
@@ -27,7 +28,7 @@ const _getOrden = () => [{
 }];
 const _getAcciones = () => [{
     texto: 'ver',
-    tag:   'accionVerPedido'
+    tag:   'handlerVerPedido'
 }, {
     texto: 'procesar',
     tag:   'accionProcesarPedidos'
@@ -64,6 +65,11 @@ class PanelTablaInicioPedidos extends PanelTablaInicio {
         this.orden = _getOrden();
         this.acciones = _getAcciones();
         this.titulo = 'Pedidos';
+    }
+    handlerVerPedido(pedido) {
+        const { dispatch } = this.props;
+
+        dispatch(cambiarVerPedido(pedido));
     }
 }
 

@@ -24,13 +24,15 @@ const _getDefaultProps = () => ({
 const _renderStyle = alto => alto ?
     {height: `${alto}px`} :
     {};
-const _renderInicio = alto => [
+const _renderInicio = (alto, verPedido) => [
     <PanelTablaInicioMateriales key={ID_INICIO_MATERIALES} alto={alto} />,
     <PanelTablaInicioPedidos key={ID_INICIO_PEDIDOS} alto={alto} />,
     <PanelTablaInicioNecesita key={ID_INICIO_NECESITA} alto={alto} />
-];
-const _renderContenido = (contenido, alto) => contenido === 'inicio' ?
-    _renderInicio(alto) :
+].concatenar(verPedido ?
+        [`VER PEDIDO: ${verPedido.nombretipos_pedido}`] :
+        []);
+const _renderContenido = (contenido, alto, verPedido) => contenido === 'inicio' ?
+    _renderInicio(alto, verPedido) :
     null;
 //        } else if (contenido == 'excedente') {
 //            return this.renderExcedente();
@@ -53,8 +55,9 @@ const _renderContenido = (contenido, alto) => contenido === 'inicio' ?
 class App extends Component {
     /* Properties */
     static propTypes = {
-        menu: PropTypes.array.isRequired,
-        alto: PropTypes.number
+        menu:      PropTypes.array.isRequired,
+        alto:      PropTypes.number,
+        verPedido: PropTypes.object
     }
     getDefaultProps: _getDefaultProps
 
@@ -85,7 +88,12 @@ class App extends Component {
 
     /* Render */
     render() {
-        const { menu, alto, contenido } = this.props;
+        const {
+            menu,
+            alto,
+            contenido,
+            verPedido
+        } = this.props;
 
         return (
         <div>
@@ -94,7 +102,7 @@ class App extends Component {
           </header>
 
          <main style={_renderStyle(alto)}>
-            { _renderContenido(contenido, alto) }
+            { _renderContenido(contenido, alto, verPedido) }
           </main>
           {/* this.renderDialogo() */}
 

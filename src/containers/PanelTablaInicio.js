@@ -24,12 +24,14 @@ class PanelTablaInicio extends Component {
 
         dispatch(cambiarOrdenTabla(this.id, this.orden));
         dispatch(cargarFilasTabla(this.id, 'http://localhost:3000/db', {}, this.parseData));
+
+        this.handlerClickAcciones = this.handlerClickAcciones.bind(this);
     }
 
     /* Handlers */
-    handlerClickAcciones(tag) {
+    handlerClickAcciones(tag, ...args) {
         if (typeof this[tag] === 'function') {
-            this[tag].apply(this, arguments);
+            this[tag].apply(this, args);
         }
     }
 
