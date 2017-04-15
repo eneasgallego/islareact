@@ -58,13 +58,12 @@ const _getValorOrdenar = (campo, datos) => isNaN(_getCalcOrdenar(campo, datos)) 
     _getCalcOrdenar(campo, datos);
 
 const _ordenarFila = (orden, a, b, prof = INIT_PROFUNDIDAD) => orden[prof] ?
-        ((valA, valB, desc) => valA === valB && _ordenarFila(orden, a, b, prof + UP_PROFUNDIDAD) ?
-                ORDER_EQUAL :
-                (desc && valA < valB) ||
-                (!desc && valA > valB) ?
+        ((valA, valB, desc) => valA === valB ?
+                _ordenarFila(orden, a, b, prof + UP_PROFUNDIDAD) :
+                (desc && valA < valB) || (!desc && valA > valB) ?
                     ORDER_UP :
-                ORDER_DOWN)(_getValorOrdenar(orden[prof].campo, a), _getValorOrdenar(orden[prof].campo, b), orden[prof].desc) :
-        ORDER_EQUAL;
+                    ORDER_DOWN)(_getValorOrdenar(orden[prof].campo, a), _getValorOrdenar(orden[prof].campo, b), orden[prof].desc) :
+    ORDER_EQUAL;
 
 const _filtrar = (filtros, fila) => filtros.every(filtro => filtro.valor &&
             typeof filtro.valor === 'string' ?

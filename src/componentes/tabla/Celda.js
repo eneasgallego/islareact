@@ -57,6 +57,9 @@ class Celda extends Component {
     getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
+    componentWillMount() {
+        this.handlerResize = this.handlerResize.bind(this);
+    }
     componentDidMount() {
         window.addEventListener('resize', this.handlerResize);
         this.handlerResize();
