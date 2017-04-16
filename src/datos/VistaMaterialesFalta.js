@@ -1,5 +1,7 @@
-import { calcularTotales } from './utils';
-import getVistaMaterialesNecesita from './VistaMaterialesNecesita';
+import {
+    calcularTotales,
+    getVistaBD
+} from './utils';
 
 import { NO_NECESITA, INIT_INDEX } from '../utils/constantes';
 
@@ -7,7 +9,7 @@ export default data => {
     const ret = [];
     const map = {};
 
-    const vistaMaterialesNecesita = getVistaMaterialesNecesita(data);
+    const vistaMaterialesNecesita = getVistaBD(data, 'vistaMaterialesNecesita');
 
     for (let i = INIT_INDEX; i < data.materiales.length; i++) {
         const material = data.materiales[i];

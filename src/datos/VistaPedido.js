@@ -1,7 +1,7 @@
-import { getMapa } from './utils';
-import getVistaFabricas from './VistaFabricas';
-import getVistaMaterialesFalta from './VistaMaterialesFalta';
-import getPedidosDinamicos from './PedidosDinamicos';
+import {
+    getMapa,
+    getVistaBD
+} from './utils';
 
 import { INIT_INDEX } from '../utils/constantes';
 
@@ -10,9 +10,9 @@ export default data => {
     const map = {};
     const mapas = {};
 
-    const vistaFabricas = getVistaFabricas(data);
-    const vistaMaterialesFalta = getVistaMaterialesFalta(data);
-    const pedidosDinamicos = getPedidosDinamicos(data);
+    const vistaFabricas = getVistaBD(data, 'vistaFabricas');
+    const vistaMaterialesFalta = getVistaBD(data, 'vistaMaterialesFalta');
+    const pedidosDinamicos = getVistaBD(data, 'pedidosDinamicos');
 
     for (let i = INIT_INDEX; i < pedidosDinamicos.length; i++) {
         const pedido = pedidosDinamicos[i];

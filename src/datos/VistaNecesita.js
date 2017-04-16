@@ -1,7 +1,7 @@
-import { getMapa } from './utils';
-import getVistaFabricas from './VistaFabricas';
-import getVistaMaterialesFalta from './VistaMaterialesFalta';
-import getPedidosDinamicos from './PedidosDinamicos';
+import {
+    getMapa,
+    getVistaBD
+} from './utils';
 
 import {
     ORDER_EQUAL, ORDER_UP, ORDER_DOWN,
@@ -14,10 +14,10 @@ export default (data,calcularProfundidad,sinpedidos) => {
     const map = {};
     const mapas = {};
 
-    const vistaFabricas = getVistaFabricas(data);
-    const vistaMaterialesFalta = getVistaMaterialesFalta(data);
+    const vistaFabricas = getVistaBD(data, 'vistaFabricas');
+    const vistaMaterialesFalta = getVistaBD(data, 'vistaMaterialesFalta');
 
-    const pedidosDinamicos = getPedidosDinamicos(data);
+    const pedidosDinamicos = getVistaBD(data, 'pedidosDinamicos');
 
     const mapVistaFabricas = getMapa('vistaFabricas','fabricamateriales',mapas,vistaFabricas);
     const mapVistaMaterialesFalta = getMapa('vistaMaterialesFalta','idmateriales',mapas,vistaMaterialesFalta);

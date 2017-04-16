@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 
-import { cambiarContenido, dimensionar } from '../actions/App';
+import {
+    cambiarContenido,
+    dimensionar,
+    cargarBD
+} from '../actions/App';
 import {
     ID_INICIO_MATERIALES,
     ID_INICIO_PEDIDOS,
@@ -21,7 +25,8 @@ import Menu from '../componentes/menu/Menu';
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    menu: []
+    menu: [],
+    bd:   {}
 });
 const _renderStyle = alto => alto ?
     {height: `${alto}px`} :
@@ -59,12 +64,17 @@ class App extends Component {
     static propTypes = {
         menu:      PropTypes.array.isRequired,
         alto:      PropTypes.number,
-        verPedido: PropTypes.object
+        verPedido: PropTypes.object,
+        bd:        PropTypes.object.isRequired
     }
     getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
+        const { dispatch } = this.props;
+
+        dispatch(cargarBD());
+
         this.handlerAccionMenu = this.handlerAccionMenu.bind(this);
     }
     componentDidMount() {

@@ -1,5 +1,7 @@
-import { getMapa } from './utils';
-import getPedidosDinamicos from './PedidosDinamicos';
+import {
+    getMapa,
+    getVistaBD
+} from './utils';
 
 import {
     INIT_INDEX,
@@ -14,7 +16,7 @@ export default data => {
     const mapas = {};
 
 
-    const pedidosDinamicos = getPedidosDinamicos(data);
+    const pedidosDinamicos = getVistaBD(data, 'pedidosDinamicos');
 
     for (let i = INIT_INDEX; i < pedidosDinamicos.length; i++) {
         const pedido = pedidosDinamicos[i];

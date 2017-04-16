@@ -9,6 +9,7 @@ export const getMapa = (mapa, id, mapas, lista) => {
 
     return ret;
 };
+
 const calcularTotal = par => {
     let ret = par.defecto;
 
@@ -56,4 +57,45 @@ export const calcularTotales = par => {
     }
 
     return ret;
+};
+
+const _vistas = {
+    pedidosDinamicos:        './PedidosDinamicos',
+    vistaFabricas:           './VistaFabricas',
+    vistaMaterialesNecesita: './VistaMaterialesNecesita',
+    vistaMaterialesFalta:    './VistaMaterialesFalta',
+    vistaNecesitaHacer:      './VistaNecesitaHacer',
+    vistaNecesitaHaciendo:   './VistaNecesitaHaciendo',
+    vistaPedido:             './VistaPedido',
+    vistaPedidos:            './VistaPedidos'
+};
+const _getVista = vistaName => {
+    debugger;
+
+    return require.context('./', true, /^\.\/.*\.js$/)(`${_vistas[vistaName]}.js`).default;
+};
+const _getVistas = () => {
+    const ret = {};
+
+    for (const key in _vistas) {
+        ret[key] = _getVista(key);
+    }
+
+    return ret;
+};
+const _addVistaBD = (bd, nameVista, fnVista) => {
+    bd[nameVista] = fnVista(bd);
+
+    return bd[nameVista];
+};
+
+export const getVistaBD = (bd, nameVista) => bd[nameVista] || _addVistaBD(bd, nameVista, _getVista(nameVista));
+export const generarVistasBD = bd => {
+    for (const key in _vistas) {
+        getVistaBD(bd, key);
+    }
+
+    return {
+        ...bd
+    };
 };
