@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 import {
-    cambiarOrdenTabla,
-    cargarFilasTabla
+    cambiarOrdenTabla
+//    cargarFilasTabla
 } from '../actions/Tabla';
 
 import { getInitialState } from '../reducers/Tabla';
@@ -11,7 +11,10 @@ import PanelTabla from '../componentes/panel/PanelTabla';
 import { getPropTypesTabla } from '../utils/utils';
 
 /* Private functions */
-const _getDefaultProps = getInitialState;
+const _getDefaultProps = () => ({
+    ...getInitialState(),
+    filas: []
+});
 
 class PanelTablaInicio extends Component {
     /* Properties */
@@ -20,17 +23,11 @@ class PanelTablaInicio extends Component {
 
     /* Lifecycle */
     componentWillMount() {
-        const { dispatch, params } = this.props;
+        const { dispatch } = this.props;
 
         dispatch(cambiarOrdenTabla(this.id, this.orden));
-        dispatch(cargarFilasTabla(this.id, 'http://localhost:3000/db', params || {}, this.parseData));
 
         this.handlerClickAcciones = this.handlerClickAcciones.bind(this);
-    }
-    componentWillReceiveProps(nextProps) {
-        const { dispatch, params } = this.props;
-
-        nextProps.params !== params && dispatch(cargarFilasTabla(this.id, 'http://localhost:3000/db', nextProps.params || {}, this.parseData));
     }
 
     /* Handlers */

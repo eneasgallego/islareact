@@ -73,8 +73,9 @@ class PanelTablaInicioPedido extends PanelTablaInicio {
     }
 }
 
-const mapStateToProps = state => ({
-    ...state.panelTablaInicioPedido
+const mapStateToProps = (state, props) => ({
+    ...state.panelTablaInicioPedido,
+    filas: state.app.bd.vistaPedido.filter(item => item.tipopedidos === props.params.idTiposPedido)
 });
 
 export default connect(mapStateToProps)(PanelTablaInicioPedido);

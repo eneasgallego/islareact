@@ -69,11 +69,7 @@ const _vistas = {
     vistaPedido:             './VistaPedido',
     vistaPedidos:            './VistaPedidos'
 };
-const _getVista = vistaName => {
-    debugger;
-
-    return require.context('./', true, /^\.\/.*\.js$/)(`${_vistas[vistaName]}.js`).default;
-};
+const _getVista = vistaName => require.context('./', true, /^\.\/.*\.js$/)(`${_vistas[vistaName]}.js`).default;
 const _getVistas = () => {
     const ret = {};
 

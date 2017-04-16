@@ -71,7 +71,8 @@ class PanelTablaInicioNecesita extends PanelTablaInicio {
 }
 
 const mapStateToProps = state => ({
-    ...state.panelTablaInicioNecesita
+    ...state.panelTablaInicioNecesita,
+    filas: state.app.bd.vistaNecesitaHaciendo || []
 });
 
 export default connect(mapStateToProps)(PanelTablaInicioNecesita);

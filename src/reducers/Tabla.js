@@ -1,5 +1,4 @@
 export const getInitialState = () => ({
-    filas:    [],
     filtros:  [],
     orden:    [],
     cargando: false
