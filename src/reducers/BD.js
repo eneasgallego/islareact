@@ -1,7 +1,6 @@
 import {
     CARGAR_BD_START,
-    CARGAR_BD_SUCCESS,
-    CARGAR_BD_ERROR
+    CARGAR_BD_SUCCESS
 } from '../actions/BD';
 
 import { generarVistasBD, initVistasBD } from '../datos/utils';
@@ -18,12 +17,6 @@ export default (state = initVistasBD(), action = {}) => {
             ...state,
             ...generarVistasBD(action.data, true),
             cargando: false
-        };
-    case CARGAR_BD_ERROR:
-        return {
-            ...state,
-            cargando: false,
-            error:    action.error
         };
         /*
     case CARGAR_DATASET_TIPOPEDIDOS_START:

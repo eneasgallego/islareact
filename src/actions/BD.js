@@ -3,8 +3,8 @@ import {
     editar,
     eliminar
 } from '../utils/utils';
-import { getVistaBD } from '../datos/utils';
 
+import { getVistaBD } from '../datos/utils';
 
 import {
     NO_NECESITA,
@@ -13,6 +13,9 @@ import {
     POS_TO_DELETE_SPLICE
 } from '../utils/constantes';
 
+import { handlerError } from '../actions/App';
+
+const _handlerError = dispatch => error => dispatch(handlerError(error));
 
 export const CARGAR_BD_START = 'CARGAR_BD_START';
 const cargarBDStart = () => ({
@@ -24,14 +27,6 @@ const cargarBDSuccess = data => ({
     type: CARGAR_BD_SUCCESS,
     data
 });
-
-export const CARGAR_BD_ERROR = 'CARGAR_BD_ERROR';
-const cargarBDError = error => ({
-    type: CARGAR_BD_ERROR,
-    error
-});
-
-const _handlerError = dispatch => error => dispatch(cargarBDError(error));
 
 export const cargarBD = () => dispatch => {
     dispatch(cargarBDStart());

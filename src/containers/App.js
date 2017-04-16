@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 
 import {
     cambiarContenido,
-    dimensionar
+    dimensionar,
+    setDialogo
 } from '../actions/App';
 
 import { cargarBD } from '../actions/BD';
@@ -23,7 +24,7 @@ import PanelTablaInicioNecesita from './PanelTablaInicioNecesita';
 import PanelTablaInicioPedido from './PanelTablaInicioPedido';
 
 import Menu from '../componentes/menu/Menu';
-
+import Dialogo from '../componentes/ui/Dialogo';
 
 /* Private functions */
 const _getDefaultProps = () => ({
@@ -63,6 +64,16 @@ const _renderContenido = (contenido, alto, verPedido) => contenido === 'inicio' 
      setDialogo={this.setDialogo}
      />
      ); */
+const _renderDialogo = (dialogo, handlerDialogo) => dialogo ?
+        <Dialogo
+            titulo={dialogo.titulo}
+            puedeCerrar={dialogo.puedeCerrar}
+            contenido={dialogo.contenido}
+            menu={dialogo.menu}
+            accionMenu={dialogo.accionMenu}
+            onClickCerrar={handlerDialogo}
+        /> :
+        null;
 
 
 class App extends Component {
@@ -70,7 +81,8 @@ class App extends Component {
     static propTypes = {
         menu:      PropTypes.array.isRequired,
         alto:      PropTypes.number,
-        verPedido: PropTypes.object
+        verPedido: PropTypes.object,
+        dialogo:   PropTypes.object
     }
     getDefaultProps: _getDefaultProps
 
@@ -81,6 +93,7 @@ class App extends Component {
         dispatch(cargarBD());
 
         this.handlerAccionMenu = this.handlerAccionMenu.bind(this);
+        this.handlerDialogo = this.handlerDialogo.bind(this);
     }
     componentDidMount() {
         this.dimensionar();
@@ -94,6 +107,11 @@ class App extends Component {
         const { dispatch } = this.props;
 
         dispatch(cambiarContenido(tag));
+    }
+    handlerDialogo(dialogo) {
+        const { dispatch } = this.props;
+
+        dispatch(setDialogo(dialogo || null));
     }
 
     /* Methods */
@@ -109,7 +127,8 @@ class App extends Component {
             menu,
             alto,
             contenido,
-            verPedido
+            verPedido,
+            dialogo
         } = this.props;
 
         return (
@@ -121,7 +140,7 @@ class App extends Component {
          <main style={_renderStyle(alto)}>
             { _renderContenido(contenido, alto, verPedido) }
           </main>
-          {/* this.renderDialogo() */}
+          { _renderDialogo(dialogo, this.handlerDialogo) }
 
         </div>
         );

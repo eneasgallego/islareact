@@ -1,7 +1,9 @@
 import {
     CAMBIAR_CONTENIDO,
     DIMENSIONAR,
-    CAMBIAR_VER_PEDIDO
+    CAMBIAR_VER_PEDIDO,
+    SET_DIALOGO,
+    HANDLER_ERROR
 } from '../actions/App';
 
 const options = {
@@ -243,6 +245,11 @@ const options = {
 };
 
 const _dimensionar = menu => window.innerHeight - menu.offsetHeight;
+const _setDialogoError = error => ({
+    titulo:      'Error',
+    puedeCerrar: true,
+    contenido:   error.message
+});
 
 export default (state = {
     menu:      options.menu,
@@ -263,6 +270,16 @@ export default (state = {
         return {
             ...state,
             verPedido: action.pedido
+        };
+    case SET_DIALOGO:
+        return {
+            ...state,
+            dialogo: action.dialogo
+        };
+    case HANDLER_ERROR:
+        return {
+            ...state,
+            dialogo: _setDialogoError(action.error)
         };
         /*
     case CARGAR_DATASET_TIPOPEDIDOS_START:

@@ -15,3 +15,15 @@ export const cambiarVerPedido = pedido => ({
     type: CAMBIAR_VER_PEDIDO,
     pedido
 });
+
+export const SET_DIALOGO = 'SET_DIALOGO';
+export const setDialogo = dialogo => ({
+    type: SET_DIALOGO,
+    dialogo
+});
+
+export const HANDLER_ERROR = 'HANDLER_ERROR';
+export const handlerError = error => ({
+    type: HANDLER_ERROR,
+    error
+});
