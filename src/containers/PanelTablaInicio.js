@@ -41,14 +41,15 @@ class PanelTablaInicio extends Component {
             filtros,
             orden,
             alto,
-            cargando
+            cargando,
+            titulo
         } = this.props;
 
         return (
             <PanelTabla
                 id={this.id}
                 ref={this.id}
-                titulo={this.titulo}
+                titulo={titulo || this.titulo}
                 cols={this.cols}
                 filas={filas}
                 filtros={filtros}

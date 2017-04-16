@@ -75,7 +75,6 @@ class PanelTablaInicioPedido extends PanelTablaInicio {
         this.cols = _getCols();
         this.orden = _getOrden();
         this.acciones = _getAcciones();
-        this.titulo = 'Pedido';
     }
 
     /* Handlers */

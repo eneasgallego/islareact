@@ -37,7 +37,12 @@ const _renderInicio = (alto, verPedido) => [
     <PanelTablaInicioNecesita key={ID_INICIO_NECESITA} alto={alto} />,
     <PanelTablaInicioPedidos key={ID_INICIO_PEDIDOS} alto={alto} />
 ].concatenar(verPedido ?
-        [<PanelTablaInicioPedido key={ID_INICIO_PEDIDO} alto={alto} params={{ idTiposPedido: verPedido.idtipos_pedido }} />] :
+[<PanelTablaInicioPedido
+            key={ID_INICIO_PEDIDO}
+            alto={alto}
+            params={{ idTiposPedido: verPedido.idtipos_pedido }}
+            titulo={verPedido.nombretipos_pedido}
+        />] :
         []);
 const _renderContenido = (contenido, alto, verPedido) => contenido === 'inicio' ?
     _renderInicio(alto, verPedido) :
