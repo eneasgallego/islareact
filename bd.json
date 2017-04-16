@@ -1488,7 +1488,7 @@
       "cantidadpedidos": 3,
       "tipopedidos": 3,
       "profundidadpedidos": 0,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "id": 1070
     },
     {
@@ -1504,7 +1504,7 @@
       "cantidadpedidos": 3,
       "tipopedidos": 3,
       "profundidadpedidos": 0,
-      "procesadopedidos": false,
+      "procesadopedidos": true,
       "id": 1072
     },
     {
