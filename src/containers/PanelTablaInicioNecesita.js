@@ -2,8 +2,8 @@ import PanelTablaInicio from './PanelTablaInicio';
 import { connect } from 'react-redux';
 
 import {
-    ID_INICIO_NECESITA
-//    recogerMaterial
+    ID_INICIO_NECESITA,
+    recogerMaterial
 } from '../actions/Tabla';
 
 import { getInitialState } from '../reducers/Tabla';
@@ -63,16 +63,16 @@ class PanelTablaInicioNecesita extends PanelTablaInicio {
     }
 
     /* Handlers */
-    /* handlerRecogerMaterial(material) {
+    handlerRecogerMaterial(material) {
         const { dispatch } = this.props;
 
         dispatch(recogerMaterial(material.materialpedidos));
-    } */
+    }
 }
 
 const mapStateToProps = state => ({
     ...state.panelTablaInicioNecesita,
-    filas: state.app.bd.vistaNecesitaHaciendo || []
+    filas: state.bd.vistaNecesitaHaciendo
 });
 
 export default connect(mapStateToProps)(PanelTablaInicioNecesita);

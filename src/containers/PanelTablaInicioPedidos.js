@@ -69,7 +69,7 @@ class PanelTablaInicioPedidos extends PanelTablaInicio {
 
 const mapStateToProps = state => ({
     ...state.panelTablaInicioPedidos,
-    filas: state.app.bd.vistaPedidos || []
+    filas: state.bd.vistaPedidos
 });
 
 export default connect(mapStateToProps)(PanelTablaInicioPedidos);

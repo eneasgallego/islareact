@@ -1,13 +1,8 @@
 import {
     CAMBIAR_CONTENIDO,
     DIMENSIONAR,
-    CAMBIAR_VER_PEDIDO,
-    CARGAR_BD_START,
-    CARGAR_BD_SUCCESS,
-    CARGAR_BD_ERROR
+    CAMBIAR_VER_PEDIDO
 } from '../actions/App';
-
-import { generarVistasBD } from '../datos/utils';
 
 const options = {
     menu: [{
@@ -251,8 +246,7 @@ const _dimensionar = menu => window.innerHeight - menu.offsetHeight;
 
 export default (state = {
     menu:      options.menu,
-    contenido: 'inicio',
-    bd:        {}
+    contenido: 'inicio'
 }, action = {}) => {
     switch (action.type) {
     case CAMBIAR_CONTENIDO:
@@ -269,24 +263,6 @@ export default (state = {
         return {
             ...state,
             verPedido: action.pedido
-        };
-    case CARGAR_BD_START:
-        return {
-            ...state,
-            cargando: true
-        };
-    case CARGAR_BD_SUCCESS:
-        return {
-            ...state,
-            cargando: false,
-            bd:       generarVistasBD(action.data)
-
-        };
-    case CARGAR_BD_ERROR:
-        return {
-            ...state,
-            cargando: false,
-            error:    action.error
         };
         /*
     case CARGAR_DATASET_TIPOPEDIDOS_START:

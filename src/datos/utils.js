@@ -95,3 +95,12 @@ export const generarVistasBD = bd => {
         ...bd
     };
 };
+export const initVistasBD = () => {
+    const ret = {};
+
+    for (const key in _vistas) {
+        ret[key] = [];
+    }
+
+    return ret;
+};

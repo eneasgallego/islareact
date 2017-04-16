@@ -63,7 +63,7 @@ class PanelTablaInicioMateriales extends PanelTablaInicio {
 
 const mapStateToProps = state => ({
     ...state.panelTablaInicioMateriales,
-    filas: state.app.bd.vistaNecesitaHacer || []
+    filas: state.bd.vistaNecesitaHacer
 });
 
 
