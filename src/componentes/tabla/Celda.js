@@ -16,6 +16,7 @@ const _getDefaultProps = () => ({
     datos:         '',
     onResize:      emptyFunction
 });
+const _getValorDataset = (dataset, tipo, datos) => dataset && (dataset.buscar(tipo.id, datos) || {})[tipo.texto];
 const _renderStyle = (ancho, tipo) => ({
     width: ancho ?
         `${ancho}px` :
@@ -43,16 +44,16 @@ const _renderIconoOrden = orden => typeof orden === 'undefined' ?
 class Celda extends Component {
     /* Properties */
     static propTypes = {
-        header:   PropTypes.bool,
-        ancho:    PropTypes.number,
-        tipo:     PropTypes.object.isRequired,
-        filtro:   PropTypes.object,
-        orden:    PropTypes.number,
+        header:        PropTypes.bool,
+        ancho:         PropTypes.number,
+        tipo:          PropTypes.object.isRequired,
+        filtro:        PropTypes.object,
+        orden:         PropTypes.number,
 //        mostrarFiltro: PropTypes.func.isRequired,
-//        combosDataset: PropTypes.object.isRequired,
+        combosDataset: PropTypes.object,
 //        campo:  PropTypes.string.isRequired,
-        datos:    PropTypes.any,
-        onResize: PropTypes.func.isRequired
+        datos:         PropTypes.any,
+        onResize:      PropTypes.func.isRequired
     }
     getDefaultProps: _getDefaultProps
 
@@ -137,12 +138,11 @@ class Celda extends Component {
         const {
             tipo,
             combosDataset,
-            campo,
             datos
         } = this.props;
 
         return tipo.tipo === 'object' ?
-            combosDataset[campo].buscar(tipo.id, datos)[tipo.texto] :
+            _getValorDataset(combosDataset[tipo.dataset], tipo, datos) :
         tipo.tipo === 'bool' ?
             datos ?
                 'Sí' :

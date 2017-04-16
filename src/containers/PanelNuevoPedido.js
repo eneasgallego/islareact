@@ -2,48 +2,76 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 
-import { cambiarTipoNuevoPedido } from '../actions/PanelNuevoPedido';
+import { parseCols } from '../utils/utils';
+
+import {
+    initState,
+    cambiarTipoNuevoPedido,
+    nuevaFilaNuevoPedido
+} from '../actions/PanelNuevoPedido';
 
 import Panel from '../componentes/panel/Panel';
+
+import ListaTabla from '../componentes/tabla/ListaTabla';
 
 import Combo from '../componentes/ui/Combo';
 import Boton from '../componentes/ui/Boton';
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    datasetTipoPedidos: [],
-    nuevoPedido:        {}
+    ...initState(),
+    combosDataset: {}
 });
 const _getIdTipoPedido = nuevoPedido => nuevoPedido && nuevoPedido.tipoPedido && nuevoPedido.tipoPedido.idTipoPedido;
+const _getCols = () => parseCols([{
+    texto: 'MATERIAL',
+    campo: 'materialpedidos',
+    tipo:  {
+        tipo:    'object',
+        dataset: 'materiales',
+        id:      'id',
+        texto:   'nombremateriales'
+    }
+},{
+    texto: 'CANTIDAD',
+    campo: 'cantidadpedidos',
+    tipo:  'int'
+}]);
 
 class PanelNuevoPedido extends Component {
     /* Properties */
     static propTypes = {
-        datasetTipoPedidos: PropTypes.array.isRequired,
-        nuevoPedido:        PropTypes.object.isRequired
+        combosDataset: PropTypes.object.isRequired,
+        nuevoPedido:   PropTypes.object.isRequired
     }
     getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
         this.handlerChangeCombo = this.handlerChangeCombo.bind(this);
+        this.handlerNuevaFila = this.handlerNuevaFila.bind(this);
     }
 
     /* Handlers */
     handlerChangeCombo(valor) {
-        const { dispatch, datasetTipoPedidos } = this.props;
+        const { dispatch, combosDataset } = this.props;
 
-        dispatch(cambiarTipoNuevoPedido(datasetTipoPedidos.buscar('id', parseInt(valor, 10))));
+        dispatch(cambiarTipoNuevoPedido(combosDataset.tipos_pedido.buscar('id', parseInt(valor, 10))));
+    }
+    handlerNuevaFila() {
+        const { dispatch } = this.props;
+
+        dispatch(nuevaFilaNuevoPedido(_getCols()));
     }
 
     /* Render */
     renderContenidoNuevoPedido() {
         const {
-            datasetTipoPedidos,
-            nuevoPedido
+            nuevoPedido,
+            combosDataset
         } = this.props;
 
-        return datasetTipoPedidos.length ?
+        return combosDataset.tipos_pedido.length ?
         [
             <Combo
                 key="tipopedido"
@@ -53,26 +81,30 @@ class PanelNuevoPedido extends Component {
                 onChange={this.handlerChangeCombo}
                 campoId="id"
                 campoTexto="nombretipos_pedido"
-                dataset={datasetTipoPedidos}
+                dataset={combosDataset.tipos_pedido}
                 onLoad={this.dimensionar}
             />,
             <Boton
                 key="aceptar"
                 texto="ACEPTAR"
                 accion={this.crearNuevoPedido}
-            />/* ,
+            />,
             <ListaTabla
-                    id_campo={this.props.config.nuevo_pedido.tabla.id_campo}
-                    url={this.props.config.nuevo_pedido.tabla.url}
-                    cols={this.props.config.nuevo_pedido.tabla.cols}
-                    eliminar={this.props.config.nuevo_pedido.tabla.eliminar}
-                    key="tabla_nuevo_pedido"
-                    ref="tabla_nuevo_pedido"
-                    setDialogo={this.setDialogo}
-                    onResizeFila={this.onResizeFilaNuevoPedido}
-                    onLoad={this.dimensionar}
-                    persistir={false}
-                /> */
+                key="tabla_nuevo_pedido"
+                ref="tabla_nuevo_pedido"
+                cols={_getCols()}
+                filas={nuevoPedido.filas}
+                onClickNuevo={this.handlerNuevaFila}
+                combosDataset={combosDataset}
+                eliminar
+//                id_campo={this.props.config.nuevo_pedido.tabla.id_campo}
+//                url={this.props.config.nuevo_pedido.tabla.url}
+//                eliminar={this.props.config.nuevo_pedido.tabla.eliminar}
+//                setDialogo={this.setDialogo}
+//                onResizeFila={this.onResizeFilaNuevoPedido}
+//                onLoad={this.dimensionar}
+//                persistir={false}
+            />
         ] :
             null;
     }
@@ -91,7 +123,7 @@ class PanelNuevoPedido extends Component {
 
 const mapStateToProps = state => ({
     ...state.panelNuevoPedido,
-    datasetTipoPedidos: state.bd.tipos_pedido
+    combosDataset: state.bd
 });
 
 export default connect(mapStateToProps)(PanelNuevoPedido);

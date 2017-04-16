@@ -283,3 +283,22 @@ export const getPropTypesTabla = () => ({
     cargando: PropTypes.bool,
     params:   PropTypes.object
 });
+const _getValorDefecto = tipo => tipo === 'string' ?
+    '' :
+    tipo === 'int' || tipo === 'float' || tipo === 'object' ?
+    NUMERO_DEFECTO :
+    tipo === 'bool' ?
+        false :
+        undefined;
+
+export const createDefaultRow = cols => {
+    const obj = {};
+
+    for (let i = INIT_INDEX; i < cols.length; i++) {
+        const col = cols[i];
+
+        obj[col.campo] = _getValorDefecto(col.tipo.tipo);
+    }
+
+    return obj;
+};

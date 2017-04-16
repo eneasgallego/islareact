@@ -23,7 +23,9 @@ const _getDefaultProps = () => ({
     orden:           [],
     velo:            false,
     claseFila:       emptyFunction,
-    onClickAcciones: emptyFunction
+    onClickAcciones: emptyFunction,
+    onClickNuevo:    emptyFunction,
+    combosDataset:   {}
 });
 const _getInitialState = () => ({
     altoTabla: undefined,
@@ -65,10 +67,12 @@ const _ordenarFila = (orden, a, b, prof = INIT_PROFUNDIDAD) => orden[prof] ?
                     ORDER_DOWN)(_getValorOrdenar(orden[prof].campo, a), _getValorOrdenar(orden[prof].campo, b), orden[prof].desc) :
     ORDER_EQUAL;
 
-const _filtrar = (filtros, fila) => filtros.every(filtro => filtro.valor &&
+const _filtrar = (filtros, fila) => filtros ?
+    filtros.every(filtro => filtro.valor &&
             typeof filtro.valor === 'string' ?
                 ~`${fila}`.toUpperCase().indexOf(`${filtro.valor}`.toUpperCase()) :
-                !(typeof filtro.valor === 'object' && !filtro.valor.filtrar(fila)));
+                !(typeof filtro.valor === 'object' && !filtro.valor.filtrar(fila))) :
+    true;
 const _renderVelo = () => (
     <div className="velo">
         <div className="velo-fondo" />
@@ -91,8 +95,6 @@ const _calcAlto = function *_calcAlto(alto, dom) {
     yield _calcAltoBody(alto, dom.querySelector('.tabla-div'));
 };
 
-const _handlerAccionMenu = () => { /**/ };
-
 class Tabla extends Component {
     /* Properties */
     static propTypes = {
@@ -100,18 +102,21 @@ class Tabla extends Component {
         alto:            PropTypes.number,
         cols:            PropTypes.array.isRequired,
         filas:           PropTypes.array.isRequired,
-        filtros:         PropTypes.array.isRequired,
-        orden:           PropTypes.array.isRequired,
+        filtros:         PropTypes.array,
+        orden:           PropTypes.array,
         velo:            PropTypes.bool,
-        claseFila:       PropTypes.func.isRequired,
-        onClickAcciones: PropTypes.func.isRequired,
-        acciones:        PropTypes.array
+        claseFila:       PropTypes.func,
+        onClickAcciones: PropTypes.func,
+        acciones:        PropTypes.array,
+        onClickNuevo:    PropTypes.func,
+        combosDataset:   PropTypes.object
     }
     getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
         this.handlerResizeCelda = this.handlerResizeCelda.bind(this);
+        this.handlerClickMenu = this.handlerClickMenu.bind(this);
 
         this.setState(_getInitialState());
     }
@@ -123,6 +128,13 @@ class Tabla extends Component {
             altoTabla: calcAlto.next().value,
             altoBody:  calcAlto.next().value
         });
+    }
+
+    /* Handlers */
+    handlerClickMenu(tag) {
+        const { onClickNuevo } = this.props;
+
+        tag === 'nuevo' && onClickNuevo();
     }
 
     /* Methods */
@@ -144,7 +156,8 @@ class Tabla extends Component {
             claseFila,
             onClickAcciones,
             cols,
-            acciones
+            acciones,
+            combosDataset
         } = this.props,
             { anchos } = this.state;
 
@@ -160,6 +173,7 @@ class Tabla extends Component {
                 acciones={acciones}
                 anchos={anchos}
                 onResizeCelda={this.handlerResizeCelda}
+                combosDataset={combosDataset}
 //                    guardar={this.guardar}
 //                    id_campo={this.props.id_campo}
 //                    onResize={this.onResizeFila}
@@ -214,7 +228,7 @@ class Tabla extends Component {
 
         return (
             <div className="tabla-cont" style={renderStyleAlto(alto)}>
-				{_renderMenu(guardar, _handlerAccionMenu)}
+				{_renderMenu(guardar, this.handlerClickMenu)}
 				{this.renderTabla()}
 				{velo && _renderVelo()}
             </div>

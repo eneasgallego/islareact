@@ -20,7 +20,8 @@ const _getDefaultProps = () => ({
     filtros:         false,
     orden:           [],
     anchos:          [],
-    onResizeCelda:   emptyFunction
+    onResizeCelda:   emptyFunction,
+    combosDataset:   {}
 });
 const _claseFila = (header, claseFila, datos) => `${header ?
     'header' :
@@ -54,7 +55,8 @@ class Fila extends Component {
         orden:           PropTypes.array,
         acciones:        PropTypes.array,
         anchos:          PropTypes.array.isRequired,
-        onResizeCelda:   PropTypes.func.isRequired
+        onResizeCelda:   PropTypes.func.isRequired,
+        combosDataset:   PropTypes.object
     }
     getDefaultProps: _getDefaultProps
 
@@ -73,7 +75,8 @@ class Fila extends Component {
             orden,
             datos,
             anchos,
-            onResizeCelda
+            onResizeCelda,
+            combosDataset
         } = this.props;
 
         return cols.map((col, index) => {
@@ -91,6 +94,7 @@ class Fila extends Component {
                     datos={dato}
                     ancho={anchos[index]}
                     onResize={onResizeCelda}
+                    combosDataset={combosDataset}
 //                    campo={col.campo}
 //                    guardar={this.guardar}
 //                    onClick={this.props.onClickCelda}
