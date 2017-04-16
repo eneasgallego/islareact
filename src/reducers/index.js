@@ -6,6 +6,7 @@ import panelTablaInicioMateriales from './PanelTablaInicioMateriales';
 import panelTablaInicioPedidos from './PanelTablaInicioPedidos';
 import panelTablaInicioNecesita from './PanelTablaInicioNecesita';
 import panelTablaInicioPedido from './PanelTablaInicioPedido';
+import panelNuevoPedido from './PanelNuevoPedido';
 
 const rootReducer = combineReducers({
     app,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     panelTablaInicioMateriales,
     panelTablaInicioPedidos,
     panelTablaInicioNecesita,
-    panelTablaInicioPedido
+    panelTablaInicioPedido,
+    panelNuevoPedido
 });
 
 export default rootReducer;

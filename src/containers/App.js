@@ -22,6 +22,7 @@ import PanelTablaInicioMateriales from './PanelTablaInicioMateriales';
 import PanelTablaInicioPedidos from './PanelTablaInicioPedidos';
 import PanelTablaInicioNecesita from './PanelTablaInicioNecesita';
 import PanelTablaInicioPedido from './PanelTablaInicioPedido';
+import PanelNuevoPedido from './PanelNuevoPedido';
 
 import Menu from '../componentes/menu/Menu';
 import Dialogo from '../componentes/ui/Dialogo';
@@ -45,13 +46,19 @@ const _renderInicio = (alto, verPedido) => [
             titulo={verPedido.nombretipos_pedido}
         />] :
         []);
+const _renderNuevoPedido = () => (
+        <PanelNuevoPedido
+            ref="panel_nuevo_pedido"
+//            dimensionar={this.dimensionarNuevoPedido}
+        />
+    );
 const _renderContenido = (contenido, alto, verPedido) => contenido === 'inicio' ?
     _renderInicio(alto, verPedido) :
+    contenido === 'nuevo_pedido' ?
+    _renderNuevoPedido() :
     null;
 //        } else if (contenido == 'excedente') {
 //            return this.renderExcedente();
-//        } else if (contenido == 'nuevo_pedido') {
-//            return this.renderNuevoPedido();
     /* (
      <ListaTabla	id_campo={this.props.config[contenido].id_campo}
      url_editar={this.props.config[contenido].url_editar}
