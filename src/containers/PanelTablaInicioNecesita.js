@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 
 import { ID_INICIO_NECESITA } from '../actions/Tabla';
 
-import { recogerMaterial } from '../actions/BD';
+import {
+    recogerMaterial,
+    recogerTodoMaterial
+} from '../actions/BD';
 
 import { getInitialState } from '../reducers/Tabla';
 
@@ -44,7 +47,7 @@ const _getAcciones = () => [{
     tag:   'handlerRecogerMaterial'
 },{
     texto: 'todo',
-    tag:   'accionRecogerTodoMaterial'
+    tag:   'handlerRecogerTodoMaterial'
 }];
 const _getClaseFila = getClaseFilaMateriales;
 
@@ -66,6 +69,11 @@ class PanelTablaInicioNecesita extends PanelTablaInicio {
         const { dispatch } = this.props;
 
         dispatch(recogerMaterial(material.materialpedidos));
+    }
+    handlerRecogerTodoMaterial(material) {
+        const { dispatch } = this.props;
+
+        dispatch(recogerTodoMaterial(material.materialpedidos));
     }
 }
 
