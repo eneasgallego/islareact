@@ -9,29 +9,3 @@ export const cambiarOrdenTabla = (idTabla, orden) => ({
     idTabla,
     orden
 });
-
-/*
-export const recogerMaterial = (material, idMaterial, bd) => {
-    dispatch(recogerMaterialStart());
-
-    return editar('materiales', material, 'id', id, callback, error)
-        .then(json => dispatch(recogerMaterialSuccess(json)))
-        .catch(error => dispatch(recogerMaterialError(error)));
-
-
-    let mapas = {};
-
-    let materiales = this.getMapa('materiales','id',mapas,bd.materiales);
-    let material = materiales[id];
-
-    if (material.haciendomateriales > 0) {
-
-        material.haciendomateriales -= material.hacemateriales;
-        material.stockmateriales += material.hacemateriales;
-
-        this.editar('materiales',material,'id',id,callback, error);
-    } else {
-        throw new Error('No hay nada que recoger');
-    }
-};
-*/

@@ -85,10 +85,10 @@ const _addVistaBD = (bd, nameVista, fnVista) => {
     return bd[nameVista];
 };
 
-export const getVistaBD = (bd, nameVista) => bd[nameVista] || _addVistaBD(bd, nameVista, _getVista(nameVista));
-export const generarVistasBD = bd => {
+export const getVistaBD = (bd, nameVista, force) => (!force && bd[nameVista]) || _addVistaBD(bd, nameVista, _getVista(nameVista));
+export const generarVistasBD = (bd, force) => {
     for (const key in _vistas) {
-        getVistaBD(bd, key);
+        getVistaBD(bd, key, force);
     }
 
     return {

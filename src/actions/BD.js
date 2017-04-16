@@ -1,4 +1,7 @@
-import { ajax } from '../utils/utils';
+import { ajax, editar } from '../utils/utils';
+
+import { NO_NECESITA } from '../utils/constantes';
+
 
 export const CARGAR_BD_START = 'CARGAR_BD_START';
 const cargarBDStart = () => ({
@@ -26,4 +29,28 @@ export const cargarBD = () => dispatch => {
     })
         .then(json => dispatch(cargarBDSuccess(json)))
         .catch(error => dispatch(cargarBDError(error)));
+};
+
+export const recogerMaterial = idMaterial => (dispatch, getState) => {
+    dispatch(cargarBDStart());
+
+    debugger;
+    const state = getState();
+    const materiales = state.bd.materiales.slice();
+    const material = materiales.buscar('id', idMaterial);
+
+    if (material.haciendomateriales > NO_NECESITA) {
+
+        material.haciendomateriales -= material.hacemateriales;
+        material.stockmateriales += material.hacemateriales;
+
+        return editar('materiales', material, idMaterial)
+            .then(json => dispatch(cargarBDSuccess({
+                ...state.bd,
+                materiales
+            })))
+            .catch(error => dispatch(cargarBDError(error)));
+    }
+    throw new Error('No hay nada que recoger');
+
 };

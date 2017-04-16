@@ -16,7 +16,7 @@ export default (state = initVistasBD(), action = {}) => {
     case CARGAR_BD_SUCCESS:
         return {
             ...state,
-            ...generarVistasBD(action.data),
+            ...generarVistasBD(action.data, true),
             cargando: false
         };
     case CARGAR_BD_ERROR:

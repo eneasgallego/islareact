@@ -1,10 +1,9 @@
 import PanelTablaInicio from './PanelTablaInicio';
 import { connect } from 'react-redux';
 
-import {
-    ID_INICIO_NECESITA,
-    recogerMaterial
-} from '../actions/Tabla';
+import { ID_INICIO_NECESITA } from '../actions/Tabla';
+
+import { recogerMaterial } from '../actions/BD';
 
 import { getInitialState } from '../reducers/Tabla';
 
