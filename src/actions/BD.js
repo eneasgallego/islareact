@@ -44,10 +44,11 @@ export const cargarBD = () => dispatch => {
         .catch(_handlerError(dispatch));
 };
 
+/* MATERIALES */
 export const recogerMaterial = idMaterial => (dispatch, getState) => {
     const
         state = getState(),
-        materiales = state.bd.materiales.slice(),
+        { materiales } = state.bd,
         material = materiales.buscar('id', idMaterial);
 
     if (material.haciendomateriales > NO_NECESITA) {
@@ -62,14 +63,13 @@ export const recogerMaterial = idMaterial => (dispatch, getState) => {
     }
     dispatch(cargarBDSuccess({
         ...state.bd,
-        materiales
+        materiales: materiales.slice()
     }));
 };
-
 export const recogerTodoMaterial = idMaterial => (dispatch, getState) => {
     const
         state = getState(),
-        materiales = state.bd.materiales.slice(),
+        { materiales } = state.bd,
         material = materiales.buscar('id', idMaterial);
 
     if (material.haciendomateriales > NO_NECESITA) {
@@ -84,10 +84,55 @@ export const recogerTodoMaterial = idMaterial => (dispatch, getState) => {
     }
     dispatch(cargarBDSuccess({
         ...state.bd,
-        materiales
+        materiales: materiales.slice()
+    }));
+};
+export const hacerMaterial = idMaterial => (dispatch, getState) => {
+    const
+        state = getState(),
+        { materiales } = state.bd,
+        material = materiales.buscar('id', idMaterial),
+        vistaFabricas = getVistaBD(state.bd, 'vistaFabricas'),
+        fabrica = vistaFabricas.buscar('fabricamateriales', material.fabricamateriales);
+
+    debugger;
+    if (fabrica.haciendomateriales < fabrica.maximofabricas) {
+        const
+            materialesNecesita = getVistaBD(state.bd, 'vistaMaterialesNecesita').filter(item => item.materialmateriales_necesita === idMaterial),
+            materialNecesitaFalta = materialesNecesita.buscar(item => item.cantidadmateriales_necesita - item.stockmaterialesnecesita > NO_NECESITA);
+
+        if (materialNecesitaFalta) {
+            _handlerError(dispatch)(new Error(`Falta ${materialNecesitaFalta.nombrematerialesnecesita}.`));
+        } else {
+            material.haciendomateriales += material.hacemateriales;
+
+            editar('materiales', material, idMaterial)
+                .catch(_handlerError(dispatch));
+
+            for (let i = INIT_INDEX; i < materialesNecesita.length; i++) {
+                const
+                    materialNecesita = materialesNecesita[i],
+                    dif = materialNecesita.stockmaterialesnecesita - materialNecesita.cantidadmateriales_necesita,
+                    auxMaterial = materiales.buscar('id', materialNecesita.materialnecesitamateriales_necesita);
+
+                auxMaterial.stockmateriales = dif;
+
+                editar('materiales', auxMaterial, auxMaterial.id)
+                    .catch(_handlerError(dispatch));
+            }
+        }
+    } else {
+        _handlerError(dispatch)(new Error('Fábrica completa.'));
+    }
+
+    dispatch(cargarBDSuccess({
+        ...state.bd,
+        materiales: materiales.slice()
     }));
 };
 
+
+/* PEDIDOS */
 export const cerrarPedido = idTipoPedido => (dispatch, getState) => {
     const
         state = getState(),

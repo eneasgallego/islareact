@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { ID_INICIO_MATERIALES } from '../actions/Tabla';
 
+import { hacerMaterial } from '../actions/BD';
+
 import { parseCols, getClaseFilaMateriales } from '../utils/utils';
 
 import { ORDER_UP, ORDER_DOWN } from '../utils/constantes';
@@ -44,7 +46,7 @@ const _getOrden = () => [{
 }];
 const _getAcciones = () => [{
     texto: 'hacer',
-    tag:   'accionHacerMaterial'
+    tag:   'handlerHacerMaterial'
 }];
 
 class PanelTablaInicioMateriales extends PanelTablaInicio {
@@ -58,6 +60,13 @@ class PanelTablaInicioMateriales extends PanelTablaInicio {
         this.orden = _getOrden();
         this.acciones = _getAcciones();
         this.titulo = 'Materiales';
+    }
+
+    /* Handlers */
+    handlerHacerMaterial(material) {
+        const { dispatch } = this.props;
+
+        dispatch(hacerMaterial(material.materialpedidos));
     }
 }
 
