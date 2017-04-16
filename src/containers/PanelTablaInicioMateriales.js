@@ -61,14 +61,10 @@ class PanelTablaInicioMateriales extends PanelTablaInicio {
     }
 }
 
-const mapStateToProps = state => {
-    debugger;
-
-    return {
-        ...state.panelTablaInicioMateriales,
-        filas: state.app.bd.vistaNecesitaHacer || []
-    };
-};
+const mapStateToProps = state => ({
+    ...state.panelTablaInicioMateriales,
+    filas: state.app.bd.vistaNecesitaHacer || []
+});
 
 
 export default connect(mapStateToProps)(PanelTablaInicioMateriales);

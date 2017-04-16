@@ -1,29 +1,17 @@
 import {
     ID_INICIO_MATERIALES,
-    CAMBIAR_ORDEN_TABLA,
-    CARGAR_FILAS_TABLA_START,
-    CARGAR_FILAS_TABLA_SUCCESS,
-    CARGAR_FILAS_TABLA_ERROR
+    CAMBIAR_ORDEN_TABLA
 } from '../actions/Tabla';
 
 import {
     getInitialState,
-    cambiarOrdenTabla,
-    cargarFilasTablaStart,
-    cargarFilasTablaSuccess,
-    cargarFilasTablaError
+    cambiarOrdenTabla
 } from './Tabla';
 
 export default (state = getInitialState(), action = {}) => {
     switch (action.type) {
     case CAMBIAR_ORDEN_TABLA:
         return cambiarOrdenTabla(state, action, ID_INICIO_MATERIALES);
-    case CARGAR_FILAS_TABLA_START:
-        return cargarFilasTablaStart(state, action, ID_INICIO_MATERIALES);
-    case CARGAR_FILAS_TABLA_SUCCESS:
-        return cargarFilasTablaSuccess(state, action, ID_INICIO_MATERIALES);
-    case CARGAR_FILAS_TABLA_ERROR:
-        return cargarFilasTablaError(state, action, ID_INICIO_MATERIALES);
     default:
         return state;
     }

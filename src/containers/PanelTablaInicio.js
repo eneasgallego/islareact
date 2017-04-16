@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 
-import {
-    cambiarOrdenTabla
-//    cargarFilasTabla
-} from '../actions/Tabla';
+import { cambiarOrdenTabla } from '../actions/Tabla';
 
 import { getInitialState } from '../reducers/Tabla';
 
