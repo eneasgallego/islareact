@@ -31,6 +31,8 @@ const cargarBDError = error => ({
     error
 });
 
+const _handlerError = dispatch => error => dispatch(cargarBDError(error));
+
 export const cargarBD = () => dispatch => {
     dispatch(cargarBDStart());
 
@@ -39,12 +41,10 @@ export const cargarBD = () => dispatch => {
         url:    'http://localhost:3000/db'
     })
         .then(json => dispatch(cargarBDSuccess(json)))
-        .catch(error => dispatch(cargarBDError(error)));
+        .catch(_handlerError(dispatch));
 };
 
 export const recogerMaterial = idMaterial => (dispatch, getState) => {
-    dispatch(cargarBDStart());
-
     const
         state = getState(),
         materiales = state.bd.materiales.slice(),
@@ -56,19 +56,17 @@ export const recogerMaterial = idMaterial => (dispatch, getState) => {
         material.stockmateriales += material.hacemateriales;
 
         editar('materiales', material, idMaterial)
-            .then(() => dispatch(cargarBDSuccess({
-                ...state.bd,
-                materiales
-            })))
-            .catch(error => dispatch(cargarBDError(error)));
+            .catch(_handlerError(dispatch));
     } else {
-        throw new Error('No hay nada que recoger');
+        _handlerError(dispatch)(new Error('No hay nada que recoger'));
     }
+    dispatch(cargarBDSuccess({
+        ...state.bd,
+        materiales
+    }));
 };
 
 export const recogerTodoMaterial = idMaterial => (dispatch, getState) => {
-    dispatch(cargarBDStart());
-
     const
         state = getState(),
         materiales = state.bd.materiales.slice(),
@@ -80,25 +78,22 @@ export const recogerTodoMaterial = idMaterial => (dispatch, getState) => {
         material.haciendomateriales = NUMERO_DEFECTO;
 
         editar('materiales', material, idMaterial)
-            .then(json => dispatch(cargarBDSuccess({
-                ...state.bd,
-                materiales
-            })))
-    .catch(error => dispatch(cargarBDError(error)));
+    .catch(_handlerError(dispatch));
     } else {
-        throw new Error('No hay nada que recoger');
+        _handlerError(dispatch)(new Error('No hay nada que recoger'));
     }
+    dispatch(cargarBDSuccess({
+        ...state.bd,
+        materiales
+    }));
 };
 
 export const cerrarPedido = idTipoPedido => (dispatch, getState) => {
-    dispatch(cargarBDStart());
-
     const
         state = getState(),
         { pedidos, materiales } = state.bd,
         vistaPedido = getVistaBD(state.bd, 'vistaPedido'),
-        pedidosCerrar = vistaPedido.filter(item => item.tipopedidos === idTipoPedido),
-        reject = error => dispatch(cargarBDError(error));
+        pedidosCerrar = vistaPedido.filter(item => item.tipopedidos === idTipoPedido);
 
     for (let i = INIT_INDEX; i < pedidosCerrar.length; i++) {
         const
@@ -111,14 +106,13 @@ export const cerrarPedido = idTipoPedido => (dispatch, getState) => {
             material.stockmateriales = NUMERO_DEFECTO;
         }
 
-        debugger;
         ~index && pedidos.splice(index, POS_TO_DELETE_SPLICE);
 
         editar('materiales', material, material.id)
-            .catch(reject);
+            .catch(_handlerError(dispatch));
 
         eliminar('pedidos', pedido.idpedidos)
-            .catch(reject);
+            .catch(_handlerError(dispatch));
     }
 
     dispatch(cargarBDSuccess({
@@ -126,4 +120,24 @@ export const cerrarPedido = idTipoPedido => (dispatch, getState) => {
         materiales: materiales.slice(),
         pedidos:    pedidos.slice()
     }));
+};
+
+export const procesarPedido = idPedido => (dispatch, getState) => {
+    const
+        state = getState(),
+        { pedidos } = state.bd,
+        pedido = pedidos.buscar('id', idPedido);
+
+    debugger;
+    if (pedido.procesadopedidos) {
+        _handlerError(dispatch)(new Error('Ya está procesado'));
+    } else {
+        pedido.procesadopedidos = true;
+        editar('pedidos', pedido, pedido.id)
+            .catch(_handlerError(dispatch));
+        dispatch(cargarBDSuccess({
+            ...state.bd,
+            pedidos: pedidos.slice()
+        }));
+    }
 };
