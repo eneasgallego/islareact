@@ -95,7 +95,6 @@ export const hacerMaterial = idMaterial => (dispatch, getState) => {
         vistaFabricas = getVistaBD(state.bd, 'vistaFabricas'),
         fabrica = vistaFabricas.buscar('fabricamateriales', material.fabricamateriales);
 
-    debugger;
     if (fabrica.haciendomateriales < fabrica.maximofabricas) {
         const
             materialesNecesita = getVistaBD(state.bd, 'vistaMaterialesNecesita').filter(item => item.materialmateriales_necesita === idMaterial),
