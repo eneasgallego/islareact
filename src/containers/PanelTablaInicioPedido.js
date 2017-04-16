@@ -3,6 +3,10 @@ import { connect } from 'react-redux';
 
 import { ID_INICIO_PEDIDO } from '../actions/Tabla';
 
+import {
+    recogerMaterial
+} from '../actions/BD';
+
 import { getInitialState } from '../reducers/Tabla';
 
 import { parseCols } from '../utils/utils';
@@ -39,7 +43,7 @@ const _getAcciones = () => [{
     tag:   'accionHacerMaterial'
 }, {
     texto: 'recoger',
-    tag:   'accionRecogerMaterial'
+    tag:   'handlerRecogerMaterial'
 }, {
     texto: 'procesar',
     tag:   'accionProcesarPedido'
@@ -70,6 +74,13 @@ class PanelTablaInicioPedido extends PanelTablaInicio {
         this.orden = _getOrden();
         this.acciones = _getAcciones();
         this.titulo = 'Pedido';
+    }
+
+    /* Handlers */
+    handlerRecogerMaterial(material) {
+        const { dispatch } = this.props;
+
+        dispatch(recogerMaterial(material.materialpedidos));
     }
 }
 

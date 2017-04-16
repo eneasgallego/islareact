@@ -2,7 +2,10 @@ import PanelTablaInicio from './PanelTablaInicio';
 import { connect } from 'react-redux';
 
 import { ID_INICIO_PEDIDOS } from '../actions/Tabla';
+
 import { cambiarVerPedido } from '../actions/App';
+
+import { cerrarPedido } from '../actions/BD';
 
 import { getInitialState } from '../reducers/Tabla';
 
@@ -34,7 +37,7 @@ const _getAcciones = () => [{
     tag:   'accionProcesarPedidos'
 }, {
     texto: 'cerrar',
-    tag:   'accionCerrarPedido'
+    tag:   'handlerCerrarPedido'
 }];
 const _getClaseFila = datos => datos.faltapedidos ?
     datos.procesadopedidos === PROCESADO_PEDIDO ?
@@ -64,6 +67,11 @@ class PanelTablaInicioPedidos extends PanelTablaInicio {
         const { dispatch } = this.props;
 
         dispatch(cambiarVerPedido(pedido));
+    }
+    handlerCerrarPedido(pedido) {
+        const { dispatch } = this.props;
+
+        dispatch(cerrarPedido(pedido.idtipos_pedido));
     }
 }
 

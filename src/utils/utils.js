@@ -182,6 +182,10 @@ export const editar = (tabla, par, id) => ajax({
     url:    `http://localhost:3000/${tabla}/${id}`,
     params: par
 });
+export const eliminar = (tabla, id) => ajax({
+    metodo: 'DELETE',
+    url:    `http://localhost:3000/${tabla}/${id}`
+});
 export const parseTipo = tipo => {
     if (typeof tipo === 'string') {
         return {
