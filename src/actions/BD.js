@@ -128,7 +128,6 @@ export const procesarPedido = idPedido => (dispatch, getState) => {
         { pedidos } = state.bd,
         pedido = pedidos.buscar('id', idPedido);
 
-    debugger;
     if (pedido.procesadopedidos) {
         _handlerError(dispatch)(new Error('Ya está procesado'));
     } else {
@@ -139,5 +138,29 @@ export const procesarPedido = idPedido => (dispatch, getState) => {
             ...state.bd,
             pedidos: pedidos.slice()
         }));
+    }
+};
+
+export const procesarPedidos = idTipoPedido => (dispatch, getState) => {
+    const
+        state = getState(),
+        { pedidos } = state.bd,
+        pedidosFiltrados = pedidos.filter(item => item.tipopedidos === idTipoPedido && !item.procesadopedidos);
+
+    if (pedidosFiltrados.length) {
+        for (let i = INIT_INDEX; i < pedidosFiltrados.length; i++) {
+            const pedido = pedidosFiltrados[i];
+
+            pedido.procesadopedidos = true;
+
+            editar('pedidos', pedido, pedido.id)
+                .catch(_handlerError(dispatch));
+        }
+        dispatch(cargarBDSuccess({
+            ...state.bd,
+            pedidos: pedidos.slice()
+        }));
+    } else {
+        _handlerError(dispatch)(new Error('Ya está procesado'));
     }
 };

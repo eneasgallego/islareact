@@ -5,7 +5,10 @@ import { ID_INICIO_PEDIDOS } from '../actions/Tabla';
 
 import { cambiarVerPedido } from '../actions/App';
 
-import { cerrarPedido } from '../actions/BD';
+import {
+    cerrarPedido,
+    procesarPedidos
+} from '../actions/BD';
 
 import { getInitialState } from '../reducers/Tabla';
 
@@ -34,7 +37,7 @@ const _getAcciones = () => [{
     tag:   'handlerVerPedido'
 }, {
     texto: 'procesar',
-    tag:   'accionProcesarPedidos'
+    tag:   'handlerProcesarPedidos'
 }, {
     texto: 'cerrar',
     tag:   'handlerCerrarPedido'
@@ -67,6 +70,11 @@ class PanelTablaInicioPedidos extends PanelTablaInicio {
         const { dispatch } = this.props;
 
         dispatch(cambiarVerPedido(pedido));
+    }
+    handlerProcesarPedidos(pedido) {
+        const { dispatch } = this.props;
+
+        dispatch(procesarPedidos(pedido.idtipos_pedido));
     }
     handlerCerrarPedido(pedido) {
         const { dispatch } = this.props;
