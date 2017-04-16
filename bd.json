@@ -69,16 +69,16 @@
       "nombremateriales": "Madera",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 5,
-      "haciendomateriales": 7,
+      "stockmateriales": 7,
+      "haciendomateriales": 5,
       "id": 2
     },
     {
       "nombremateriales": "Plástico",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 2,
-      "haciendomateriales": 13,
+      "stockmateriales": 4,
+      "haciendomateriales": 11,
       "id": 3
     },
     {
@@ -102,7 +102,7 @@
       "fabricamateriales": 1,
       "hacemateriales": 1,
       "stockmateriales": 0,
-      "haciendomateriales": 0,
+      "haciendomateriales": 3,
       "id": 6
     },
     {
