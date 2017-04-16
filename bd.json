@@ -117,7 +117,7 @@
       "nombremateriales": "Azucar y Especias",
       "fabricamateriales": 1,
       "hacemateriales": 1,
-      "stockmateriales": 1,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 8
     },
@@ -157,7 +157,7 @@
       "nombremateriales": "Tablas",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 2,
+      "stockmateriales": 0,
       "haciendomateriales": 2,
       "id": 13
     },
@@ -189,7 +189,7 @@
       "nombremateriales": "Pintura",
       "fabricamateriales": 2,
       "hacemateriales": 1,
-      "stockmateriales": 2,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 17
     },
@@ -205,7 +205,7 @@
       "nombremateriales": "Metro",
       "fabricamateriales": 3,
       "hacemateriales": 1,
-      "stockmateriales": 2,
+      "stockmateriales": 1,
       "haciendomateriales": 2,
       "id": 19
     },
@@ -213,7 +213,7 @@
       "nombremateriales": "Pala",
       "fabricamateriales": 3,
       "hacemateriales": 1,
-      "stockmateriales": 4,
+      "stockmateriales": 3,
       "haciendomateriales": 0,
       "id": 20
     },
@@ -413,7 +413,7 @@
       "nombremateriales": "Reloj",
       "fabricamateriales": 8,
       "hacemateriales": 1,
-      "stockmateriales": 1,
+      "stockmateriales": 0,
       "haciendomateriales": 0,
       "id": 45
     },
@@ -1434,54 +1434,6 @@
       "procesadopedidos": false,
       "id": 898,
       "novacia_pedido": "undefined"
-    },
-    {
-      "materialpedidos": 13,
-      "cantidadpedidos": 2,
-      "tipopedidos": 2,
-      "profundidadpedidos": 0,
-      "procesadopedidos": true,
-      "id": 1058
-    },
-    {
-      "materialpedidos": 8,
-      "cantidadpedidos": 1,
-      "tipopedidos": 2,
-      "profundidadpedidos": 0,
-      "procesadopedidos": true,
-      "id": 1059
-    },
-    {
-      "materialpedidos": 19,
-      "cantidadpedidos": 1,
-      "tipopedidos": 2,
-      "profundidadpedidos": 0,
-      "procesadopedidos": true,
-      "id": 1060
-    },
-    {
-      "materialpedidos": 17,
-      "cantidadpedidos": 2,
-      "tipopedidos": 2,
-      "profundidadpedidos": 0,
-      "procesadopedidos": true,
-      "id": 1061
-    },
-    {
-      "materialpedidos": 45,
-      "cantidadpedidos": 1,
-      "tipopedidos": 2,
-      "profundidadpedidos": 0,
-      "procesadopedidos": true,
-      "id": 1062
-    },
-    {
-      "materialpedidos": 20,
-      "cantidadpedidos": 1,
-      "tipopedidos": 2,
-      "profundidadpedidos": 0,
-      "procesadopedidos": true,
-      "id": 1063
     },
     {
       "materialpedidos": 26,
