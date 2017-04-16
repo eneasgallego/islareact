@@ -44,57 +44,28 @@ export const cargarFilasTabla = (idTabla, url, params, parseData) => dispatch =>
         .then(json => dispatch(cargarFilasTablaSuccess(idTabla, json, data => parseData(data, params))))
         .catch(error => dispatch(cargarFilasTablaError(idTabla, error)));
 };
-
 /*
+export const recogerMaterial = (material, idMaterial, bd) => {
+    dispatch(recogerMaterialStart());
 
-export const CARGAR_DATASET_TIPOPEDIDOS_START = 'CARGAR_DATASET_TIPOPEDIDOS_START';
-const cargarDatasetTipopedidosStart = () => ({
-    type: CARGAR_DATASET_TIPOPEDIDOS_START
-});
+    return editar('materiales', material, 'id', id, callback, error)
+        .then(json => dispatch(recogerMaterialSuccess(json)))
+        .catch(error => dispatch(recogerMaterialError(error)));
 
-export const CARGAR_DATASET_TIPOPEDIDOS_SUCCESS = 'CARGAR_DATASET_TIPOPEDIDOS_SUCCESS';
-const cargarDatasetTipopedidosSuccess = data => ({
-    type: CARGAR_DATASET_TIPOPEDIDOS_SUCCESS,
-    data
-});
 
-export const CARGAR_DATASET_TIPOPEDIDOS_ERROR = 'CARGAR_DATASET_TIPOPEDIDOS_ERROR';
-const cargarDatasetTipopedidosError = error => ({
-    type: CARGAR_DATASET_TIPOPEDIDOS_ERROR,
-    error
-});
+    let mapas = {};
 
-export const cargarDatasetTipopedidos = (url, orden) => dispatch => {
-    dispatch(cargarDatasetTipopedidosStart());
+    let materiales = this.getMapa('materiales','id',mapas,bd.materiales);
+    let material = materiales[id];
 
-    return ajax({
-        metodo: 'get',
-        url,
-        params: {
-            _sort:  orden,
-            _order: 'ASC'
-        }
-    })
-      .then(response => response.json())
-      .then(json => dispatch(cargarDatasetTipopedidosSuccess(json)))
-      .catch(error => dispatch(cargarDatasetTipopedidosError(error)));
+    if (material.haciendomateriales > 0) {
+
+        material.haciendomateriales -= material.hacemateriales;
+        material.stockmateriales += material.hacemateriales;
+
+        this.editar('materiales',material,'id',id,callback, error);
+    } else {
+        throw new Error('No hay nada que recoger');
+    }
 };
-
-export const LIMPIAR_DATASET_TIPOPEDIDOS_ERROR = 'LIMPIAR_DATASET_TIPOPEDIDOS_ERROR';
-export const limpiarDatasetTipopedidosError = () => ({
-    type: LIMPIAR_DATASET_TIPOPEDIDOS_ERROR
-});
-
-export const CAMBIAR_PEDIDO_VER = 'CAMBIAR_PEDIDO_VER';
-export const cambiarPedidoVer = pedidoVer => ({
-    type: CAMBIAR_PEDIDO_VER,
-    pedidoVer
-});
-
-export const DIMENSIONAR = 'DIMENSIONAR';
-export const dimensionar = menu => ({
-    type: DIMENSIONAR,
-    menu
-});
-
-    */
+*/

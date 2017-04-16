@@ -35,9 +35,9 @@ class PanelTablaInicio extends Component {
 
     /* Handlers */
     handlerClickAcciones(tag, ...args) {
-        if (typeof this[tag] === 'function') {
-            this[tag].apply(this, args);
-        }
+        typeof this[tag] === 'function' ?
+            this[tag].apply(this, args) :
+            console.warn(`There is no action for ${tag}`);
     }
 
     /* Render */

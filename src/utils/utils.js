@@ -177,6 +177,11 @@ export const ajax = par => new Promise((resolve, reject) => {
 
     xhttp.send(params);
 });
+export const editar = (tabla, par, id) => ajax({
+    metodo: 'PUT',
+    url:    `http://localhost:3000/${tabla}/${id}`,
+    params: par
+});
 export const parseTipo = tipo => {
     if (typeof tipo === 'string') {
         return {
