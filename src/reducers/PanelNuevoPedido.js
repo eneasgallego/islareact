@@ -1,7 +1,8 @@
 import {
     initState,
     CAMBIAR_TIPO_NUEVO_PEDIDO,
-    NUEVA_FILA_NUEVO_PEDIDO
+    NUEVA_FILA_NUEVO_PEDIDO,
+    CAMBIAR_VALOR_TABLA_NUEVO_PEDIDO
 } from '../actions/PanelNuevoPedido';
 
 import { createDefaultRow } from '../utils/utils';
@@ -14,6 +15,23 @@ const _nuevaFilaNuevoPedido = (nuevoPedido, cols) => ({
     ...nuevoPedido,
     filas: [createDefaultRow(cols)].concatenar(nuevoPedido.filas)
 });
+const _cambiarValorTablaNuevoPedido = (nuevoPedido, valor, campo, index) => {
+    debugger;
+
+    const
+        { filas } = nuevoPedido,
+        fila = {
+            ...filas[index],
+            [campo]: valor
+        };
+
+    filas[index] = fila;
+
+    return {
+        ...nuevoPedido,
+        filas: filas.slice()
+    };
+};
 
 export default (state = initState(), action = {}) => {
     switch (action.type) {
@@ -26,6 +44,13 @@ export default (state = initState(), action = {}) => {
         return {
             ...state,
             nuevoPedido: _nuevaFilaNuevoPedido(state.nuevoPedido, action.cols)
+        };
+    case CAMBIAR_VALOR_TABLA_NUEVO_PEDIDO:
+        debugger;
+
+        return {
+            ...state,
+            nuevoPedido: _cambiarValorTablaNuevoPedido(state.nuevoPedido, action.valor, action.campo, action.index)
         };
         /*
     case CARGAR_DATASET_TIPOPEDIDOS_SUCCESS:

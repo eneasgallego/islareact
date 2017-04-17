@@ -7,7 +7,8 @@ import { parseCols } from '../utils/utils';
 import {
     initState,
     cambiarTipoNuevoPedido,
-    nuevaFilaNuevoPedido
+    nuevaFilaNuevoPedido,
+    cambiarValorTablaNuevoPedido
 } from '../actions/PanelNuevoPedido';
 
 import Panel from '../componentes/panel/Panel';
@@ -50,6 +51,7 @@ class PanelNuevoPedido extends Component {
     componentWillMount() {
         this.handlerChangeCombo = this.handlerChangeCombo.bind(this);
         this.handlerNuevaFila = this.handlerNuevaFila.bind(this);
+        this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
     }
 
     /* Handlers */
@@ -62,6 +64,13 @@ class PanelNuevoPedido extends Component {
         const { dispatch } = this.props;
 
         dispatch(nuevaFilaNuevoPedido(_getCols()));
+    }
+    handlerCambiaEditar(valor, campo, index) {
+        const { dispatch } = this.props;
+
+        debugger;
+
+        dispatch(cambiarValorTablaNuevoPedido(valor, campo, index));
     }
 
     /* Render */
@@ -97,6 +106,7 @@ class PanelNuevoPedido extends Component {
                 onClickNuevo={this.handlerNuevaFila}
                 combosDataset={combosDataset}
                 eliminar
+                onCambiaEditar={this.handlerCambiaEditar}
 //                id_campo={this.props.config.nuevo_pedido.tabla.id_campo}
 //                url={this.props.config.nuevo_pedido.tabla.url}
 //                eliminar={this.props.config.nuevo_pedido.tabla.eliminar}

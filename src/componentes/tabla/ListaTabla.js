@@ -7,11 +7,12 @@ import Tabla from './Tabla';
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    cols:          [],
-    filas:         [],
-    onClickNuevo:  emptyFunction,
-    combosDataset: {},
-    eliminar:      false
+    cols:           [],
+    filas:          [],
+    onClickNuevo:   emptyFunction,
+    combosDataset:  {},
+    eliminar:       false,
+    onCambiaEditar: emptyFunction
 });
 const _acciones = eliminar => eliminar ?
 [{
@@ -23,11 +24,12 @@ const _acciones = eliminar => eliminar ?
 class ListaTabla extends Component {
     /* Properties */
     static propTypes = {
-        cols:          PropTypes.array.isRequired,
-        filas:         PropTypes.array.isRequired,
-        onClickNuevo:  PropTypes.func.isRequired,
-        combosDataset: PropTypes.object,
-        eliminar:      PropTypes.bool
+        cols:           PropTypes.array.isRequired,
+        filas:          PropTypes.array.isRequired,
+        onClickNuevo:   PropTypes.func.isRequired,
+        combosDataset:  PropTypes.object,
+        eliminar:       PropTypes.bool,
+        onCambiaEditar: PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
@@ -38,7 +40,8 @@ class ListaTabla extends Component {
             filas,
             onClickNuevo,
             combosDataset,
-            eliminar
+            eliminar,
+            onCambiaEditar
         } = this.props;
 
         return (
@@ -51,6 +54,7 @@ class ListaTabla extends Component {
                 onClickNuevo={onClickNuevo}
                 combosDataset={combosDataset}
                 acciones={_acciones(eliminar)}
+                onCambiaEditar={onCambiaEditar}
 //                id_campo={this.props.id_campo}
 //                url={this.props.url}
 //                onResizeFila={this.onResizeFila}

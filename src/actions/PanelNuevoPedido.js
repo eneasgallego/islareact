@@ -15,3 +15,11 @@ export const nuevaFilaNuevoPedido = cols => ({
     type: NUEVA_FILA_NUEVO_PEDIDO,
     cols
 });
+
+export const CAMBIAR_VALOR_TABLA_NUEVO_PEDIDO = 'CAMBIAR_VALOR_TABLA_NUEVO_PEDIDO';
+export const cambiarValorTablaNuevoPedido = (valor, campo, index) => ({
+    type: CAMBIAR_VALOR_TABLA_NUEVO_PEDIDO,
+    valor,
+    campo,
+    index
+});

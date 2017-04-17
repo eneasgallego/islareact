@@ -4,19 +4,41 @@ import { PropTypes } from 'prop-types';
 
 import { emptyFunction } from '../../utils/utils';
 
-import { ORDER_EQUAL } from '../../utils/constantes';
+import {
+    ORDER_EQUAL,
+    ESCAPE_KEY, ENTER_KEY
+} from '../../utils/constantes';
+
+import Combo from '../ui/Combo';
+import TextField from '../ui/TextField';
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    header:        false,
-    tipo:          {},
-    mostrarFiltro: emptyFunction,
-    combosDataset: {},
-    campo:         '',
-    datos:         '',
-    onResize:      emptyFunction
+    header:           false,
+    tipo:             {},
+    mostrarFiltro:    emptyFunction,
+    comboDataset:     [],
+    campo:            '',
+    datos:            '',
+    onResize:         emptyFunction,
+    onComienzaEditar: emptyFunction,
+    onCambiaEditar:   emptyFunction
 });
 const _getValorDataset = (dataset, tipo, datos) => dataset && (dataset.buscar(tipo.id, datos) || {})[tipo.texto];
+const _parseValor = (valor, tipo) => {
+    let ret = valor;
+
+    if (typeof ret === 'string' && (tipo === 'float' || tipo === 'int' || tipo === 'object')) {
+        if (!isNaN(ret)) {
+            ret = parseFloat(ret);
+            if (tipo !== 'float') {
+                ret = ~~ret;
+            }
+        }
+    }
+
+    return ret;
+};
 const _renderStyle = (ancho, tipo) => ({
     width: ancho ?
         `${ancho}px` :
@@ -44,26 +66,40 @@ const _renderIconoOrden = orden => typeof orden === 'undefined' ?
 class Celda extends Component {
     /* Properties */
     static propTypes = {
-        header:        PropTypes.bool,
-        ancho:         PropTypes.number,
-        tipo:          PropTypes.object.isRequired,
-        filtro:        PropTypes.object,
-        orden:         PropTypes.number,
+        header:           PropTypes.bool,
+        ancho:            PropTypes.number,
+        tipo:             PropTypes.object.isRequired,
+        filtro:           PropTypes.object,
+        orden:            PropTypes.number,
+        comboDataset:     PropTypes.array,
+        campo:            PropTypes.string.isRequired,
 //        mostrarFiltro: PropTypes.func.isRequired,
-        combosDataset: PropTypes.object,
-//        campo:  PropTypes.string.isRequired,
-        datos:         PropTypes.any,
-        onResize:      PropTypes.func.isRequired
+        datos:            PropTypes.any,
+        onResize:         PropTypes.func.isRequired,
+        onComienzaEditar: PropTypes.func,
+        onCambiaEditar:   PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
+        this.setState({editar: false});
+
         this.handlerResize = this.handlerResize.bind(this);
+        this.handlerClick = this.handlerClick.bind(this);
+        this.handlerChange = this.handlerChange.bind(this);
+        this.handlerKeyPress = this.handlerKeyPress.bind(this);
     }
     componentDidMount() {
         window.addEventListener('resize', this.handlerResize);
         this.handlerResize();
+    }
+    componentWillUpdate(nextProps, nextState) {
+        const
+            { editar } = this.state,
+            { onComienzaEditar, campo } = this.props;
+
+        onComienzaEditar && nextState.editar && nextState.editar !== editar && onComienzaEditar(campo);
     }
 
     /* Handlers */
@@ -78,6 +114,33 @@ class Celda extends Component {
             left:   dom.offsetLeft,
             index:  dom.cellIndex
         });
+    }
+    handlerClick(e) {
+        const
+            { editar } = this.state;
+
+        e.stopPropagation();
+
+        !editar && this.setState({editar: true});
+    }
+    handlerChange(valor) {
+        const {
+            onCambiaEditar,
+            campo,
+            tipo: {tipo}
+        } = this.props;
+
+        debugger;
+        onCambiaEditar && onCambiaEditar(_parseValor(valor, tipo), campo);
+
+        this.setState({editar: false});
+    }
+    handlerKeyPress(valor, key) {
+        if (key === ESCAPE_KEY) {
+            this.setState({editar: false});
+        } else if (key === ENTER_KEY) {
+            this.handlerChange(valor);
+        }
     }
 
     /* Render */
@@ -137,17 +200,65 @@ class Celda extends Component {
     renderValor() {
         const {
             tipo,
-            combosDataset,
+            comboDataset,
             datos
         } = this.props;
 
         return tipo.tipo === 'object' ?
-            _getValorDataset(combosDataset[tipo.dataset], tipo, datos) :
+            _getValorDataset(comboDataset, tipo, datos) :
         tipo.tipo === 'bool' ?
             datos ?
                 'Sí' :
                 'No' :
             datos;
+    }
+    renderEditar() {
+        const
+            {
+                tipo,
+                datos,
+                comboDataset
+            } = this.props,
+            { editar } = this.state;
+
+        if (editar) {
+            if (tipo.tipo === 'object') {
+                return (
+                    <Combo
+                        valor={datos}
+                        combo={tipo}
+                        dataset={comboDataset}
+                        onChange={this.handlerChange}
+                        campoId={tipo.id}
+                        campoTexto={tipo.texto}
+//                        onClick={this.onClickField}
+//                        onBlur={this.onBlurField}
+//                        onLoad={this.onLoadField}
+                    />
+                );
+            } else if (tipo.tipo === 'bool') {
+                /* return (
+                    <CheckBox
+                        valor={datos}
+                        onClick={this.onClickCheck}
+                        onBlur={this.onBlurField}
+                        onLoad={this.onLoadField}
+                    />
+                ); */
+            }
+
+            return (
+                    <TextField
+                        valor={datos}
+                        onBlur={this.handlerChange}
+                        onKeyPress={this.handlerKeyPress}
+//                        onClick={this.onClickField}
+                    />
+            );
+
+        }
+
+        return null;
     }
     renderCelda() {
         const {
@@ -158,11 +269,11 @@ class Celda extends Component {
         return (
             <td
                 style={_renderStyle(ancho, tipo.tipo)}
-                onClick={this.accionCelda}
+                onClick={this.handlerClick}
             >
                 <div className="tabla-celda-div">
                     {this.renderValor()}
-                    {/* this.renderEditar() */}
+                    { this.renderEditar() }
                 </div>
             </td>
         );

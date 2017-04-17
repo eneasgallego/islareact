@@ -11,17 +11,19 @@ const _SUM_MOSTRAR_ORDEN = 1;
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    header:          false,
-    claseFila:       emptyFunction,
-    datos:           {},
-    acciones:        [],
-    onClickAcciones: emptyFunction,
-    cols:            [],
-    filtros:         false,
-    orden:           [],
-    anchos:          [],
-    onResizeCelda:   emptyFunction,
-    combosDataset:   {}
+    header:           false,
+    claseFila:        emptyFunction,
+    datos:            {},
+    acciones:         [],
+    onClickAcciones:  emptyFunction,
+    cols:             [],
+    filtros:          false,
+    orden:            [],
+    anchos:           [],
+    onResizeCelda:    emptyFunction,
+    combosDataset:    {},
+    onComienzaEditar: emptyFunction,
+    onCambiaEditar:   emptyFunction
 });
 const _claseFila = (header, claseFila, datos) => `${header ?
     'header' :
@@ -46,23 +48,39 @@ const _orden = (orden, campo) => orden ?
 class Fila extends Component {
     /* Properties */
     static propTypes = {
-        header:          PropTypes.bool,
-        claseFila:       PropTypes.func,
-        datos:           PropTypes.object.isRequired,
-        onClickAcciones: PropTypes.func,
-        cols:            PropTypes.array.isRequired,
-        filtros:         PropTypes.bool,
-        orden:           PropTypes.array,
-        acciones:        PropTypes.array,
-        anchos:          PropTypes.array.isRequired,
-        onResizeCelda:   PropTypes.func.isRequired,
-        combosDataset:   PropTypes.object
+        header:           PropTypes.bool,
+        claseFila:        PropTypes.func,
+        datos:            PropTypes.object.isRequired,
+        onClickAcciones:  PropTypes.func,
+        cols:             PropTypes.array.isRequired,
+        filtros:          PropTypes.bool,
+        orden:            PropTypes.array,
+        acciones:         PropTypes.array,
+        anchos:           PropTypes.array.isRequired,
+        onResizeCelda:    PropTypes.func.isRequired,
+        combosDataset:    PropTypes.object,
+        onComienzaEditar: PropTypes.func,
+        onCambiaEditar:   PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
-        this.handlerAcciones = this.handlerAcciones.bind(this);
+        this.handlerComienzaEditar = this.handlerComienzaEditar.bind(this);
+        this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
+    }
+
+    /* Handlers */
+    handlerComienzaEditar(campo) {
+        console.log(this);
+    }
+    handlerCambiaEditar(valor, campo) {
+        const {
+            onCambiaEditar,
+            datos
+        } = this.props;
+
+        onCambiaEditar && onCambiaEditar(valor, campo, datos);
     }
 
     /* Render */
@@ -94,10 +112,11 @@ class Fila extends Component {
                     datos={dato}
                     ancho={anchos[index]}
                     onResize={onResizeCelda}
-                    combosDataset={combosDataset}
-//                    campo={col.campo}
+                    comboDataset={combosDataset && combosDataset[col.tipo.dataset]}
+                    onComienzaEditar={this.handlerComienzaEditar}
+                    onCambiaEditar={this.handlerCambiaEditar}
+                    campo={col.campo}
 //                    guardar={this.guardar}
-//                    onClick={this.props.onClickCelda}
 //                    onChangeValor={this.onChangeValor}
 //                    onChangeDesc={this.onChangeDesc}
 //                    combos_dataset={this.props.combos_dataset}

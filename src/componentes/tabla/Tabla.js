@@ -25,7 +25,8 @@ const _getDefaultProps = () => ({
     claseFila:       emptyFunction,
     onClickAcciones: emptyFunction,
     onClickNuevo:    emptyFunction,
-    combosDataset:   {}
+    combosDataset:   {},
+    onCambiaEditar:  emptyFunction
 });
 const _getInitialState = () => ({
     altoTabla: undefined,
@@ -109,7 +110,8 @@ class Tabla extends Component {
         onClickAcciones: PropTypes.func,
         acciones:        PropTypes.array,
         onClickNuevo:    PropTypes.func,
-        combosDataset:   PropTypes.object
+        combosDataset:   PropTypes.object,
+        onCambiaEditar:  PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
@@ -117,6 +119,7 @@ class Tabla extends Component {
     componentWillMount() {
         this.handlerResizeCelda = this.handlerResizeCelda.bind(this);
         this.handlerClickMenu = this.handlerClickMenu.bind(this);
+        this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
 
         this.setState(_getInitialState());
     }
@@ -135,6 +138,17 @@ class Tabla extends Component {
         const { onClickNuevo } = this.props;
 
         tag === 'nuevo' && onClickNuevo();
+    }
+    handlerComienzaEditar(campo) {
+        console.log(this);
+    }
+    handlerCambiaEditar(valor, campo, datos) {
+        const {
+            onCambiaEditar,
+            filas
+        } = this.props;
+
+        onCambiaEditar && onCambiaEditar(valor, campo, filas.indexOf(datos));
     }
 
     /* Methods */
@@ -174,6 +188,8 @@ class Tabla extends Component {
                 anchos={anchos}
                 onResizeCelda={this.handlerResizeCelda}
                 combosDataset={combosDataset}
+                onComienzaEditar={this.handlerComienzaEditar}
+                onCambiaEditar={this.handlerCambiaEditar}
 //                    guardar={this.guardar}
 //                    id_campo={this.props.id_campo}
 //                    onResize={this.onResizeFila}
