@@ -60,7 +60,7 @@ const _getValorOrdenar = (campo, datos) => isNaN(_getCalcOrdenar(campo, datos)) 
     datos[campo] :
     _getCalcOrdenar(campo, datos);
 
-const _ordenarFila = (orden, a, b, prof = INIT_PROFUNDIDAD) => orden[prof] ?
+const _ordenarFila = (orden, a, b, prof = INIT_PROFUNDIDAD) => orden && orden[prof] ?
         ((valA, valB, desc) => valA === valB ?
                 _ordenarFila(orden, a, b, prof + UP_PROFUNDIDAD) :
                 (desc && valA < valB) || (!desc && valA > valB) ?
@@ -150,8 +150,6 @@ class Tabla extends Component {
 
         onCambiaEditar && onCambiaEditar(valor, campo, filas.indexOf(datos));
     }
-
-    /* Methods */
     handlerResizeCelda(offset) {
         const { anchos } = this.state;
 
@@ -160,6 +158,8 @@ class Tabla extends Component {
             this.setState({anchos: anchos.slice()});
         }
     }
+
+    /* Methods */
 
     /* Render */
     renderFilas() {

@@ -68,6 +68,7 @@ class Fila extends Component {
     componentWillMount() {
         this.handlerComienzaEditar = this.handlerComienzaEditar.bind(this);
         this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
+        this.handlerAcciones = this.handlerAcciones.bind(this);
     }
 
     /* Handlers */

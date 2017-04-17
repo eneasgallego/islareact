@@ -12,7 +12,8 @@ const _getDefaultProps = () => ({
     onClickNuevo:   emptyFunction,
     combosDataset:  {},
     eliminar:       false,
-    onCambiaEditar: emptyFunction
+    onCambiaEditar: emptyFunction,
+    onEliminar:     emptyFunction
 });
 const _acciones = eliminar => eliminar ?
 [{
@@ -29,9 +30,22 @@ class ListaTabla extends Component {
         onClickNuevo:   PropTypes.func.isRequired,
         combosDataset:  PropTypes.object,
         eliminar:       PropTypes.bool,
-        onCambiaEditar: PropTypes.func
+        onCambiaEditar: PropTypes.func,
+        onEliminar:     PropTypes.func
     }
     getDefaultProps: _getDefaultProps
+
+    /* Lifecycle */
+    componentWillMount() {
+        this.handlerEliminar = this.handlerEliminar.bind(this);
+    }
+
+    /* Handlers */
+    handlerEliminar(tag, datos) {
+        const { onEliminar, filas } = this.props;
+
+        onEliminar && onEliminar(filas.indexOf(datos));
+    }
 
     /* Render */
     render() {
@@ -50,7 +64,7 @@ class ListaTabla extends Component {
                 cols={cols}
                 filas={filas}
                 guardar
-                onClickAcciones={this.handlerClickAcciones}
+                onClickAcciones={this.handlerEliminar}
                 onClickNuevo={onClickNuevo}
                 combosDataset={combosDataset}
                 acciones={_acciones(eliminar)}

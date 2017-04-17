@@ -23,3 +23,9 @@ export const cambiarValorTablaNuevoPedido = (valor, campo, index) => ({
     campo,
     index
 });
+
+export const ELIMINAR_FILA_TABLA_NUEVO_PEDIDO = 'ELIMINAR_FILA_TABLA_NUEVO_PEDIDO';
+export const eliminarFilaTablaNuevoPedido = index => ({
+    type: ELIMINAR_FILA_TABLA_NUEVO_PEDIDO,
+    index
+});

@@ -2,10 +2,13 @@ import {
     initState,
     CAMBIAR_TIPO_NUEVO_PEDIDO,
     NUEVA_FILA_NUEVO_PEDIDO,
-    CAMBIAR_VALOR_TABLA_NUEVO_PEDIDO
+    CAMBIAR_VALOR_TABLA_NUEVO_PEDIDO,
+    ELIMINAR_FILA_TABLA_NUEVO_PEDIDO
 } from '../actions/PanelNuevoPedido';
 
 import { createDefaultRow } from '../utils/utils';
+
+import { POS_TO_DELETE_SPLICE } from '../utils/constantes';
 
 const _cambiarTipoNuevoPedido = (nuevoPedido, tipoPedido) => ({
     ...nuevoPedido,
@@ -16,8 +19,6 @@ const _nuevaFilaNuevoPedido = (nuevoPedido, cols) => ({
     filas: [createDefaultRow(cols)].concatenar(nuevoPedido.filas)
 });
 const _cambiarValorTablaNuevoPedido = (nuevoPedido, valor, campo, index) => {
-    debugger;
-
     const
         { filas } = nuevoPedido,
         fila = {
@@ -26,6 +27,16 @@ const _cambiarValorTablaNuevoPedido = (nuevoPedido, valor, campo, index) => {
         };
 
     filas[index] = fila;
+
+    return {
+        ...nuevoPedido,
+        filas: filas.slice()
+    };
+};
+const _eliminarFilaTablaNuevoPedido = (nuevoPedido, index) => {
+    const { filas } = nuevoPedido;
+
+    filas.splice(index, POS_TO_DELETE_SPLICE);
 
     return {
         ...nuevoPedido,
@@ -46,35 +57,15 @@ export default (state = initState(), action = {}) => {
             nuevoPedido: _nuevaFilaNuevoPedido(state.nuevoPedido, action.cols)
         };
     case CAMBIAR_VALOR_TABLA_NUEVO_PEDIDO:
-        debugger;
-
         return {
             ...state,
             nuevoPedido: _cambiarValorTablaNuevoPedido(state.nuevoPedido, action.valor, action.campo, action.index)
         };
-        /*
-    case CARGAR_DATASET_TIPOPEDIDOS_SUCCESS:
+    case ELIMINAR_FILA_TABLA_NUEVO_PEDIDO:
         return {
             ...state,
-            cargando_dataset_tipopedidos: false,
-            dataset_tipopedidos:          action.data
+            nuevoPedido: _eliminarFilaTablaNuevoPedido(state.nuevoPedido, action.index)
         };
-    case CARGAR_DATASET_TIPOPEDIDOS_ERROR:
-        return {
-            ...state
-        };
-    case LIMPIAR_DATASET_TIPOPEDIDOS_ERROR:
-        return {
-            ...state,
-            dataset_tipopedidos:          [],
-            cargando_dataset_tipopedidos: false
-        };
-    case CAMBIAR_PEDIDO_VER:
-        return {
-            ...state,
-            pedidoVer: action.pedidoVer
-        };
-     */
     default:
         return state;
     }

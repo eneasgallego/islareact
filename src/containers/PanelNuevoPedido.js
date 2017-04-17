@@ -8,7 +8,8 @@ import {
     initState,
     cambiarTipoNuevoPedido,
     nuevaFilaNuevoPedido,
-    cambiarValorTablaNuevoPedido
+    cambiarValorTablaNuevoPedido,
+    eliminarFilaTablaNuevoPedido
 } from '../actions/PanelNuevoPedido';
 
 import Panel from '../componentes/panel/Panel';
@@ -52,6 +53,7 @@ class PanelNuevoPedido extends Component {
         this.handlerChangeCombo = this.handlerChangeCombo.bind(this);
         this.handlerNuevaFila = this.handlerNuevaFila.bind(this);
         this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
+        this.handlerEliminar = this.handlerEliminar.bind(this);
     }
 
     /* Handlers */
@@ -68,9 +70,12 @@ class PanelNuevoPedido extends Component {
     handlerCambiaEditar(valor, campo, index) {
         const { dispatch } = this.props;
 
-        debugger;
-
         dispatch(cambiarValorTablaNuevoPedido(valor, campo, index));
+    }
+    handlerEliminar(index) {
+        const { dispatch } = this.props;
+
+        dispatch(eliminarFilaTablaNuevoPedido(index));
     }
 
     /* Render */
@@ -107,6 +112,7 @@ class PanelNuevoPedido extends Component {
                 combosDataset={combosDataset}
                 eliminar
                 onCambiaEditar={this.handlerCambiaEditar}
+                onEliminar={this.handlerEliminar}
 //                id_campo={this.props.config.nuevo_pedido.tabla.id_campo}
 //                url={this.props.config.nuevo_pedido.tabla.url}
 //                eliminar={this.props.config.nuevo_pedido.tabla.eliminar}

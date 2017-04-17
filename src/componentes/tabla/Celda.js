@@ -89,6 +89,7 @@ class Celda extends Component {
         this.handlerClick = this.handlerClick.bind(this);
         this.handlerChange = this.handlerChange.bind(this);
         this.handlerKeyPress = this.handlerKeyPress.bind(this);
+        this.handlerBlur = this.handlerBlur.bind(this);
     }
     componentDidMount() {
         window.addEventListener('resize', this.handlerResize);
@@ -130,7 +131,6 @@ class Celda extends Component {
             tipo: {tipo}
         } = this.props;
 
-        debugger;
         onCambiaEditar && onCambiaEditar(_parseValor(valor, tipo), campo);
 
         this.setState({editar: false});
@@ -141,6 +141,10 @@ class Celda extends Component {
         } else if (key === ENTER_KEY) {
             this.handlerChange(valor);
         }
+    }
+    handlerBlur() {
+        debugger;
+        this.setState({editar: false});
     }
 
     /* Render */
@@ -232,7 +236,7 @@ class Celda extends Component {
                         campoId={tipo.id}
                         campoTexto={tipo.texto}
 //                        onClick={this.onClickField}
-//                        onBlur={this.onBlurField}
+                        onBlur={this.handlerBlur}
 //                        onLoad={this.onLoadField}
                     />
                 );

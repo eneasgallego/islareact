@@ -10,7 +10,8 @@ const _getDefaultProps = () => ({
     onChange:   emptyFunction,
     dataset:    [],
     campoId:    '',
-    campoTexto: ''
+    campoTexto: '',
+    onBlur:     emptyFunction
 });
 
 class Combo extends Component {
@@ -20,13 +21,18 @@ class Combo extends Component {
         onChange:   PropTypes.func.isRequired,
         dataset:    PropTypes.array.isRequired,
         campoId:    PropTypes.string.isRequired,
-        campoTexto: PropTypes.string.isRequired
+        campoTexto: PropTypes.string.isRequired,
+        onBlur:     PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
         this.handlerChange = this.handlerChange.bind(this);
+        this.handlerBlur = this.handlerBlur.bind(this);
+    }
+    componentDidMount() {
+        this.refs.combo.focus();
     }
 
     /* Handlers */
@@ -36,6 +42,14 @@ class Combo extends Component {
         e.preventDefault();
 
         onChange && onChange(e.currentTarget.value);
+    }
+    handlerBlur(e) {
+        const { onBlur } = this.props;
+
+        debugger;
+        e.preventDefault();
+
+        onBlur && onBlur(e.currentTarget.value);
     }
 
     /* Render */
@@ -67,8 +81,8 @@ class Combo extends Component {
             <select
                 ref="combo"
                 defaultValue={valor}
-                onClick={this.onClick}
-                onBlur={this.onBlur}
+//                onClick={this.onClick}
+                onBlur={this.handlerBlur}
                 onChange={this.handlerChange}
             >
 			{this.renderOptions()}
