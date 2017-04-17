@@ -143,7 +143,6 @@ class Celda extends Component {
         }
     }
     handlerBlur() {
-        debugger;
         this.setState({editar: false});
     }
 

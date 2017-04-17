@@ -66,15 +66,11 @@ class Fila extends Component {
 
     /* Lifecycle */
     componentWillMount() {
-        this.handlerComienzaEditar = this.handlerComienzaEditar.bind(this);
         this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
         this.handlerAcciones = this.handlerAcciones.bind(this);
     }
 
     /* Handlers */
-    handlerComienzaEditar(campo) {
-        console.log(this);
-    }
     handlerCambiaEditar(valor, campo) {
         const {
             onCambiaEditar,
@@ -114,7 +110,6 @@ class Fila extends Component {
                     ancho={anchos[index]}
                     onResize={onResizeCelda}
                     comboDataset={combosDataset && combosDataset[col.tipo.dataset]}
-                    onComienzaEditar={this.handlerComienzaEditar}
                     onCambiaEditar={this.handlerCambiaEditar}
                     campo={col.campo}
 //                    guardar={this.guardar}

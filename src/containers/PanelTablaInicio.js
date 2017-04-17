@@ -30,7 +30,6 @@ class PanelTablaInicio extends Component {
     /* Handlers */
     handlerClickAcciones(tag, ...args) {
 
-        debugger;
         typeof this[tag] === 'function' ?
             this[tag].apply(this, args) :
             console.warn(`There is no action for ${tag}`);

@@ -1,5 +1,6 @@
 import {
     ajax,
+    insertar,
     editar,
     eliminar
 } from '../utils/utils';
@@ -7,13 +8,16 @@ import {
 import { getVistaBD } from '../datos/utils';
 
 import {
+    cambiarContenido,
+    handlerError
+} from './App';
+
+import {
     NO_NECESITA,
     NUMERO_DEFECTO,
     INIT_INDEX,
     POS_TO_DELETE_SPLICE
 } from '../utils/constantes';
-
-import { handlerError } from '../actions/App';
 
 const _handlerError = dispatch => error => dispatch(handlerError(error));
 
@@ -27,6 +31,35 @@ const cargarBDSuccess = data => ({
     type: CARGAR_BD_SUCCESS,
     data
 });
+
+const insertarBDSuccess = (tabla, newData, oldData) => (dispatch, getState) => {
+    debugger;
+    const
+        state = getState(),
+        filasTabla = state.bd[tabla],
+        index = filasTabla.indexOf(oldData);
+
+    if (~index) {
+        filasTabla[index] = newData;
+
+        dispatch(cargarBDSuccess({
+            ...state.bd,
+            [tabla]: filasTabla.slice()
+        }));
+    }
+};
+
+export const insertarBD = (tabla, data) => (dispatch, getState) => {
+    const
+        state = getState(),
+        filasTabla = state.bd[tabla];
+
+    filasTabla.unshift(data);
+
+    insertar(tabla, data)
+        .then(id => dispatch(insertarBDSuccess(tabla, id, data)))
+        .catch(_handlerError(dispatch));
+};
 
 export const cargarBD = () => dispatch => {
     dispatch(cargarBDStart());
@@ -201,5 +234,33 @@ export const procesarPedidos = idTipoPedido => (dispatch, getState) => {
         }));
     } else {
         _handlerError(dispatch)(new Error('Ya está procesado'));
+    }
+};
+
+export const crearNuevoPedido = nuevoPedido => dispatch => {
+    debugger;
+    try {
+        const { tipoPedido , filas } = nuevoPedido;
+
+        if (tipoPedido) {
+            if (filas.length) {
+                for (let i = INIT_INDEX; i < filas.length; i++) {
+                    dispatch(insertarBD('pedidos', {
+                        ...filas[i],
+                        tipopedidos:        tipoPedido.id,
+                        profundidadpedidos: tipoPedido.profundidadtipos_pedido,
+                        procesadopedidos:   false
+                    }));
+                }
+
+                dispatch(cambiarContenido('inicio'));
+            } else {
+                handlerError(new Error('Debe haber seleccionado algún material.'));
+            }
+        } else {
+            handlerError(new Error('Hay que seleccionar el Tipo de Pedido.'));
+        }
+    } catch (e) {
+        handlerError(e);
     }
 };

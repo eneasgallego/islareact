@@ -139,9 +139,6 @@ class Tabla extends Component {
 
         tag === 'nuevo' && onClickNuevo();
     }
-    handlerComienzaEditar(campo) {
-        console.log(this);
-    }
     handlerCambiaEditar(valor, campo, datos) {
         const {
             onCambiaEditar,
@@ -188,7 +185,6 @@ class Tabla extends Component {
                 anchos={anchos}
                 onResizeCelda={this.handlerResizeCelda}
                 combosDataset={combosDataset}
-                onComienzaEditar={this.handlerComienzaEditar}
                 onCambiaEditar={this.handlerCambiaEditar}
 //                    guardar={this.guardar}
 //                    id_campo={this.props.id_campo}

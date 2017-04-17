@@ -12,6 +12,8 @@ import {
     eliminarFilaTablaNuevoPedido
 } from '../actions/PanelNuevoPedido';
 
+import { crearNuevoPedido } from '../actions/BD';
+
 import Panel from '../componentes/panel/Panel';
 
 import ListaTabla from '../componentes/tabla/ListaTabla';
@@ -54,6 +56,7 @@ class PanelNuevoPedido extends Component {
         this.handlerNuevaFila = this.handlerNuevaFila.bind(this);
         this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
         this.handlerEliminar = this.handlerEliminar.bind(this);
+        this.handlerNuevoPedido = this.handlerNuevoPedido.bind(this);
     }
 
     /* Handlers */
@@ -76,6 +79,12 @@ class PanelNuevoPedido extends Component {
         const { dispatch } = this.props;
 
         dispatch(eliminarFilaTablaNuevoPedido(index));
+    }
+    handlerNuevoPedido() {
+        const { dispatch, nuevoPedido } = this.props;
+
+        debugger;
+        dispatch(crearNuevoPedido(nuevoPedido));
     }
 
     /* Render */
@@ -101,7 +110,7 @@ class PanelNuevoPedido extends Component {
             <Boton
                 key="aceptar"
                 texto="ACEPTAR"
-                accion={this.crearNuevoPedido}
+                onClick={this.handlerNuevoPedido}
             />,
             <ListaTabla
                 key="tabla_nuevo_pedido"

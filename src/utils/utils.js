@@ -177,6 +177,11 @@ export const ajax = par => new Promise((resolve, reject) => {
 
     xhttp.send(params);
 });
+export const insertar = (tabla, par) => ajax({
+    metodo: 'POST',
+    url:    `http://localhost:3000/${tabla}`,
+    params: par
+});
 export const editar = (tabla, par, id) => ajax({
     metodo: 'PUT',
     url:    `http://localhost:3000/${tabla}/${id}`,

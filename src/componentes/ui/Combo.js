@@ -46,7 +46,6 @@ class Combo extends Component {
     handlerBlur(e) {
         const { onBlur } = this.props;
 
-        debugger;
         e.preventDefault();
 
         onBlur && onBlur(e.currentTarget.value);

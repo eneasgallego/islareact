@@ -18,34 +18,6 @@ export default (state = initVistasBD(), action = {}) => {
             ...generarVistasBD(action.data, true),
             cargando: false
         };
-        /*
-    case CARGAR_DATASET_TIPOPEDIDOS_START:
-        return {
-            ...state,
-            cargando_dataset_tipopedidos: true
-        };
-    case CARGAR_DATASET_TIPOPEDIDOS_SUCCESS:
-        return {
-            ...state,
-            cargando_dataset_tipopedidos: false,
-            dataset_tipopedidos:          action.data
-        };
-    case CARGAR_DATASET_TIPOPEDIDOS_ERROR:
-        return {
-            ...state
-        };
-    case LIMPIAR_DATASET_TIPOPEDIDOS_ERROR:
-        return {
-            ...state,
-            dataset_tipopedidos:          [],
-            cargando_dataset_tipopedidos: false
-        };
-    case CAMBIAR_PEDIDO_VER:
-        return {
-            ...state,
-            pedidoVer: action.pedidoVer
-        };
-     */
     default:
         return state;
     }
