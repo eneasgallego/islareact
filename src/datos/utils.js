@@ -67,7 +67,8 @@ const _vistas = {
     vistaNecesitaHacer:      './VistaNecesitaHacer',
     vistaNecesitaHaciendo:   './VistaNecesitaHaciendo',
     vistaPedido:             './VistaPedido',
-    vistaPedidos:            './VistaPedidos'
+    vistaPedidos:            './VistaPedidos',
+    vistaExcedente:          './VistaExcedente'
 };
 const _getVista = vistaName => require.context('./', true, /^\.\/.*\.js$/)(`${_vistas[vistaName]}.js`).default;
 const _getVistas = () => {

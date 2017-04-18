@@ -169,64 +169,30 @@ const options = {
             id:     'excedente',
             titulo: 'Excedente',
             url:    'http://localhost:3000/db',
-            orden:  [/* {
-             campo: "eshuerto",
-             desc: false
-                }, */{
-                    campo: 'excedentemateriales',
-                    desc:  true
-                },{
-                    campo: 'excedentematerialesprocesados',
-                    desc:  true
-                },{
-                    campo: 'stockmateriales',
-                    desc:  true
-                },{
-                    campo: 'cantidadpedidos',
-                    desc:  true
-                },{
-                    campo: 'cantidadpedidosprocesados',
-                    desc:  true
-                },{
-                    campo: 'nombremateriales',
-                    desc:  false
-                }],
+            orden:  [{
+                campo: 'excedentemateriales',
+                desc:  true
+            },{
+                campo: 'excedentematerialesprocesados',
+                desc:  true
+            },{
+                campo: 'stockmateriales',
+                desc:  true
+            },{
+                campo: 'cantidadpedidos',
+                desc:  true
+            },{
+                campo: 'cantidadpedidosprocesados',
+                desc:  true
+            },{
+                campo: 'nombremateriales',
+                desc:  false
+            }],
             parseData: 'parseDataExcedente',
             id_campo:  'idmateriales',
             cols:      'colsExcedente',
             acciones:  'accionesExcedente',
             claseFila: 'claseFilaExcedente'
-        },
-        nuevo_pedido: {
-            guardar:    'guardarPedido',
-            tipopedido: {
-                titulo: 'Tipo',
-                url:    'http://localhost:3000/tipos_pedido',
-                id:     'id',
-                texto:  'nombretipos_pedido'
-            },
-            profundidad: {
-                titulo: 'Profundidad'
-            },
-            tabla: {
-                id_campo: 'id',
-                cols:     [{
-                    texto: 'MATERIAL',
-                    campo: 'materialpedidos',
-                    tipo:  {
-                        tipo:  'object',
-                        url:   'http://localhost:3000/materiales',
-                        id:    'id',
-                        texto: 'nombremateriales'
-                    }
-                },{
-                    texto: 'CANTIDAD',
-                    campo: 'cantidadpedidos',
-                    tipo:  'int'
-                }],
-                eliminar: true,
-                guardar:  'guardarNuevoPedido'
-            }
         },
         inicio_pedido: {
             id:    'pedido',

@@ -33,7 +33,6 @@ const cargarBDSuccess = data => ({
 });
 
 const insertarBDSuccess = (tabla, newData, oldData) => (dispatch, getState) => {
-    debugger;
     const
         state = getState(),
         filasTabla = state.bd[tabla],
@@ -157,6 +156,42 @@ export const hacerMaterial = idMaterial => (dispatch, getState) => {
         materiales: materiales.slice()
     }));
 };
+export const ganarMaterial = idMaterial => (dispatch, getState) => {
+    const
+        state = getState(),
+        { materiales } = state.bd,
+        material = materiales.buscar('id', idMaterial);
+
+    material.stockmateriales++;
+
+    editar('materiales', material, idMaterial)
+        .catch(_handlerError(dispatch));
+
+    dispatch(cargarBDSuccess({
+        ...state.bd,
+        materiales: materiales.slice()
+    }));
+};
+export const venderMaterial = idMaterial => (dispatch, getState) => {
+    const
+        state = getState(),
+        { materiales } = state.bd,
+        material = materiales.buscar('id', idMaterial);
+
+    if (material.stockmateriales > NO_NECESITA) {
+        material.stockmateriales--;
+    } else {
+        _handlerError(dispatch)(new Error('No hay para vender.'));
+    }
+
+    editar('materiales', material, idMaterial)
+        .catch(_handlerError(dispatch));
+
+    dispatch(cargarBDSuccess({
+        ...state.bd,
+        materiales: materiales.slice()
+    }));
+};
 
 
 /* PEDIDOS */
@@ -238,7 +273,6 @@ export const procesarPedidos = idTipoPedido => (dispatch, getState) => {
 };
 
 export const crearNuevoPedido = nuevoPedido => dispatch => {
-    debugger;
     try {
         const { tipoPedido , filas } = nuevoPedido;
 

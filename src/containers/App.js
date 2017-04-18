@@ -15,7 +15,8 @@ import {
     ID_INICIO_MATERIALES,
     ID_INICIO_PEDIDOS,
     ID_INICIO_NECESITA,
-    ID_INICIO_PEDIDO
+    ID_INICIO_PEDIDO,
+    ID_EXCEDENTE
 } from '../actions/Tabla';
 
 import PanelTablaInicioMateriales from './PanelTablaInicioMateriales';
@@ -23,6 +24,7 @@ import PanelTablaInicioPedidos from './PanelTablaInicioPedidos';
 import PanelTablaInicioNecesita from './PanelTablaInicioNecesita';
 import PanelTablaInicioPedido from './PanelTablaInicioPedido';
 import PanelNuevoPedido from './PanelNuevoPedido';
+import PanelExcedente from './PanelExcedente';
 
 import Menu from '../componentes/menu/Menu';
 import Dialogo from '../componentes/ui/Dialogo';
@@ -46,6 +48,12 @@ const _renderInicio = (alto, verPedido) => [
             titulo={verPedido.nombretipos_pedido}
         />] :
         []);
+const _renderExcedente = alto => (
+    <PanelExcedente
+        key={ID_EXCEDENTE}
+        alto={alto}
+    />
+    );
 const _renderNuevoPedido = () => (
         <PanelNuevoPedido
             ref="panel_nuevo_pedido"
@@ -54,11 +62,11 @@ const _renderNuevoPedido = () => (
     );
 const _renderContenido = (contenido, alto, verPedido) => contenido === 'inicio' ?
     _renderInicio(alto, verPedido) :
-    contenido === 'nuevo_pedido' ?
-    _renderNuevoPedido() :
+    contenido === 'excedente' ?
+        _renderExcedente(alto) :
+        contenido === 'nuevo_pedido' ?
+            _renderNuevoPedido() :
     null;
-//        } else if (contenido == 'excedente') {
-//            return this.renderExcedente();
     /* (
      <ListaTabla	id_campo={this.props.config[contenido].id_campo}
      url_editar={this.props.config[contenido].url_editar}

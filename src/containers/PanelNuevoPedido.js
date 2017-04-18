@@ -83,7 +83,6 @@ class PanelNuevoPedido extends Component {
     handlerNuevoPedido() {
         const { dispatch, nuevoPedido } = this.props;
 
-        debugger;
         dispatch(crearNuevoPedido(nuevoPedido));
     }
 
