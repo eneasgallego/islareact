@@ -5,8 +5,15 @@ export const ID_INICIO_PEDIDO = 'inicio_pedido';
 export const ID_EXCEDENTE = 'excedente';
 
 export const CAMBIAR_ORDEN_TABLA = 'CAMBIAR_ORDEN_TABLA';
-export const cambiarOrdenTabla = (idTabla, orden) => ({
+export const cambiarOrdenTabla = (idTabla, campo) => ({
     type: CAMBIAR_ORDEN_TABLA,
+    idTabla,
+    campo
+});
+
+export const SET_ORDEN_TABLA = 'SET_ORDEN_TABLA';
+export const setOrdenTabla = (idTabla, orden) => ({
+    type: SET_ORDEN_TABLA,
     idTabla,
     orden
 });

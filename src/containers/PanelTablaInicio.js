@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { cambiarOrdenTabla } from '../actions/Tabla';
+import { cambiarOrdenTabla, setOrdenTabla } from '../actions/Tabla';
 
 import { getInitialState } from '../reducers/Tabla';
 
@@ -22,9 +22,10 @@ class PanelTablaInicio extends Component {
     componentWillMount() {
         const { dispatch } = this.props;
 
-        dispatch(cambiarOrdenTabla(this.id, this.orden));
+        dispatch(setOrdenTabla(this.id, this.orden));
 
         this.handlerClickAcciones = this.handlerClickAcciones.bind(this);
+        this.handlerCambiaOrden = this.handlerCambiaOrden.bind(this);
     }
 
     /* Handlers */
@@ -33,6 +34,11 @@ class PanelTablaInicio extends Component {
         typeof this[tag] === 'function' ?
             this[tag].apply(this, args) :
             console.warn(`There is no action for ${tag}`);
+    }
+    handlerCambiaOrden(campo) {
+        const { dispatch } = this.props;
+
+        dispatch(cambiarOrdenTabla(this.id, campo));
     }
 
     /* Render */
@@ -60,6 +66,7 @@ class PanelTablaInicio extends Component {
                 alto={alto}
                 velo={cargando}
                 acciones={this.acciones}
+                onCambiaOrden={this.handlerCambiaOrden}
         >
         </PanelTabla>
         );

@@ -35,7 +35,8 @@ class PanelTabla extends Component {
         onClickAcciones: PropTypes.func.isRequired,
         alto:            PropTypes.number,
         velo:            PropTypes.bool,
-        acciones:        PropTypes.array
+        acciones:        PropTypes.array,
+        onCambiaOrden:   PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
@@ -75,7 +76,8 @@ class PanelTabla extends Component {
             claseFila,
             onClickAcciones,
             velo,
-            acciones
+            acciones,
+                onCambiaOrden
         } = this.props,
             { altoTabla } = this.state;
 
@@ -94,6 +96,7 @@ class PanelTabla extends Component {
                     onClickAcciones={onClickAcciones}
                     velo={velo}
                     acciones={acciones}
+                    onCambiaOrden={onCambiaOrden}
 //        id_campo={this.props.id_campo}
 //        url={this.props.url}
 //        parseData={this.parseData}

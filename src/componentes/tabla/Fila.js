@@ -44,6 +44,17 @@ const _renderAcciones = (acciones, cols, header, onClickAcciones) => acciones &&
 const _orden = (orden, campo) => orden ?
     orden.indice('campo', campo) + _SUM_MOSTRAR_ORDEN :
     ORDER_EQUAL;
+const _ordenDesc = (orden, campo) => {
+    if (orden) {
+        const item = orden.buscar('campo', campo);
+
+        if (item) {
+            return item.desc;
+        }
+    }
+
+    return false;
+};
 
 class Fila extends Component {
     /* Properties */
@@ -60,7 +71,8 @@ class Fila extends Component {
         onResizeCelda:    PropTypes.func.isRequired,
         combosDataset:    PropTypes.object,
         onComienzaEditar: PropTypes.func,
-        onCambiaEditar:   PropTypes.func
+        onCambiaEditar:   PropTypes.func,
+        onClickCelda:     PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
@@ -91,7 +103,8 @@ class Fila extends Component {
             datos,
             anchos,
             onResizeCelda,
-            combosDataset
+            combosDataset,
+            onClickCelda
         } = this.props;
 
         return cols.map((col, index) => {
@@ -106,12 +119,14 @@ class Fila extends Component {
                         col.filtro :
                         undefined}
                     orden={_orden(orden, col.campo)}
+                    ordenDesc={_ordenDesc(orden, col.campo)}
                     datos={dato}
                     ancho={anchos[index]}
                     onResize={onResizeCelda}
                     comboDataset={combosDataset && combosDataset[col.tipo.dataset]}
                     onCambiaEditar={this.handlerCambiaEditar}
                     campo={col.campo}
+                    onClick={onClickCelda}
 //                    guardar={this.guardar}
 //                    onChangeValor={this.onChangeValor}
 //                    onChangeDesc={this.onChangeDesc}

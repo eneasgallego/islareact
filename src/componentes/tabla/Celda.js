@@ -5,7 +5,6 @@ import { PropTypes } from 'prop-types';
 import { emptyFunction } from '../../utils/utils';
 
 import {
-    ORDER_EQUAL,
     ESCAPE_KEY, ENTER_KEY
 } from '../../utils/constantes';
 
@@ -57,11 +56,14 @@ const _renderTitle = filtro => filtro && filtro.valor ?
         filtro.valor :
     typeof filtro.valor === 'object' && filtro.tipo === 'int' && filtro.valor.getTitulo() :
         '';
-const _renderIconoOrden = orden => typeof orden === 'undefined' ?
-    '' :
-    `icon icon-triangle ${orden < ORDER_EQUAL ?
+const _renderIconoOrden = ordenDesc => `icon icon-triangle ${ordenDesc ?
         'icon-inv' :
         ''}`;
+const _renderOrden = (orden, ordenDesc) => orden ?
+    <i className={_renderIconoOrden(ordenDesc)}>
+        {orden}
+    </i> :
+    '';
 
 class Celda extends Component {
     /* Properties */
@@ -71,13 +73,15 @@ class Celda extends Component {
         tipo:             PropTypes.object.isRequired,
         filtro:           PropTypes.object,
         orden:            PropTypes.number,
+        ordenDesc:        PropTypes.bool,
         comboDataset:     PropTypes.array,
         campo:            PropTypes.string.isRequired,
 //        mostrarFiltro: PropTypes.func.isRequired,
         datos:            PropTypes.any,
         onResize:         PropTypes.func.isRequired,
         onComienzaEditar: PropTypes.func,
-        onCambiaEditar:   PropTypes.func
+        onCambiaEditar:   PropTypes.func,
+        onClick:          PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
@@ -87,9 +91,11 @@ class Celda extends Component {
 
         this.handlerResize = this.handlerResize.bind(this);
         this.handlerClick = this.handlerClick.bind(this);
+        this.handlerClickEditar = this.handlerClickEditar.bind(this);
         this.handlerChange = this.handlerChange.bind(this);
         this.handlerKeyPress = this.handlerKeyPress.bind(this);
         this.handlerBlur = this.handlerBlur.bind(this);
+
     }
     componentDidMount() {
         window.addEventListener('resize', this.handlerResize);
@@ -117,12 +123,18 @@ class Celda extends Component {
         });
     }
     handlerClick(e) {
-        const
-            { editar } = this.state;
+        const { onClick, campo } = this.props;
 
         e.stopPropagation();
 
+        onClick && onClick(campo);
+    }
+    handlerClickEditar(e) {
+        const { editar } = this.state;
+
         !editar && this.setState({editar: true});
+
+        this.handlerClick(e);
     }
     handlerChange(valor) {
         const {
@@ -178,6 +190,7 @@ class Celda extends Component {
             tipo,
             filtro,
             orden,
+            ordenDesc,
             datos
         } = this.props;
 
@@ -186,14 +199,12 @@ class Celda extends Component {
                 className={_renderClassHeader(filtro)}
                 style={_renderStyle(ancho, tipo.tipo)}
                 title={_renderTitle(filtro)}
+                onClick={this.handlerClick}
 //                onMouseOver={this.onMouseOver}
 //                onMouseOut={this.onMouseOut}
-//                onClick={this.accionCelda}
             >
                 <div className="tabla-celda-div">
-                    <i className={_renderIconoOrden(orden)}>
-                        {orden}
-                    </i>
+                    {_renderOrden(orden, ordenDesc)}
                     {datos}
                 </div>
                 {/* this.renderFiltros() */}
@@ -272,7 +283,7 @@ class Celda extends Component {
         return (
             <td
                 style={_renderStyle(ancho, tipo.tipo)}
-                onClick={this.handlerClick}
+                onClick={this.handlerClickEditar}
             >
                 <div className="tabla-celda-div">
                     {this.renderValor()}

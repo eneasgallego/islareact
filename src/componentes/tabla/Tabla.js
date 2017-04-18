@@ -111,7 +111,8 @@ class Tabla extends Component {
         acciones:        PropTypes.array,
         onClickNuevo:    PropTypes.func,
         combosDataset:   PropTypes.object,
-        onCambiaEditar:  PropTypes.func
+        onCambiaEditar:  PropTypes.func,
+        onCambiaOrden:   PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
@@ -200,7 +201,7 @@ class Tabla extends Component {
     }
     renderTabla() {
         const
-            { cols, orden, acciones } = this.props,
+            { cols, orden, acciones, onCambiaOrden } = this.props,
             { altoTabla, altoBody, anchos } = this.state;
 
         return (
@@ -218,10 +219,10 @@ class Tabla extends Component {
                             acciones={acciones}
                             anchos={anchos}
                             onResizeCelda={this.handlerResizeCelda}
+                            onClickCelda={onCambiaOrden}
 //                            filtros={filtros}
     //                    ref={this.refFilas}
     //                    onResize={this.onResizeFila}
-    //                    onClickCelda={this.onClickCeldaHeader}
     //                    onChangeDesc={this.ordenar}
     //                    combos_dataset={this.state.combos_dataset}
     //                    onFiltrado={this.onFiltrado}

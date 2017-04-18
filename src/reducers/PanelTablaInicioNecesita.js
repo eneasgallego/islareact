@@ -1,18 +1,5 @@
-import {
-    ID_INICIO_NECESITA,
-    CAMBIAR_ORDEN_TABLA
-} from '../actions/Tabla';
+import { ID_INICIO_NECESITA } from '../actions/Tabla';
 
-import {
-    getInitialState,
-    cambiarOrdenTabla
-} from './Tabla';
+import getReducer from './Tabla';
 
-export default (state = getInitialState(), action = {}) => {
-    switch (action.type) {
-    case CAMBIAR_ORDEN_TABLA:
-        return cambiarOrdenTabla(state, action, ID_INICIO_NECESITA);
-    default:
-        return state;
-    }
-};
+export default getReducer(ID_INICIO_NECESITA);
