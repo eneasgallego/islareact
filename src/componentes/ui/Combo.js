@@ -3,7 +3,10 @@ import { PropTypes } from 'prop-types';
 
 import { emptyFunction } from '../../utils/utils';
 
-import { INIT_INDEX } from '../../utils/constantes';
+import {
+    INIT_INDEX,
+    ORDER_EQUAL, ORDER_UP, ORDER_DOWN
+} from '../../utils/constantes';
 
 /* Private functions */
 const _getDefaultProps = () => ({
@@ -58,13 +61,18 @@ class Combo extends Component {
                 dataset,
                 campoId,
                 campoTexto
-            } = this.props;
+            } = this.props,
+            datasetOrdenado = dataset.sort((a, b) => a[campoTexto] === b[campoTexto] ?
+        ORDER_EQUAL :
+        a[campoTexto] > b[campoTexto] ?
+        ORDER_UP :
+        ORDER_DOWN);
 
         ret.push(
             <option key={-1}></option>
         );
-        for (let i = INIT_INDEX; i < dataset.length; i++) {
-            const item = dataset[i];
+        for (let i = INIT_INDEX; i < datasetOrdenado.length; i++) {
+            const item = datasetOrdenado[i];
 
             ret.push(
                 <option key={i} value={item[campoId]}>{item[campoTexto]}</option>
