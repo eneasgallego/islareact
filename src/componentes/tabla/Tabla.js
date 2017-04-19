@@ -19,14 +19,14 @@ const _getDefaultProps = () => ({
     alto:            undefined,
     cols:            [],
     filas:           [],
-    filtros:         [],
     orden:           [],
     velo:            false,
     claseFila:       emptyFunction,
     onClickAcciones: emptyFunction,
     onClickNuevo:    emptyFunction,
     combosDataset:   {},
-    onCambiaEditar:  emptyFunction
+    onCambiaEditar:  emptyFunction,
+    puedeFiltrar:    false
 });
 const _getInitialState = () => ({
     altoTabla: undefined,
@@ -69,11 +69,27 @@ const _ordenarFila = (orden, a, b, prof = INIT_PROFUNDIDAD) => orden && orden[pr
     ORDER_EQUAL;
 
 const _filtrar = (filtros, fila) => filtros ?
-    filtros.every(filtro => filtro.valor &&
-            typeof filtro.valor === 'string' ?
-                ~`${fila}`.toUpperCase().indexOf(`${filtro.valor}`.toUpperCase()) :
-                !(typeof filtro.valor === 'object' && !filtro.valor.filtrar(fila))) :
-    true;
+        filtros.every(filtro => {
+            const
+                { campo, valor } = filtro,
+                valorFila = fila[campo];
+
+            if (valor) {
+                if (typeof valor === 'string') {
+                    return ~(`${valorFila}`.toUpperCase()).indexOf(`${valor}`.toUpperCase());
+                }
+                if (typeof valor === 'object') {
+                    const valFiltrar = valor.filtrar(fila);
+
+
+                    return valFiltrar;
+                }
+
+            }
+
+            return true;
+        }) :
+        true;
 const _renderVelo = () => (
     <div className="velo">
         <div className="velo-fondo" />
@@ -112,7 +128,10 @@ class Tabla extends Component {
         onClickNuevo:    PropTypes.func,
         combosDataset:   PropTypes.object,
         onCambiaEditar:  PropTypes.func,
-        onCambiaOrden:   PropTypes.func
+        onCambiaOrden:   PropTypes.func,
+        puedeFiltrar:    PropTypes.bool,
+        onFiltrado:      PropTypes.func,
+        onLimpiarFiltro: PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
@@ -193,7 +212,6 @@ class Tabla extends Component {
 //                    onClickCelda={this.onClickCelda}
 //                    onChangeValor={this.onChangeValor}
 //                    combos_dataset={this.state.combos_dataset}
-//                    filtros={false}
         />
         ));
 
@@ -201,8 +219,21 @@ class Tabla extends Component {
     }
     renderTabla() {
         const
-            { cols, orden, acciones, onCambiaOrden } = this.props,
-            { altoTabla, altoBody, anchos } = this.state;
+            {
+                cols,
+                orden,
+                acciones,
+                onCambiaOrden,
+                puedeFiltrar,
+                combosDataset,
+                onFiltrado,
+                onLimpiarFiltro
+            } = this.props,
+            {
+                altoTabla,
+                altoBody,
+                anchos
+            } = this.state;
 
         return (
             <div
@@ -220,12 +251,14 @@ class Tabla extends Component {
                             anchos={anchos}
                             onResizeCelda={this.handlerResizeCelda}
                             onClickCelda={onCambiaOrden}
-//                            filtros={filtros}
+                            filtros={puedeFiltrar}
+                            combosDataset={combosDataset}
+                            onFiltrado={onFiltrado}
+                            onLimpiarFiltro={onLimpiarFiltro}
     //                    ref={this.refFilas}
     //                    onResize={this.onResizeFila}
     //                    onChangeDesc={this.ordenar}
     //                    combos_dataset={this.state.combos_dataset}
-    //                    onFiltrado={this.onFiltrado}
                         />
                     </thead>
                     <tbody style={renderStyleAlto(altoBody)}>

@@ -16,7 +16,8 @@ const _getDefaultProps = () => ({
     orden:           [],
     claseFila:       emptyFunction,
     onClickAcciones: emptyFunction,
-    velo:            false
+    velo:            false,
+    puedeFiltrar:    false
 });
 const _getInitialState = () => ({
     altoTabla: undefined
@@ -36,7 +37,10 @@ class PanelTabla extends Component {
         alto:            PropTypes.number,
         velo:            PropTypes.bool,
         acciones:        PropTypes.array,
-        onCambiaOrden:   PropTypes.func
+        onCambiaOrden:   PropTypes.func,
+        puedeFiltrar:    PropTypes.bool,
+        onFiltrado:      PropTypes.func,
+        onLimpiarFiltro: PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
@@ -77,7 +81,10 @@ class PanelTabla extends Component {
             onClickAcciones,
             velo,
             acciones,
-                onCambiaOrden
+            onCambiaOrden,
+            puedeFiltrar,
+            onFiltrado,
+                onLimpiarFiltro
         } = this.props,
             { altoTabla } = this.state;
 
@@ -97,6 +104,9 @@ class PanelTabla extends Component {
                     velo={velo}
                     acciones={acciones}
                     onCambiaOrden={onCambiaOrden}
+                    puedeFiltrar={puedeFiltrar}
+                    onFiltrado={onFiltrado}
+                    onLimpiarFiltro={onLimpiarFiltro}
 //        id_campo={this.props.id_campo}
 //        url={this.props.url}
 //        parseData={this.parseData}

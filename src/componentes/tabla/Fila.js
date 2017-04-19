@@ -72,14 +72,20 @@ class Fila extends Component {
         combosDataset:    PropTypes.object,
         onComienzaEditar: PropTypes.func,
         onCambiaEditar:   PropTypes.func,
-        onClickCelda:     PropTypes.func
+        onClickCelda:     PropTypes.func,
+        onFiltrado:       PropTypes.func,
+        onLimpiarFiltro:  PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
-        this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
         this.handlerAcciones = this.handlerAcciones.bind(this);
+        this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
+        this.handlerMostrarFiltro = this.handlerMostrarFiltro.bind(this);
+        this.handlerOcultarFiltro = this.handlerOcultarFiltro.bind(this);
+
+        this.setState({mostrarFiltro: ''});
     }
 
     /* Handlers */
@@ -91,7 +97,16 @@ class Fila extends Component {
 
         onCambiaEditar && onCambiaEditar(valor, campo, datos);
     }
-
+    handlerMostrarFiltro(campo) {
+        this.setState({
+            mostrarFiltro: campo
+        });
+    }
+    handlerOcultarFiltro(campo) {
+        this.setState({
+            mostrarFiltro: ''
+        });
+    }
     /* Render */
     renderCeldas() {
         const {
@@ -104,8 +119,11 @@ class Fila extends Component {
             anchos,
             onResizeCelda,
             combosDataset,
-            onClickCelda
-        } = this.props;
+            onClickCelda,
+            onFiltrado,
+                onLimpiarFiltro
+        } = this.props,
+            { mostrarFiltro } = this.state;
 
         return cols.map((col, index) => {
             const dato = datos[col.campo];
@@ -127,14 +145,17 @@ class Fila extends Component {
                     onCambiaEditar={this.handlerCambiaEditar}
                     campo={col.campo}
                     onClick={onClickCelda}
+                    mostrarFiltro={mostrarFiltro === col.campo}
+                    onMostrarFiltro={this.handlerMostrarFiltro}
+                    onOcultarFiltro={this.handlerOcultarFiltro}
+                    onFiltrado={onFiltrado}
+                    onLimpiarFiltro={onLimpiarFiltro}
 //                    guardar={this.guardar}
 //                    onChangeValor={this.onChangeValor}
 //                    onChangeDesc={this.onChangeDesc}
 //                    combos_dataset={this.props.combos_dataset}
 //                    orden_desc={this.orden(col.campo) && this.props.orden.desc}
-//                    mostrarFiltro={this.mostrarFiltro}
 //                    onFiltroFijado={this.onFiltroFijado}
-//                    onFiltrado={this.onFiltrado}
             />
             );
         }).concatenar(_renderAcciones(acciones, cols, header, this.handlerAcciones));

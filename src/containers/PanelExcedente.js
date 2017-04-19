@@ -86,6 +86,7 @@ class PanelExcedente extends PanelTablaInicio {
         this.orden = _getOrden();
         this.acciones = _getAcciones();
         this.titulo = 'Excedente';
+        this.puedeFiltrar = 'true';
     }
 
     /* Handlers */

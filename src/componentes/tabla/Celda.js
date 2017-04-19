@@ -8,21 +8,28 @@ import {
     ESCAPE_KEY, ENTER_KEY
 } from '../../utils/constantes';
 
+import FiltroTabla from './filtros/FiltroTabla';
+
 import Combo from '../ui/Combo';
 import TextField from '../ui/TextField';
+
+const _TIMEOUT = 100;
 
 /* Private functions */
 const _getDefaultProps = () => ({
     header:           false,
     tipo:             {},
-    mostrarFiltro:    emptyFunction,
+    mostrarFiltro:    false,
     comboDataset:     [],
     campo:            '',
     datos:            '',
     onResize:         emptyFunction,
     onComienzaEditar: emptyFunction,
-    onCambiaEditar:   emptyFunction
+    onCambiaEditar:   emptyFunction,
+    onMostrarFiltro:  emptyFunction,
+    onOcultarFiltro:  emptyFunction
 });
+
 const _getValorDataset = (dataset, tipo, datos) => dataset && (dataset.buscar(tipo.id, datos) || {})[tipo.texto];
 const _parseValor = (valor, tipo) => {
     let ret = valor;
@@ -38,6 +45,9 @@ const _parseValor = (valor, tipo) => {
 
     return ret;
 };
+const _mostrarFiltros = (mostrarFiltrosOver, mostrarFiltrosOverPanel, mostrarFiltrosClick) => mostrarFiltrosOver || mostrarFiltrosOverPanel || mostrarFiltrosClick;
+const _handlerClickFiltro = e => e.stopPropagation();
+
 const _renderStyle = (ancho, tipo) => ({
     width: ancho ?
         `${ancho}px` :
@@ -76,18 +86,27 @@ class Celda extends Component {
         ordenDesc:        PropTypes.bool,
         comboDataset:     PropTypes.array,
         campo:            PropTypes.string.isRequired,
-//        mostrarFiltro: PropTypes.func.isRequired,
+        mostrarFiltro:    PropTypes.bool,
         datos:            PropTypes.any,
         onResize:         PropTypes.func.isRequired,
         onComienzaEditar: PropTypes.func,
         onCambiaEditar:   PropTypes.func,
-        onClick:          PropTypes.func
+        onClick:          PropTypes.func,
+        onMostrarFiltro:  PropTypes.func,
+        onOcultarFiltro:  PropTypes.func,
+        onFiltrado:       PropTypes.func,
+        onLimpiarFiltro:  PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
-        this.setState({editar: false});
+        this.setState({
+            editar:                  false,
+            mostrarFiltrosOver:      false,
+            mostrarFiltrosOverPanel: false,
+            mostrarFiltrosClick:     false
+        });
 
         this.handlerResize = this.handlerResize.bind(this);
         this.handlerClick = this.handlerClick.bind(this);
@@ -95,7 +114,11 @@ class Celda extends Component {
         this.handlerChange = this.handlerChange.bind(this);
         this.handlerKeyPress = this.handlerKeyPress.bind(this);
         this.handlerBlur = this.handlerBlur.bind(this);
-
+        this.handlerMouseOver = this.handlerMouseOver.bind(this);
+        this.handlerMouseOut = this.handlerMouseOut.bind(this);
+        this.handlerClosePanel = this.handlerClosePanel.bind(this);
+        this.handlerFiltrado = this.handlerFiltrado.bind(this);
+        this.handlerLimpiarFiltro = this.handlerLimpiarFiltro.bind(this);
     }
     componentDidMount() {
         window.addEventListener('resize', this.handlerResize);
@@ -103,10 +126,30 @@ class Celda extends Component {
     }
     componentWillUpdate(nextProps, nextState) {
         const
-            { editar } = this.state,
-            { onComienzaEditar, campo } = this.props;
+            {
+                editar,
+                mostrarFiltrosOver,
+                mostrarFiltrosOverPanel,
+                mostrarFiltrosClick
+            } = this.state,
+            {
+                onComienzaEditar,
+                campo,
+                header,
+                filtro,
+                onMostrarFiltro,
+                onOcultarFiltro
+            } = this.props;
 
         onComienzaEditar && nextState.editar && nextState.editar !== editar && onComienzaEditar(campo);
+//        console.log('componentWillUpdate.header', header);
+//        console.log('componentWillUpdate.filtro', filtro);
+//        console.log('componentWillUpdate.mostrarFiltrosOver', mostrarFiltrosOver);
+//        console.log('componentWillUpdate.nextState.mostrarFiltrosOver', nextState.mostrarFiltrosOver);
+//        console.log('componentWillUpdate.this.mostrarFiltros()', this.mostrarFiltros());
+        header && filtro && _mostrarFiltros(mostrarFiltrosOver, mostrarFiltrosOverPanel, mostrarFiltrosClick) !== _mostrarFiltros(nextState.mostrarFiltrosOver, nextState.mostrarFiltrosOverPanel, nextState.mostrarFiltrosClick) && (_mostrarFiltros(nextState.mostrarFiltrosOver, nextState.mostrarFiltrosOverPanel, nextState.mostrarFiltrosClick) ?
+            onMostrarFiltro(campo) :
+            onOcultarFiltro(campo));
     }
 
     /* Handlers */
@@ -157,32 +200,69 @@ class Celda extends Component {
     handlerBlur() {
         this.setState({editar: false});
     }
+    handlerMouseOver() {
+        this.setStateDelay({mostrarFiltrosOver: true});
+    }
+    handlerMouseOut() {
+        this.setStateDelay({mostrarFiltrosOver: false});
+    }
+    handlerClosePanel() {
+        this.setState({
+            mostrarFiltrosOver: false/* ,
+            mostrarFiltrosOverPanel: false,
+            mostrarFiltrosClick: false */
+        }/* ,this.onFiltroFijado */);
+    }
+    handlerFiltrado(valor) {
+        const {
+            onFiltrado,
+            campo
+        } = this.props;
+
+        onFiltrado && onFiltrado(valor, campo);
+    }
+    handlerLimpiarFiltro() {
+        const {
+            onLimpiarFiltro,
+            campo
+            } = this.props;
+
+        onLimpiarFiltro && onLimpiarFiltro(campo);
+    }
+
+    /* Methods */
+    setStateDelay(state, delay = _TIMEOUT) {
+        setTimeout(() => {
+            this.setState(state);
+        }, delay);
+    }
 
     /* Render */
     renderFiltros() {
-//        const {
-//            filtro,
-//            mostrarFiltro
-//            combosDataset,
-//            campo
-//        } = this.props;
+        const {
+            header,
+            filtro,
+            mostrarFiltro,
+            combosDataset,
+            campo
+        } = this.props;
 
-        return this;
-//        filtro && mostrarFiltro(this) && this.mostrarFiltros() ?
-//            <FiltroTabla
-//                tipo={filtro.tipo}
-//                valor={filtro.valor}
-//                filtro={{
-//                    ...filtro,
-//                    lista: combosDataset[campo]
-//                }}
-//                    onClick={this.onClickPanel}
-//                    onClosePanel={this.onClosePanel}
+        return header && filtro && mostrarFiltro ?
+            <FiltroTabla
+                tipo={filtro.tipo}
+                valor={filtro.valor}
+                filtro={{
+                    ...filtro,
+                    lista: combosDataset && combosDataset[campo]
+                }}
+                onClick={_handlerClickFiltro}
+                onClosePanel={this.handlerClosePanel}
+                onFiltrado={this.handlerFiltrado}
+                onLimpiarFiltro={this.handlerLimpiarFiltro}
 //                    onMouseOver={this.onMouseOverPanel}
 //                    onMouseOut={this.onMouseOutPanel}
-//                    onFiltrado={this.onFiltrado}
-//            /> :
-//        null;
+            /> :
+        null;
     }
     renderCeldaHeader() {
         const {
@@ -200,14 +280,14 @@ class Celda extends Component {
                 style={_renderStyle(ancho, tipo.tipo)}
                 title={_renderTitle(filtro)}
                 onClick={this.handlerClick}
-//                onMouseOver={this.onMouseOver}
-//                onMouseOut={this.onMouseOut}
+                onMouseOver={this.handlerMouseOver}
+                onMouseOut={this.handlerMouseOut}
             >
                 <div className="tabla-celda-div">
                     {_renderOrden(orden, ordenDesc)}
                     {datos}
                 </div>
-                {/* this.renderFiltros() */}
+                { this.renderFiltros() }
             </th>
         );
     }

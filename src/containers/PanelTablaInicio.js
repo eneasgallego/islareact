@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 
-import { cambiarOrdenTabla, setOrdenTabla } from '../actions/Tabla';
+import {
+    cambiarOrdenTabla,
+    setOrdenTabla,
+    filtrarTabla,
+    limpiarFiltroTabla
+} from '../actions/Tabla';
 
 import { getInitialState } from '../reducers/Tabla';
 
@@ -26,6 +31,8 @@ class PanelTablaInicio extends Component {
 
         this.handlerClickAcciones = this.handlerClickAcciones.bind(this);
         this.handlerCambiaOrden = this.handlerCambiaOrden.bind(this);
+        this.handlerFiltrado = this.handlerFiltrado.bind(this);
+        this.handlerLimpiarFiltro = this.handlerLimpiarFiltro.bind(this);
     }
 
     /* Handlers */
@@ -39,6 +46,16 @@ class PanelTablaInicio extends Component {
         const { dispatch } = this.props;
 
         dispatch(cambiarOrdenTabla(this.id, campo));
+    }
+    handlerFiltrado(valor, campo) {
+        const { dispatch } = this.props;
+
+        dispatch(filtrarTabla(this.id, valor, campo));
+    }
+    handlerLimpiarFiltro(campo) {
+        const { dispatch } = this.props;
+
+        dispatch(limpiarFiltroTabla(this.id, campo));
     }
 
     /* Render */
@@ -67,6 +84,9 @@ class PanelTablaInicio extends Component {
                 velo={cargando}
                 acciones={this.acciones}
                 onCambiaOrden={this.handlerCambiaOrden}
+                puedeFiltrar={!!this.puedeFiltrar}
+                onFiltrado={this.handlerFiltrado}
+                onLimpiarFiltro={this.handlerLimpiarFiltro}
         >
         </PanelTabla>
         );

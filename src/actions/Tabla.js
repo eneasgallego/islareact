@@ -17,3 +17,18 @@ export const setOrdenTabla = (idTabla, orden) => ({
     idTabla,
     orden
 });
+
+export const FILTRAR_TABLA = 'FILTRAR_TABLA';
+export const filtrarTabla = (idTabla, valor, campo) => ({
+    type: FILTRAR_TABLA,
+    idTabla,
+    valor,
+    campo
+});
+
+export const LIMPIAR_FILTRO_TABLA = 'LIMPIAR_FILTRO_TABLA';
+export const limpiarFiltroTabla = (idTabla, campo) => ({
+    type: LIMPIAR_FILTRO_TABLA,
+    idTabla,
+    campo
+});
