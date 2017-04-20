@@ -17,7 +17,7 @@ const _getDefaultProps = () => ({
     acciones:         [],
     onClickAcciones:  emptyFunction,
     cols:             [],
-    filtros:          false,
+    puedeFiltrar:     false,
     orden:            [],
     anchos:           [],
     onResizeCelda:    emptyFunction,
@@ -64,7 +64,8 @@ class Fila extends Component {
         datos:            PropTypes.object.isRequired,
         onClickAcciones:  PropTypes.func,
         cols:             PropTypes.array.isRequired,
-        filtros:          PropTypes.bool,
+        puedeFiltrar:     PropTypes.bool,
+        filtros:          PropTypes.array,
         orden:            PropTypes.array,
         acciones:         PropTypes.array,
         anchos:           PropTypes.array.isRequired,
@@ -113,7 +114,8 @@ class Fila extends Component {
             cols,
             header,
             acciones,
-            filtros,
+            puedeFiltrar,
+                filtros,
             orden,
             datos,
             anchos,
@@ -126,16 +128,21 @@ class Fila extends Component {
             { mostrarFiltro } = this.state;
 
         return cols.map((col, index) => {
-            const dato = datos[col.campo];
+            const
+                dato = datos[col.campo],
+                filtro = puedeFiltrar && filtros && (filtros.buscar('campo', col.campo) || col.filtro);
 
             return (
                 <Celda
                     key={index}
                     header={header}
                     tipo={col.tipo}
-                    filtro={filtros ?
-                        col.filtro :
-                        undefined}
+                    filtro={puedeFiltrar ?
+                    {
+                        ...col.filtro,
+                        ...filtro
+                    } :
+                        null}
                     orden={_orden(orden, col.campo)}
                     ordenDesc={_ordenDesc(orden, col.campo)}
                     datos={dato}

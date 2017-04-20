@@ -227,7 +227,8 @@ class Tabla extends Component {
                 puedeFiltrar,
                 combosDataset,
                 onFiltrado,
-                onLimpiarFiltro
+                onLimpiarFiltro,
+                filtros
             } = this.props,
             {
                 altoTabla,
@@ -251,8 +252,9 @@ class Tabla extends Component {
                             anchos={anchos}
                             onResizeCelda={this.handlerResizeCelda}
                             onClickCelda={onCambiaOrden}
-                            filtros={puedeFiltrar}
+                            puedeFiltrar={puedeFiltrar}
                             combosDataset={combosDataset}
+                            filtros={filtros}
                             onFiltrado={onFiltrado}
                             onLimpiarFiltro={onLimpiarFiltro}
     //                    ref={this.refFilas}
