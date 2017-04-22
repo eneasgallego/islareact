@@ -7,6 +7,7 @@ import {
 
 import PanelFlotante from '../../panel/PanelFlotante';
 import TextField from '../../ui/TextField';
+import ListaFieldNum from './ListaFieldNum';
 
 /* Private functions */
 const _getDefaultProps = () => ({
@@ -26,6 +27,7 @@ class FiltroTabla extends Component {
     /* Lifecycle */
     componentWillMount() {
         this.handlerKeyPress = this.handlerKeyPress.bind(this);
+        this.handlerChangeLista = this.handlerChangeLista.bind(this);
     }
 
     /* Handlers */
@@ -35,6 +37,9 @@ class FiltroTabla extends Component {
         } else if (key === ENTER_KEY) {
             this.filtrar(valor);
         }
+    }
+    handlerChangeLista(valor) {
+        this.filtrar(valor);
     }
 
     /* Methods */
@@ -48,25 +53,31 @@ class FiltroTabla extends Component {
     cerrar() {
         const { onClosePanel } = this.props;
 
-        onClosePanel && onClosePanel();
+        return onClosePanel && onClosePanel();
     }
 
     /* Render */
     renderContenido() {
         const
             {
-                valor
-//                tipo:{tipo},
+                valor,
+                tipo:{tipo}
 //                filtro
             } = this.props;
+
+        if (tipo === 'int') {
+            return (
+                <ListaFieldNum
+                    valor={valor}
+                    onChange={this.handlerChangeLista}
+                />
+            );
+        }
 
         return (
             <TextField
                 valor={valor || ''}
-//                onClick={this.onClickField}
-//                onBlur={this.onBlurTextField}
                 onKeyPress={this.handlerKeyPress}
-//                onLoad={this.onLoadField}
             />
         );
 

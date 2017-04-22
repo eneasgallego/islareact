@@ -3,7 +3,8 @@ import {
     CAMBIAR_TIPO_NUEVO_PEDIDO,
     NUEVA_FILA_NUEVO_PEDIDO,
     CAMBIAR_VALOR_TABLA_NUEVO_PEDIDO,
-    ELIMINAR_FILA_TABLA_NUEVO_PEDIDO
+    ELIMINAR_FILA_TABLA_NUEVO_PEDIDO,
+    LIMPIAR_NUEVO_PEDIDO
 } from '../actions/PanelNuevoPedido';
 
 import { createDefaultRow } from '../utils/utils';
@@ -64,8 +65,9 @@ export default (state = initState(), action = {}) => {
     case ELIMINAR_FILA_TABLA_NUEVO_PEDIDO:
         return {
             ...state,
-            nuevoPedido: _eliminarFilaTablaNuevoPedido(state.nuevoPedido, action.index)
+            nuevoPedido: null
         };
+    case LIMPIAR_NUEVO_PEDIDO:
     default:
         return state;
     }

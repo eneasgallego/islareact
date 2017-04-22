@@ -29,3 +29,8 @@ export const eliminarFilaTablaNuevoPedido = index => ({
     type: ELIMINAR_FILA_TABLA_NUEVO_PEDIDO,
     index
 });
+
+export const LIMPIAR_NUEVO_PEDIDO = 'LIMPIAR_NUEVO_PEDIDO';
+export const limpiarNuevoPedido = () => ({
+    type: LIMPIAR_NUEVO_PEDIDO
+});

@@ -29,7 +29,7 @@ class Dialogo extends Component {
     /* Properties */
     static propTypes = {
         titulo:        PropTypes.string.isRequired,
-        contenido:     PropTypes.any.isRequired,
+        contenido:     PropTypes.any,
         puedeCerrar:   PropTypes.bool,
         onClickCerrar: PropTypes.func.isRequired,
         menu:          PropTypes.array,

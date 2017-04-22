@@ -17,7 +17,7 @@ class Componente extends Component {
 
         return (
             <div>
-				{this.children}
+				{this.props.children}
             </div>
         );
     }

@@ -5,7 +5,8 @@ import { PropTypes } from 'prop-types';
 import { emptyFunction } from '../../utils/utils';
 
 import {
-    ESCAPE_KEY, ENTER_KEY
+    ESCAPE_KEY, ENTER_KEY,
+    POS_TO_DELETE_SPLICE
 } from '../../utils/constantes';
 
 import FiltroTabla from './filtros/FiltroTabla';
@@ -61,11 +62,6 @@ const _renderStyle = (ancho, tipo) => ({
 const _renderClassHeader = filtro => filtro && filtro.valor && ((filtro.valor instanceof Array && filtro.valor.length) || !(filtro.valor instanceof Array)) ?
     'filtrado' :
     '';
-const _renderTitle = filtro => filtro && filtro.valor ?
-    typeof filtro.valor === 'string' ?
-        filtro.valor :
-    typeof filtro.valor === 'object' && filtro.tipo === 'int' && filtro.valor.getTitulo() :
-        '';
 const _renderIconoOrden = ordenDesc => `icon icon-triangle ${ordenDesc ?
         'icon-inv' :
         ''}`;
@@ -98,7 +94,6 @@ class Celda extends Component {
         onLimpiarFiltro:  PropTypes.func
     }
     getDefaultProps: _getDefaultProps
-
     /* Lifecycle */
     componentWillMount() {
         this.setState({
@@ -119,6 +114,8 @@ class Celda extends Component {
         this.handlerClosePanel = this.handlerClosePanel.bind(this);
         this.handlerFiltrado = this.handlerFiltrado.bind(this);
         this.handlerLimpiarFiltro = this.handlerLimpiarFiltro.bind(this);
+
+        this.timeouts = [];
     }
     componentDidMount() {
         window.addEventListener('resize', this.handlerResize);
@@ -142,14 +139,16 @@ class Celda extends Component {
             } = this.props;
 
         onComienzaEditar && nextState.editar && nextState.editar !== editar && onComienzaEditar(campo);
-//        console.log('componentWillUpdate.header', header);
-//        console.log('componentWillUpdate.filtro', filtro);
-//        console.log('componentWillUpdate.mostrarFiltrosOver', mostrarFiltrosOver);
-//        console.log('componentWillUpdate.nextState.mostrarFiltrosOver', nextState.mostrarFiltrosOver);
-//        console.log('componentWillUpdate.this.mostrarFiltros()', this.mostrarFiltros());
         header && filtro && _mostrarFiltros(mostrarFiltrosOver, mostrarFiltrosOverPanel, mostrarFiltrosClick) !== _mostrarFiltros(nextState.mostrarFiltrosOver, nextState.mostrarFiltrosOverPanel, nextState.mostrarFiltrosClick) && (_mostrarFiltros(nextState.mostrarFiltrosOver, nextState.mostrarFiltrosOverPanel, nextState.mostrarFiltrosClick) ?
             onMostrarFiltro(campo) :
             onOcultarFiltro(campo));
+    }
+    componentWillUnmount() {
+        while (this.timeouts.length) {
+            const timeout = this.timeouts.shift();
+
+            clearTimeout(timeout);
+        }
     }
 
     /* Handlers */
@@ -232,9 +231,12 @@ class Celda extends Component {
 
     /* Methods */
     setStateDelay(state, delay = _TIMEOUT) {
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
+            this.timeouts.splice(this.timeouts.indexOf(timeout), POS_TO_DELETE_SPLICE);
             this.setState(state);
         }, delay);
+
+        this.timeouts.push(timeout);
     }
 
     /* Render */
@@ -243,13 +245,14 @@ class Celda extends Component {
             header,
             filtro,
             mostrarFiltro,
+            tipo,
             combosDataset,
             campo
         } = this.props;
 
         return header && filtro && mostrarFiltro ?
             <FiltroTabla
-                tipo={filtro.tipo}
+                tipo={filtro.tipo || tipo}
                 valor={filtro.valor}
                 filtro={{
                     ...filtro,
@@ -278,7 +281,6 @@ class Celda extends Component {
             <th
                 className={_renderClassHeader(filtro)}
                 style={_renderStyle(ancho, tipo.tipo)}
-                title={_renderTitle(filtro)}
                 onClick={this.handlerClick}
                 onMouseOver={this.handlerMouseOver}
                 onMouseOut={this.handlerMouseOut}

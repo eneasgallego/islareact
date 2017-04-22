@@ -79,8 +79,7 @@ const _filtrar = (filtros, fila) => filtros ?
                     return ~(`${valorFila}`.toUpperCase()).indexOf(`${valor}`.toUpperCase());
                 }
                 if (typeof valor === 'object') {
-                    const valFiltrar = valor.filtrar(fila);
-
+                    const valFiltrar = valor.filtrar(valorFila);
 
                     return valFiltrar;
                 }
@@ -192,30 +191,29 @@ class Tabla extends Component {
         } = this.props,
             { anchos } = this.state;
 
-        const filter = filas.filter(_filtrar.bind(null, filtros));
-        const sort = filter.sort(_ordenarFila.bind(filter, orden));
-        const map = sort.map((fila, index) => (
-            <Fila
-                key={index}
-                claseFila={claseFila}
-                datos={fila}
-                onClickAcciones={onClickAcciones}
-                cols={cols}
-                acciones={acciones}
-                anchos={anchos}
-                onResizeCelda={this.handlerResizeCelda}
-                combosDataset={combosDataset}
-                onCambiaEditar={this.handlerCambiaEditar}
-//                    guardar={this.guardar}
-//                    id_campo={this.props.id_campo}
-//                    onResize={this.onResizeFila}
-//                    onClickCelda={this.onClickCelda}
-//                    onChangeValor={this.onChangeValor}
-//                    combos_dataset={this.state.combos_dataset}
-        />
-        ));
-
-        return map;
+        return filas
+            .filter(_filtrar.bind(null, filtros))
+            .sort(_ordenarFila.bind(null, orden))
+            .map((fila, index) => (
+                <Fila
+                    key={index}
+                    claseFila={claseFila}
+                    datos={fila}
+                    onClickAcciones={onClickAcciones}
+                    cols={cols}
+                    acciones={acciones}
+                    anchos={anchos}
+                    onResizeCelda={this.handlerResizeCelda}
+                    combosDataset={combosDataset}
+                    onCambiaEditar={this.handlerCambiaEditar}
+                    //                    guardar={this.guardar}
+                    //                    id_campo={this.props.id_campo}
+                    //                    onResize={this.onResizeFila}
+                    //                    onClickCelda={this.onClickCelda}
+                    //                    onChangeValor={this.onChangeValor}
+                    //                    combos_dataset={this.state.combos_dataset}
+                />
+            ));
     }
     renderTabla() {
         const

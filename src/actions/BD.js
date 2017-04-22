@@ -5,6 +5,8 @@ import {
     eliminar
 } from '../utils/utils';
 
+import { limpiarNuevoPedido } from './PanelNuevoPedido';
+
 import { getVistaBD } from '../datos/utils';
 
 import {
@@ -288,6 +290,7 @@ export const crearNuevoPedido = nuevoPedido => dispatch => {
                 }
 
                 dispatch(cambiarContenido('inicio'));
+                dispatch(limpiarNuevoPedido());
             } else {
                 handlerError(new Error('Debe haber seleccionado algún material.'));
             }

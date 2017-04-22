@@ -207,13 +207,16 @@ export const parseFiltro = (filtro, tipo) => {
 
     if (ret) {
         if (ret === true) {
-            ret = tipo;
+            ret = {...tipo};
         } else if (typeof ret === 'string') {
             const tipoFiltro = ret;
 
-            ret = tipo;
-            ret.tipo = tipoFiltro;
+            ret = {
+                ...tipo,
+                tipo: tipoFiltro
+            };
         }
+        ret.tipo = parseTipo(ret.tipo);
     }
 
     return ret;
