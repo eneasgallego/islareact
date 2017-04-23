@@ -71,14 +71,17 @@ const _ordenarFila = (orden, a, b, prof = INIT_PROFUNDIDAD) => orden && orden[pr
 const _filtrar = (filtros, fila) => filtros ?
         filtros.every(filtro => {
             const
-                { campo, valor } = filtro,
+                {
+                    campo,
+                    valor,
+                    tipo:{tipo}} = filtro,
                 valorFila = fila[campo];
 
             if (valor) {
-                if (typeof valor === 'string') {
+                if (tipo === 'string') {
                     return ~(`${valorFila}`.toUpperCase()).indexOf(`${valor}`.toUpperCase());
                 }
-                if (typeof valor === 'object') {
+                if (tipo === 'object' || tipo === 'int') {
                     const valFiltrar = valor.filtrar(valorFila);
 
                     return valFiltrar;

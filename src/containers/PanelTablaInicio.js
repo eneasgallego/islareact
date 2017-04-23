@@ -4,7 +4,8 @@ import {
     cambiarOrdenTabla,
     setOrdenTabla,
     filtrarTabla,
-    limpiarFiltroTabla
+    limpiarFiltroTabla,
+    initFiltrosTabla
 } from '../actions/Tabla';
 
 import { getInitialState } from '../reducers/Tabla';
@@ -25,14 +26,20 @@ class PanelTablaInicio extends Component {
 
     /* Lifecycle */
     componentWillMount() {
-        const { dispatch } = this.props;
+        const { dispatch, combosDataset } = this.props;
 
         dispatch(setOrdenTabla(this.id, this.orden));
+        this.puedeFiltrar && dispatch(initFiltrosTabla(this.id, this.cols, combosDataset));
 
         this.handlerClickAcciones = this.handlerClickAcciones.bind(this);
         this.handlerCambiaOrden = this.handlerCambiaOrden.bind(this);
         this.handlerFiltrado = this.handlerFiltrado.bind(this);
         this.handlerLimpiarFiltro = this.handlerLimpiarFiltro.bind(this);
+    }
+    componentWillReceiveProps(nextProps) {
+        const { dispatch, combosDataset } = this.props;
+
+        this.puedeFiltrar && combosDataset !== nextProps.combosDataset && dispatch(initFiltrosTabla(this.id, this.cols, nextProps.combosDataset));
     }
 
     /* Handlers */
@@ -66,7 +73,8 @@ class PanelTablaInicio extends Component {
             orden,
             alto,
             cargando,
-            titulo
+            titulo,
+            combosDataset
         } = this.props;
 
         return (
@@ -87,6 +95,7 @@ class PanelTablaInicio extends Component {
                 puedeFiltrar={!!this.puedeFiltrar}
                 onFiltrado={this.handlerFiltrado}
                 onLimpiarFiltro={this.handlerLimpiarFiltro}
+                combosDataset={combosDataset}
         >
         </PanelTabla>
         );

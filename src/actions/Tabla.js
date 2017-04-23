@@ -32,3 +32,11 @@ export const limpiarFiltroTabla = (idTabla, campo) => ({
     idTabla,
     campo
 });
+
+export const INIT_FILTROS_TABLA = 'INIT_FILTROS_TABLA';
+export const initFiltrosTabla = (idTabla, cols, combosDataset) => ({
+    type: INIT_FILTROS_TABLA,
+    idTabla,
+    cols,
+    combosDataset
+});

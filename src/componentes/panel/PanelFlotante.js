@@ -10,20 +10,27 @@ const _getDefaultProps = () => ({
 class PanelFlotante extends Component {
     /* Properties */
     static propTypes = {
-        onClick: PropTypes.func
+        onClick:     PropTypes.func,
+        onMouseOver: PropTypes.func,
+        onMouseOut:  PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
     /* Render */
     render() {
-        const { children, onClick } = this.props;
+        const {
+            children,
+            onClick,
+            onMouseOver,
+            onMouseOut
+        } = this.props;
 
         return (
             <Panel
                 className="flotante"
                 onClick={onClick}
-//                onMouseOver={this.onMouseOver}
-//                onMouseOut={this.onMouseOut}
+                onMouseOver={onMouseOver}
+                onMouseOut={onMouseOut}
             >
 				{children}
             </Panel>

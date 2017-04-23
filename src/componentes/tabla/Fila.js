@@ -130,25 +130,24 @@ class Fila extends Component {
         return cols.map((col, index) => {
             const
                 dato = datos[col.campo],
-                filtro = puedeFiltrar && filtros && (filtros.buscar('campo', col.campo) || col.filtro);
+                filtro = puedeFiltrar && filtros && (filtros.buscar('campo', col.campo) || col.filtro),
+                comboDataset = combosDataset && combosDataset[col.tipo.dataset],
+                _filtro = puedeFiltrar ?
+                    filtro :
+                    null;
 
             return (
                 <Celda
                     key={index}
                     header={header}
                     tipo={col.tipo}
-                    filtro={puedeFiltrar ?
-                    {
-                        ...col.filtro,
-                        ...filtro
-                    } :
-                        null}
+                    filtro={_filtro}
                     orden={_orden(orden, col.campo)}
                     ordenDesc={_ordenDesc(orden, col.campo)}
                     datos={dato}
                     ancho={anchos[index]}
                     onResize={onResizeCelda}
-                    comboDataset={combosDataset && combosDataset[col.tipo.dataset]}
+                    comboDataset={comboDataset}
                     onCambiaEditar={this.handlerCambiaEditar}
                     campo={col.campo}
                     onClick={onClickCelda}

@@ -7,8 +7,7 @@ import TextField from '../../ui/TextField';
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    texto: '',
-    valor: {}
+    disabled: false
 });
 
 class ListaItemFieldNum extends Component {
@@ -16,7 +15,8 @@ class ListaItemFieldNum extends Component {
     static propTypes = {
         texto:    PropTypes.string.isRequired,
         valor:    PropTypes.object.isRequired,
-        onChange: PropTypes.func.isRequired
+        onChange: PropTypes.func.isRequired,
+        disabled: PropTypes.bool
     }
     getDefaultProps: _getDefaultProps
 
@@ -36,7 +36,7 @@ class ListaItemFieldNum extends Component {
 
     /* Render */
     render() {
-        const { texto, valor } = this.props;
+        const { texto, valor, disabled } = this.props;
 
         return (
             <div className="contenido-numerico">
@@ -46,6 +46,7 @@ class ListaItemFieldNum extends Component {
                         '' :
                         valor.valor}
                     onKeyPress={this.handlerKeyPress}
+                    disabled={disabled}
 //                    onClick={this.onClick}
 //                    onBlur={this.onBlur}
                 />

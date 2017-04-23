@@ -37,8 +37,8 @@ class CheckBox extends Component {
             <input
 //                ref="checkbox"
                 type="checkbox"
-                defaultChecked={valor}
-            onChange={this.handlerChange}
+                checked={valor}
+                onChange={this.handlerChange}
 //                onClick={this.onClick}
 //                onBlur={this.onBlur}
             />

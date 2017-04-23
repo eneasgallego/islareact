@@ -5,8 +5,7 @@ import { PropTypes } from 'prop-types';
 import { emptyFunction } from '../../utils/utils';
 
 import {
-    ESCAPE_KEY, ENTER_KEY,
-    POS_TO_DELETE_SPLICE
+    ESCAPE_KEY, ENTER_KEY
 } from '../../utils/constantes';
 
 import FiltroTabla from './filtros/FiltroTabla';
@@ -14,14 +13,11 @@ import FiltroTabla from './filtros/FiltroTabla';
 import Combo from '../ui/Combo';
 import TextField from '../ui/TextField';
 
-const _TIMEOUT = 100;
-
 /* Private functions */
 const _getDefaultProps = () => ({
     header:           false,
     tipo:             {},
     mostrarFiltro:    false,
-    comboDataset:     [],
     campo:            '',
     datos:            '',
     onResize:         emptyFunction,
@@ -97,10 +93,8 @@ class Celda extends Component {
     /* Lifecycle */
     componentWillMount() {
         this.setState({
-            editar:                  false,
-            mostrarFiltrosOver:      false,
-            mostrarFiltrosOverPanel: false,
-            mostrarFiltrosClick:     false
+            editar:              false,
+            mostrarFiltrosCelda: false
         });
 
         this.handlerResize = this.handlerResize.bind(this);
@@ -109,13 +103,10 @@ class Celda extends Component {
         this.handlerChange = this.handlerChange.bind(this);
         this.handlerKeyPress = this.handlerKeyPress.bind(this);
         this.handlerBlur = this.handlerBlur.bind(this);
-        this.handlerMouseOver = this.handlerMouseOver.bind(this);
-        this.handlerMouseOut = this.handlerMouseOut.bind(this);
+        this.handlerContextMenu = this.handlerContextMenu.bind(this);
         this.handlerClosePanel = this.handlerClosePanel.bind(this);
         this.handlerFiltrado = this.handlerFiltrado.bind(this);
         this.handlerLimpiarFiltro = this.handlerLimpiarFiltro.bind(this);
-
-        this.timeouts = [];
     }
     componentDidMount() {
         window.addEventListener('resize', this.handlerResize);
@@ -124,31 +115,17 @@ class Celda extends Component {
     componentWillUpdate(nextProps, nextState) {
         const
             {
-                editar,
-                mostrarFiltrosOver,
-                mostrarFiltrosOverPanel,
-                mostrarFiltrosClick
+                editar
             } = this.state,
             {
                 onComienzaEditar,
-                campo,
-                header,
-                filtro,
-                onMostrarFiltro,
-                onOcultarFiltro
+                campo
             } = this.props;
 
         onComienzaEditar && nextState.editar && nextState.editar !== editar && onComienzaEditar(campo);
-        header && filtro && _mostrarFiltros(mostrarFiltrosOver, mostrarFiltrosOverPanel, mostrarFiltrosClick) !== _mostrarFiltros(nextState.mostrarFiltrosOver, nextState.mostrarFiltrosOverPanel, nextState.mostrarFiltrosClick) && (_mostrarFiltros(nextState.mostrarFiltrosOver, nextState.mostrarFiltrosOverPanel, nextState.mostrarFiltrosClick) ?
-            onMostrarFiltro(campo) :
-            onOcultarFiltro(campo));
     }
     componentWillUnmount() {
-        while (this.timeouts.length) {
-            const timeout = this.timeouts.shift();
-
-            clearTimeout(timeout);
-        }
+        window.removeEventListener('resize', this.handlerResize);
     }
 
     /* Handlers */
@@ -199,18 +176,24 @@ class Celda extends Component {
     handlerBlur() {
         this.setState({editar: false});
     }
-    handlerMouseOver() {
-        this.setStateDelay({mostrarFiltrosOver: true});
-    }
-    handlerMouseOut() {
-        this.setStateDelay({mostrarFiltrosOver: false});
+    handlerContextMenu(e) {
+        const {
+            onMostrarFiltro,
+            onOcultarFiltro,
+            campo,
+            filtro,
+            mostrarFiltro } = this.props;
+
+        e.preventDefault();
+
+        filtro && (mostrarFiltro ?
+            onOcultarFiltro(campo) :
+            onMostrarFiltro(campo));
     }
     handlerClosePanel() {
-        this.setState({
-            mostrarFiltrosOver: false/* ,
-            mostrarFiltrosOverPanel: false,
-            mostrarFiltrosClick: false */
-        }/* ,this.onFiltroFijado */);
+        const { onOcultarFiltro, campo } = this.props;
+
+        onOcultarFiltro(campo);
     }
     handlerFiltrado(valor) {
         const {
@@ -224,19 +207,9 @@ class Celda extends Component {
         const {
             onLimpiarFiltro,
             campo
-            } = this.props;
+        } = this.props;
 
         onLimpiarFiltro && onLimpiarFiltro(campo);
-    }
-
-    /* Methods */
-    setStateDelay(state, delay = _TIMEOUT) {
-        const timeout = setTimeout(() => {
-            this.timeouts.splice(this.timeouts.indexOf(timeout), POS_TO_DELETE_SPLICE);
-            this.setState(state);
-        }, delay);
-
-        this.timeouts.push(timeout);
     }
 
     /* Render */
@@ -245,25 +218,18 @@ class Celda extends Component {
             header,
             filtro,
             mostrarFiltro,
-            tipo,
-            combosDataset,
-            campo
+            tipo
         } = this.props;
 
         return header && filtro && mostrarFiltro ?
             <FiltroTabla
                 tipo={filtro.tipo || tipo}
                 valor={filtro.valor}
-                filtro={{
-                    ...filtro,
-                    lista: combosDataset && combosDataset[campo]
-                }}
+                filtro={filtro}
                 onClick={_handlerClickFiltro}
                 onClosePanel={this.handlerClosePanel}
                 onFiltrado={this.handlerFiltrado}
                 onLimpiarFiltro={this.handlerLimpiarFiltro}
-//                    onMouseOver={this.onMouseOverPanel}
-//                    onMouseOut={this.onMouseOutPanel}
             /> :
         null;
     }
@@ -282,8 +248,7 @@ class Celda extends Component {
                 className={_renderClassHeader(filtro)}
                 style={_renderStyle(ancho, tipo.tipo)}
                 onClick={this.handlerClick}
-                onMouseOver={this.handlerMouseOver}
-                onMouseOut={this.handlerMouseOut}
+                onContextMenu={this.handlerContextMenu}
             >
                 <div className="tabla-celda-div">
                     {_renderOrden(orden, ordenDesc)}

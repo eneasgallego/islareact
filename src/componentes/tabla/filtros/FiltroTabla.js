@@ -8,6 +8,7 @@ import {
 import PanelFlotante from '../../panel/PanelFlotante';
 import TextField from '../../ui/TextField';
 import ListaFieldNum from './ListaFieldNum';
+import ListaFieldObj from './ListaFieldObj';
 
 /* Private functions */
 const _getDefaultProps = () => ({
@@ -61,14 +62,25 @@ class FiltroTabla extends Component {
         const
             {
                 valor,
-                tipo:{tipo}
-//                filtro
+                tipo:{tipo},
+                filtro
             } = this.props;
 
         if (tipo === 'int') {
             return (
                 <ListaFieldNum
                     valor={valor}
+                    lista={filtro.lista}
+                    onChange={this.handlerChangeLista}
+                />
+            );
+        } else if (tipo === 'object') {
+            return (
+                <ListaFieldObj
+                    lista={filtro.lista}
+                    valor={valor}
+                    campoTexto={filtro.texto}
+                    campoId={filtro.id}
                     onChange={this.handlerChangeLista}
                 />
             );
@@ -126,8 +138,6 @@ class FiltroTabla extends Component {
         return (
             <PanelFlotante
                 onClick={onClick}
-                onMouseOver={this.onMouseOver}
-                onMouseOut={this.onMouseOut}
                 onClosePanel={this.onClosePanel}
             >
                 {this.renderContenido()}

@@ -8,8 +8,10 @@ const _getDefaultProps = () => ({
 class Panel extends Component {
     /* Properties */
     static propTypes = {
-        className: PropTypes.string,
-        onClick:   PropTypes.func
+        className:   PropTypes.string,
+        onClick:     PropTypes.func,
+        onMouseOver: PropTypes.func,
+        onMouseOut:  PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
@@ -18,15 +20,17 @@ class Panel extends Component {
         const {
             className,
             children,
-            onClick
+            onClick,
+            onMouseOver,
+            onMouseOut
         } = this.props;
 
         return (
             <div
                 className={className}
                 onClick={onClick}
-                onMouseOver={this.onMouseOver}
-                onMouseOut={this.onMouseOut}
+                onMouseOver={onMouseOver}
+                onMouseOut={onMouseOut}
             >
                 {children}
             </div>

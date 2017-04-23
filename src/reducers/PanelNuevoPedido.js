@@ -65,9 +65,13 @@ export default (state = initState(), action = {}) => {
     case ELIMINAR_FILA_TABLA_NUEVO_PEDIDO:
         return {
             ...state,
-            nuevoPedido: null
+            nuevoPedido: _eliminarFilaTablaNuevoPedido(state.nuevoPedido, action.index)
         };
     case LIMPIAR_NUEVO_PEDIDO:
+        return {
+            ...state,
+            nuevoPedido: {}
+        };
     default:
         return state;
     }

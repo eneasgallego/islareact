@@ -36,6 +36,7 @@ export default data => {
                 cantidadpedidosprocesados:     cantidadmaterialpedidosprocesados,
                 excedentemateriales:           material.stockmateriales - cantidadmaterialpedidos,
                 excedentematerialesprocesados: material.stockmateriales - cantidadmaterialpedidosprocesados,
+                fabricamateriales:             material.fabricamateriales,
                 nombrefabricas:                fabrica.nombrefabricas
             };
             ret.push(obj);

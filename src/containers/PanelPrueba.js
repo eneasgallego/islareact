@@ -76,13 +76,15 @@ const _getAcciones = () => [{
     tag:   'handlerVenderMaterial'
 }];
 const _claseFilaExcedente = datos => datos.excedentemateriales > NO_NECESITA || datos.excedentematerialesprocesados > NO_NECESITA ?
-        'bueno' :
+    'bueno' :
     datos.stockmateriales + datos.haciendomateriales >= datos.cantidadpedidos ?
         'medio' :
         'malo';
 
 class PanelExcedente extends PanelTablaInicio {
     constructor(props) {
+        debugger;
+
         super(props);
 
         this.id = ID_EXCEDENTE;
@@ -92,7 +94,8 @@ class PanelExcedente extends PanelTablaInicio {
         this.orden = _getOrden();
         this.acciones = _getAcciones();
         this.titulo = 'Excedente';
-        this.puedeFiltrar = true;
+        this.puedeFiltrar = 'true';
+        this.combosDataset = props.combosDataset;
     }
 
     /* Handlers */
@@ -110,8 +113,7 @@ class PanelExcedente extends PanelTablaInicio {
 
 const mapStateToProps = state => ({
     ...state.panelExcedente,
-    filas:         state.bd.vistaExcedente,
-    combosDataset: state.bd
+    filas: state.bd.vistaExcedente
 });
 
 

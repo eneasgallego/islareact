@@ -5,9 +5,9 @@ import { emptyFunction } from '../../utils/utils';
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    valor:      '',
     onBlur:     emptyFunction,
-    onKeyPress: emptyFunction
+    onKeyPress: emptyFunction,
+    disabled:   false
 });
 
 class TextField extends Component {
@@ -15,7 +15,8 @@ class TextField extends Component {
     static propTypes = {
         valor:      PropTypes.any.isRequired,
         onBlur:     PropTypes.func,
-        onKeyPress: PropTypes.func
+        onKeyPress: PropTypes.func,
+        disabled:   PropTypes.bool
     }
     getDefaultProps: _getDefaultProps
 
@@ -28,6 +29,13 @@ class TextField extends Component {
     componentDidMount() {
         this.refs.input.focus();
     }
+    componentWillReceiveProps(nextProps) {
+        const { valor } = this.props;
+
+        if (valor !== nextProps.valor) {
+            this.refs.input.value = nextProps.valor;
+        }
+    }
 
     /* Handlers */
     handlerFocus() {
@@ -38,19 +46,19 @@ class TextField extends Component {
 
         e.preventDefault();
 
-        onBlur && onBlur(e.currentTarget.value);
+        onBlur(e.currentTarget.value);
     }
     handlerKeyPress(e) {
         const { onKeyPress } = this.props;
 
-        onKeyPress && onKeyPress(e.currentTarget.value, typeof e.which === 'number' ?
+        onKeyPress(e.currentTarget.value, typeof e.which === 'number' ?
                 e.which :
                 e.keyCode);
     }
 
     /* Render */
     render() {
-        const { valor } = this.props;
+        const { valor, disabled } = this.props;
 
         return (
             <input
@@ -59,8 +67,9 @@ class TextField extends Component {
                 onFocus={this.handlerFocus}
                 onBlur={this.handlerBlur}
                 onKeyDown={this.handlerKeyPress}
+                disabled={disabled}
+//                onChange={this.handlerChange}
 //                onClick={this.onClick}
-//                onChange={this.onChange}
             />
         );
     }

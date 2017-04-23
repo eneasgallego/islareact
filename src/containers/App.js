@@ -49,10 +49,10 @@ const _renderInicio = (alto, verPedido) => [
         />] :
         []);
 const _renderExcedente = alto => (
-    <PanelExcedente
-        key={ID_EXCEDENTE}
-        alto={alto}
-    />
+        <PanelExcedente
+            key={ID_EXCEDENTE}
+            alto={alto}
+        />
     );
 const _renderNuevoPedido = () => (
         <PanelNuevoPedido

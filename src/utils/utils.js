@@ -284,12 +284,13 @@ export const getClaseFilaMateriales = datos => datos.stockmateriales >= datos.ca
             'nulo' :
         '';
 export const getPropTypesTabla = () => ({
-    filas:    PropTypes.array.isRequired,
-    filtros:  PropTypes.array.isRequired,
-    orden:    PropTypes.array.isRequired,
-    alto:     PropTypes.number,
-    cargando: PropTypes.bool,
-    params:   PropTypes.object
+    filas:         PropTypes.array.isRequired,
+    filtros:       PropTypes.array.isRequired,
+    orden:         PropTypes.array.isRequired,
+    alto:          PropTypes.number,
+    cargando:      PropTypes.bool,
+    params:        PropTypes.object,
+    combosDataset: PropTypes.object
 });
 const _getValorDefecto = tipo => tipo === 'string' ?
     '' :
