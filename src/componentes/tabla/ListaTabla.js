@@ -28,15 +28,15 @@ class ListaTabla extends Component {
         cols:            PropTypes.array.isRequired,
         filas:           PropTypes.array.isRequired,
         onClickNuevo:    PropTypes.func.isRequired,
-        orden:           PropTypes.array.isRequired,
+        orden:           PropTypes.array,
         combosDataset:   PropTypes.object,
         eliminar:        PropTypes.bool,
         onCambiaEditar:  PropTypes.func,
         onEliminar:      PropTypes.func,
-        onCambiaOrden:   PropTypes.func.isRequired,
-        onFiltrado:      PropTypes.func.isRequired,
-        onLimpiarFiltro: PropTypes.func.isRequired,
-        filtros:         PropTypes.array.isRequired
+        onCambiaOrden:   PropTypes.func,
+        onFiltrado:      PropTypes.func,
+        onLimpiarFiltro: PropTypes.func,
+        filtros:         PropTypes.array
     }
     getDefaultProps: _getDefaultProps
 

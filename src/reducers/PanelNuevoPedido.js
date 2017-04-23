@@ -70,7 +70,7 @@ export default (state = initState(), action = {}) => {
     case LIMPIAR_NUEVO_PEDIDO:
         return {
             ...state,
-            nuevoPedido: {}
+            ...initState()
         };
     default:
         return state;

@@ -35,7 +35,6 @@ const cargarBDSuccess = data => ({
 });
 
 const insertarBDSuccess = (tabla, newData, oldData) => (dispatch, getState) => {
-    debugger;
     const
         state = getState(),
         filasTabla = state.bd[tabla],
@@ -311,7 +310,6 @@ export const nuevaFila = (tabla, cols) => ({
 });
 
 export const eliminarFila = (dataset, index) => (dispatch, getState) => {
-    debugger;
     const
         state = getState(),
         tabla = state.bd[dataset],
@@ -329,7 +327,6 @@ export const eliminarFila = (dataset, index) => (dispatch, getState) => {
 };
 
 export const cambiarValorTabla = (dataset, valor, campo, index) => (dispatch, getState) => {
-    debugger;
     const
         state = getState(),
         tabla = state.bd[dataset],
