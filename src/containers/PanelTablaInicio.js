@@ -35,11 +35,11 @@ class PanelTablaInicio extends Component {
         this.handlerFiltrado = this.handlerFiltrado.bind(this);
         this.handlerLimpiarFiltro = this.handlerLimpiarFiltro.bind(this);
     }
-    componentWillReceiveProps(nextProps) {
-        const { dispatch, combosDataset } = this.props;
+    // componentWillReceiveProps(nextProps) {
+        // const { dispatch, combosDataset } = this.props;
 
-        this.puedeFiltrar && combosDataset !== nextProps.combosDataset && dispatch(initFiltrosTabla(this.id, this.cols, nextProps.combosDataset));
-    }
+        // this.puedeFiltrar && combosDataset !== nextProps.combosDataset && dispatch(initFiltrosTabla(this.id, this.cols, nextProps.combosDataset));
+    // }
 
     /* Handlers */
     handlerClickAcciones(tag, ...args) {
