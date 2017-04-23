@@ -9,7 +9,11 @@ import {
     initFiltrosTabla
 } from '../actions/Tabla';
 
-import { nuevaFila, eliminarFila } from '../actions/BD';
+import {
+    nuevaFila,
+    eliminarFila,
+    cambiarValorTabla
+} from '../actions/BD';
 
 import { getInitialState } from '../reducers/Tabla';
 
@@ -42,6 +46,7 @@ class PanelLista extends Component {
         this.handlerFiltrado = this.handlerFiltrado.bind(this);
         this.handlerLimpiarFiltro = this.handlerLimpiarFiltro.bind(this);
         this.handlerEliminar = this.handlerEliminar.bind(this);
+        this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
     }
     componentWillReceiveProps(nextProps) {
         const { dispatch, combosDataset } = this.props;
@@ -75,6 +80,11 @@ class PanelLista extends Component {
 
         dispatch(eliminarFila(this.dataset, index));
     }
+    handlerCambiaEditar(valor, campo, index) {
+        const { dispatch } = this.props;
+
+        dispatch(cambiarValorTabla(this.dataset, valor, campo, index));
+    }
 
     /* Render */
     render() {
@@ -101,6 +111,7 @@ class PanelLista extends Component {
                 orden={orden}
                 campoId="id"
                 onCambiaOrden={this.handlerCambiaOrden}
+                onCambiaEditar={this.handlerCambiaEditar}
 //                id_campo={this.props.config[this.state.contenido].id_campo}
 //                url_editar={this.props.config[this.state.contenido].url_editar}
 //                url_crear={this.props.config[this.state.contenido].url_crear}

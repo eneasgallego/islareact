@@ -35,6 +35,7 @@ const cargarBDSuccess = data => ({
 });
 
 const insertarBDSuccess = (tabla, newData, oldData) => (dispatch, getState) => {
+    debugger;
     const
         state = getState(),
         filasTabla = state.bd[tabla],
@@ -58,7 +59,7 @@ export const insertarBD = (tabla, data) => (dispatch, getState) => {
     filasTabla.unshift(data);
 
     insertar(tabla, data)
-        .then(id => dispatch(insertarBDSuccess(tabla, id, data)))
+        .then(json => dispatch(insertarBDSuccess(tabla, json, data)))
         .catch(_handlerError(dispatch));
 };
 
@@ -320,6 +321,30 @@ export const eliminarFila = (dataset, index) => (dispatch, getState) => {
 
     eliminar(dataset, fila.id)
         .catch(_handlerError(dispatch));
+
+    dispatch(cargarBDSuccess({
+        ...state.bd,
+        [dataset]: tabla.slice()
+    }));
+};
+
+export const cambiarValorTabla = (dataset, valor, campo, index) => (dispatch, getState) => {
+    debugger;
+    const
+        state = getState(),
+        tabla = state.bd[dataset],
+        fila = tabla[index];
+
+    fila[campo] = valor;
+
+    if (fila.id === undefined) {
+        insertar(dataset, fila)
+            .then(json => dispatch(insertarBDSuccess(dataset, json, fila)))
+            .catch(_handlerError(dispatch));
+    } else {
+        editar(dataset, fila, fila.id)
+            .catch(_handlerError(dispatch));
+    }
 
     dispatch(cargarBDSuccess({
         ...state.bd,
