@@ -4,6 +4,10 @@ export const ID_INICIO_NECESITA = 'inicio_necesita';
 export const ID_INICIO_PEDIDO = 'inicio_pedido';
 export const ID_EXCEDENTE = 'excedente';
 export const ID_FABRICAS = 'fabricas';
+export const ID_MATERIALES = 'materiales';
+export const ID_MATERIALES_NECESITA = 'materiales_necesita';
+export const ID_TIPOS_PEDIDO = 'tipos_pedido';
+export const ID_PEDIDOS = 'pedidos';
 
 export const CAMBIAR_ORDEN_TABLA = 'CAMBIAR_ORDEN_TABLA';
 export const cambiarOrdenTabla = (idTabla, campo) => ({

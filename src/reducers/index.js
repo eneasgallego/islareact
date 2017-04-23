@@ -9,6 +9,10 @@ import panelTablaInicioPedido from './PanelTablaInicioPedido';
 import panelExcedente from './PanelExcedente';
 import panelNuevoPedido from './PanelNuevoPedido';
 import listaFabricas from './ListaFabricas';
+import listaMateriales from './ListaMateriales';
+import listaMaterialesNecesita from './ListaMaterialesNecesita';
+import listaPedidos from './ListaPedidos';
+import listaTiposPedido from './ListaTiposPedido';
 
 const rootReducer = combineReducers({
     app,
@@ -19,7 +23,11 @@ const rootReducer = combineReducers({
     panelTablaInicioPedido,
     panelExcedente,
     panelNuevoPedido,
-    listaFabricas
+    listaFabricas,
+    listaMateriales,
+    listaMaterialesNecesita,
+    listaPedidos,
+    listaTiposPedido
 });
 
 export default rootReducer;

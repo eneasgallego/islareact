@@ -26,6 +26,10 @@ import PanelTablaInicioPedido from './PanelTablaInicioPedido';
 import PanelNuevoPedido from './PanelNuevoPedido';
 import PanelExcedente from './PanelExcedente';
 import ListaTablaFabricas from './ListaTablaFabricas';
+import ListaTablaMateriales from './ListaTablaMateriales';
+import ListaTablaMaterialesNecesita from './ListaTablaMaterialesNecesita';
+import ListaTablaTiposPedido from './ListaTablaTiposPedido';
+import ListaTablaPedidos from './ListaTablaPedidos';
 
 import Menu from '../componentes/menu/Menu';
 import Dialogo from '../componentes/ui/Dialogo';
@@ -61,11 +65,15 @@ const _renderNuevoPedido = () => (
         />
     );
 const _renderListaTabla = contenido => contenido === 'fabricas' ?
-    (
-        <ListaTablaFabricas
-            ref="panel_nuevo_pedido"
-        />
-    ) :
+    <ListaTablaFabricas /> :
+    contenido === 'materiales' ?
+    <ListaTablaMateriales /> :
+    contenido === 'materiales_necesita' ?
+    <ListaTablaMaterialesNecesita /> :
+    contenido === 'tipos_pedido' ?
+    <ListaTablaTiposPedido /> :
+    contenido === 'pedidos' ?
+    <ListaTablaPedidos /> :
     null;
 const _renderContenido = (contenido, alto, verPedido) => contenido === 'inicio' ?
     _renderInicio(alto, verPedido) :

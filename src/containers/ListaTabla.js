@@ -91,11 +91,11 @@ class PanelLista extends Component {
         const {
             filas,
             filtros,
-            orden
+            orden,
+            combosDataset
 //            alto,
 //            cargando,
 //            titulo,
-//            combosDataset
         } = this.props;
 
         return (
@@ -112,6 +112,7 @@ class PanelLista extends Component {
                 campoId="id"
                 onCambiaOrden={this.handlerCambiaOrden}
                 onCambiaEditar={this.handlerCambiaEditar}
+                combosDataset={combosDataset}
 //                id_campo={this.props.config[this.state.contenido].id_campo}
 //                url_editar={this.props.config[this.state.contenido].url_editar}
 //                url_crear={this.props.config[this.state.contenido].url_crear}
