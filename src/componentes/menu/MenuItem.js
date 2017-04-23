@@ -48,8 +48,10 @@ class MenuItem extends Component {
     }
 
     /* Handlers */
-    handlerClick() {
+    handlerClick(e) {
         const { onClick, tag } = this.props;
+
+        e.stopPropagation();
 
         onClick(tag);
     }

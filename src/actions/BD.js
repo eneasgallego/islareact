@@ -301,3 +301,10 @@ export const crearNuevoPedido = nuevoPedido => dispatch => {
         handlerError(e);
     }
 };
+
+export const NUEVA_FILA = 'NUEVA_FILA';
+export const nuevaFila = (tabla, cols) => ({
+    type: NUEVA_FILA,
+    tabla,
+    cols
+});

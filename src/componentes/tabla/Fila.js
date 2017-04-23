@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
-import { emptyFunction } from '../../utils/utils';
 import { ORDER_EQUAL } from '../../utils/constantes';
 
 import Celda from './Celda';
@@ -11,19 +10,11 @@ const _SUM_MOSTRAR_ORDEN = 1;
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    header:           false,
-    claseFila:        emptyFunction,
-    datos:            {},
-    acciones:         [],
-    onClickAcciones:  emptyFunction,
-    cols:             [],
-    puedeFiltrar:     false,
-    orden:            [],
-    anchos:           [],
-    onResizeCelda:    emptyFunction,
-    combosDataset:    {},
-    onComienzaEditar: emptyFunction,
-    onCambiaEditar:   emptyFunction
+    header:        false,
+    puedeFiltrar:  false,
+    acciones:      [],
+    orden:         [],
+    combosDataset: {}
 });
 const _claseFila = (header, claseFila, datos) => `${header ?
     'header' :
@@ -59,23 +50,22 @@ const _ordenDesc = (orden, campo) => {
 class Fila extends Component {
     /* Properties */
     static propTypes = {
-        header:           PropTypes.bool,
-        claseFila:        PropTypes.func,
-        datos:            PropTypes.object.isRequired,
-        onClickAcciones:  PropTypes.func,
-        cols:             PropTypes.array.isRequired,
-        puedeFiltrar:     PropTypes.bool,
-        filtros:          PropTypes.array,
-        orden:            PropTypes.array,
-        acciones:         PropTypes.array,
-        anchos:           PropTypes.array.isRequired,
-        onResizeCelda:    PropTypes.func.isRequired,
-        combosDataset:    PropTypes.object,
-        onComienzaEditar: PropTypes.func,
-        onCambiaEditar:   PropTypes.func,
-        onClickCelda:     PropTypes.func,
-        onFiltrado:       PropTypes.func,
-        onLimpiarFiltro:  PropTypes.func
+        header:          PropTypes.bool,
+        claseFila:       PropTypes.func,
+        datos:           PropTypes.object.isRequired,
+        onClickAcciones: PropTypes.func,
+        cols:            PropTypes.array.isRequired,
+        puedeFiltrar:    PropTypes.bool,
+        filtros:         PropTypes.array,
+        orden:           PropTypes.array,
+        acciones:        PropTypes.array,
+        anchos:          PropTypes.array.isRequired,
+        onResizeCelda:   PropTypes.func.isRequired,
+        combosDataset:   PropTypes.object,
+        onCambiaEditar:  PropTypes.func,
+        onClickCelda:    PropTypes.func,
+        onFiltrado:      PropTypes.func,
+        onLimpiarFiltro: PropTypes.func
     }
     getDefaultProps: _getDefaultProps
 
@@ -115,7 +105,7 @@ class Fila extends Component {
             header,
             acciones,
             puedeFiltrar,
-                filtros,
+            filtros,
             orden,
             datos,
             anchos,
@@ -123,7 +113,7 @@ class Fila extends Component {
             combosDataset,
             onClickCelda,
             onFiltrado,
-                onLimpiarFiltro
+            onLimpiarFiltro
         } = this.props,
             { mostrarFiltro } = this.state;
 

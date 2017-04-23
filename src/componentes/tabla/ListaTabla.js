@@ -25,13 +25,18 @@ const _acciones = eliminar => eliminar ?
 class ListaTabla extends Component {
     /* Properties */
     static propTypes = {
-        cols:           PropTypes.array.isRequired,
-        filas:          PropTypes.array.isRequired,
-        onClickNuevo:   PropTypes.func.isRequired,
-        combosDataset:  PropTypes.object,
-        eliminar:       PropTypes.bool,
-        onCambiaEditar: PropTypes.func,
-        onEliminar:     PropTypes.func
+        cols:            PropTypes.array.isRequired,
+        filas:           PropTypes.array.isRequired,
+        onClickNuevo:    PropTypes.func.isRequired,
+        orden:           PropTypes.array.isRequired,
+        combosDataset:   PropTypes.object,
+        eliminar:        PropTypes.bool,
+        onCambiaEditar:  PropTypes.func,
+        onEliminar:      PropTypes.func,
+        onCambiaOrden:   PropTypes.func.isRequired,
+        onFiltrado:      PropTypes.func.isRequired,
+        onLimpiarFiltro: PropTypes.func.isRequired,
+        filtros:         PropTypes.array.isRequired
     }
     getDefaultProps: _getDefaultProps
 
@@ -55,7 +60,12 @@ class ListaTabla extends Component {
             onClickNuevo,
             combosDataset,
             eliminar,
-            onCambiaEditar
+            onCambiaEditar,
+            orden,
+            onCambiaOrden,
+            filtros,
+            onFiltrado,
+            onLimpiarFiltro
         } = this.props;
 
         return (
@@ -69,6 +79,12 @@ class ListaTabla extends Component {
                 combosDataset={combosDataset}
                 acciones={_acciones(eliminar)}
                 onCambiaEditar={onCambiaEditar}
+                orden={orden}
+                onCambiaOrden={onCambiaOrden}
+                puedeFiltrar
+                filtros={filtros}
+                onFiltrado={onFiltrado}
+                onLimpiarFiltro={onLimpiarFiltro}
 //                id_campo={this.props.id_campo}
 //                url={this.props.url}
 //                onResizeFila={this.onResizeFila}

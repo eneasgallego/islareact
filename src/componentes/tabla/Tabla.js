@@ -4,7 +4,7 @@ import { PropTypes } from 'prop-types';
 
 import {
     INIT_PROFUNDIDAD, UP_PROFUNDIDAD,
-    ORDER_UP, ORDER_DOWN, ORDER_EQUAL,
+    ORDER_UP, ORDER_DOWN,
     INIT_INDEX
 } from '../../utils/constantes';
 
@@ -26,7 +26,8 @@ const _getDefaultProps = () => ({
     onClickNuevo:    emptyFunction,
     combosDataset:   {},
     onCambiaEditar:  emptyFunction,
-    puedeFiltrar:    false
+    puedeFiltrar:    false,
+    campoId:         ''
 });
 const _getInitialState = () => ({
     altoTabla: undefined,
@@ -60,13 +61,34 @@ const _getValorOrdenar = (campo, datos) => isNaN(_getCalcOrdenar(campo, datos)) 
     datos[campo] :
     _getCalcOrdenar(campo, datos);
 
-const _ordenarFila = (orden, a, b, prof = INIT_PROFUNDIDAD) => orden && orden[prof] ?
-        ((valA, valB, desc) => valA === valB ?
-                _ordenarFila(orden, a, b, prof + UP_PROFUNDIDAD) :
-                (desc && valA < valB) || (!desc && valA > valB) ?
-                    ORDER_UP :
-                    ORDER_DOWN)(_getValorOrdenar(orden[prof].campo, a), _getValorOrdenar(orden[prof].campo, b), orden[prof].desc) :
-    ORDER_EQUAL;
+const _ordenarFila = (params, a, b, prof = INIT_PROFUNDIDAD) => {
+    const
+        { orden, campoId } = params,
+        _orden = orden && orden[prof];
+
+    if (_orden) {
+        const
+            { campo, desc } = _orden,
+            valA = _getValorOrdenar(campo, a),
+            valB = _getValorOrdenar(campo, b);
+
+        if (valA === valB) {
+            return _ordenarFila(params, a, b, prof + UP_PROFUNDIDAD);
+        } else if ((desc && valA > valB) || (!desc && valA < valB)) {
+            return ORDER_DOWN;
+        }
+    } else if (campoId) {
+        const
+            idA = a[campoId],
+            idB = b[campoId];
+
+        if (idA !== undefined && idB === undefined) {
+            return ORDER_DOWN;
+        }
+    }
+
+    return ORDER_UP;
+};
 
 const _filtrar = (filtros, fila) => filtros ?
         filtros.every(filtro => {
@@ -121,6 +143,7 @@ class Tabla extends Component {
         alto:            PropTypes.number,
         cols:            PropTypes.array.isRequired,
         filas:           PropTypes.array.isRequired,
+        campoId:         PropTypes.string,
         filtros:         PropTypes.array,
         orden:           PropTypes.array,
         velo:            PropTypes.bool,
@@ -190,14 +213,15 @@ class Tabla extends Component {
             onClickAcciones,
             cols,
             acciones,
-            combosDataset
+            combosDataset,
+            campoId
         } = this.props,
-            { anchos } = this.state;
-
-        return filas
-            .filter(_filtrar.bind(null, filtros))
-            .sort(_ordenarFila.bind(null, orden))
-            .map((fila, index) => (
+            { anchos } = this.state,
+            filasFiltradas = filas.filter(_filtrar.bind(null, filtros)),
+            filasOrdenadas = orden && orden.length ?
+                filasFiltradas.sort(_ordenarFila.bind(null, {orden, campoId})) :
+                filasFiltradas,
+            _filas = filasOrdenadas.map((fila, index) => (
                 <Fila
                     key={index}
                     claseFila={claseFila}
@@ -217,6 +241,8 @@ class Tabla extends Component {
                     //                    combos_dataset={this.state.combos_dataset}
                 />
             ));
+
+        return _filas;
     }
     renderTabla() {
         const

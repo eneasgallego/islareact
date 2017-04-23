@@ -15,8 +15,7 @@ import { getPropTypesTabla } from '../utils/utils';
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    ...getInitialState(),
-    filas: []
+    ...getInitialState()
 });
 
 class PanelTablaInicio extends Component {

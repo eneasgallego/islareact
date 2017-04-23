@@ -164,48 +164,6 @@ const options = {
                 campo: 'novacia_pedido',
                 tipo:  'bool'
             }]
-        },
-        excedente: {
-            id:     'excedente',
-            titulo: 'Excedente',
-            url:    'http://localhost:3000/db',
-            orden:  [{
-                campo: 'excedentemateriales',
-                desc:  true
-            },{
-                campo: 'excedentematerialesprocesados',
-                desc:  true
-            },{
-                campo: 'stockmateriales',
-                desc:  true
-            },{
-                campo: 'cantidadpedidos',
-                desc:  true
-            },{
-                campo: 'cantidadpedidosprocesados',
-                desc:  true
-            },{
-                campo: 'nombremateriales',
-                desc:  false
-            }],
-            parseData: 'parseDataExcedente',
-            id_campo:  'idmateriales',
-            cols:      'colsExcedente',
-            acciones:  'accionesExcedente',
-            claseFila: 'claseFilaExcedente'
-        },
-        inicio_pedido: {
-            id:    'pedido',
-            url:   'http://localhost:3000/db',
-            orden: {
-                campo: 'nombremateriales',
-                desc:  false
-            },
-            id_campo:  'idpedidos',
-            parseData: 'parseDataPedido',
-            cols:      'colsPedido',
-            acciones:  'accionesPedido',
-            claseFila: 'claseFilaPedido'
         }
     }
 };

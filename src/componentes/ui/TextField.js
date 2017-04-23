@@ -5,7 +5,6 @@ import { emptyFunction } from '../../utils/utils';
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    onBlur:     emptyFunction,
     onKeyPress: emptyFunction,
     disabled:   false
 });
@@ -46,7 +45,7 @@ class TextField extends Component {
 
         e.preventDefault();
 
-        onBlur(e.currentTarget.value);
+        onBlur && onBlur(e.currentTarget.value);
     }
     handlerKeyPress(e) {
         const { onKeyPress } = this.props;

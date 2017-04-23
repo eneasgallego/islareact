@@ -15,8 +15,8 @@ import {
     ID_INICIO_MATERIALES,
     ID_INICIO_PEDIDOS,
     ID_INICIO_NECESITA,
-    ID_INICIO_PEDIDO,
-    ID_EXCEDENTE
+    ID_INICIO_PEDIDO
+//    ID_EXCEDENTE
 } from '../actions/Tabla';
 
 import PanelTablaInicioMateriales from './PanelTablaInicioMateriales';
@@ -25,6 +25,7 @@ import PanelTablaInicioNecesita from './PanelTablaInicioNecesita';
 import PanelTablaInicioPedido from './PanelTablaInicioPedido';
 import PanelNuevoPedido from './PanelNuevoPedido';
 import PanelExcedente from './PanelExcedente';
+import ListaTablaFabricas from './ListaTablaFabricas';
 
 import Menu from '../componentes/menu/Menu';
 import Dialogo from '../componentes/ui/Dialogo';
@@ -50,23 +51,29 @@ const _renderInicio = (alto, verPedido) => [
         []);
 const _renderExcedente = alto => (
         <PanelExcedente
-            key={ID_EXCEDENTE}
+//            key={ID_EXCEDENTE}
             alto={alto}
         />
     );
 const _renderNuevoPedido = () => (
         <PanelNuevoPedido
             ref="panel_nuevo_pedido"
-//            dimensionar={this.dimensionarNuevoPedido}
         />
     );
+const _renderListaTabla = contenido => contenido === 'fabricas' ?
+    (
+        <ListaTablaFabricas
+            ref="panel_nuevo_pedido"
+        />
+    ) :
+    null;
 const _renderContenido = (contenido, alto, verPedido) => contenido === 'inicio' ?
     _renderInicio(alto, verPedido) :
     contenido === 'excedente' ?
         _renderExcedente(alto) :
         contenido === 'nuevo_pedido' ?
             _renderNuevoPedido() :
-    null;
+    _renderListaTabla(contenido);
     /* (
      <ListaTabla	id_campo={this.props.config[contenido].id_campo}
      url_editar={this.props.config[contenido].url_editar}

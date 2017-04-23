@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { PropTypes } from 'prop-types';
 
-import { emptyFunction } from '../../utils/utils';
-
 import {
     ESCAPE_KEY, ENTER_KEY
 } from '../../utils/constantes';
@@ -15,16 +13,9 @@ import TextField from '../ui/TextField';
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    header:           false,
-    tipo:             {},
-    mostrarFiltro:    false,
-    campo:            '',
-    datos:            '',
-    onResize:         emptyFunction,
-    onComienzaEditar: emptyFunction,
-    onCambiaEditar:   emptyFunction,
-    onMostrarFiltro:  emptyFunction,
-    onOcultarFiltro:  emptyFunction
+    header:        false,
+    mostrarFiltro: false,
+    datos:         ''
 });
 
 const _getValorDataset = (dataset, tipo, datos) => dataset && (dataset.buscar(tipo.id, datos) || {})[tipo.texto];
@@ -187,8 +178,8 @@ class Celda extends Component {
         e.preventDefault();
 
         filtro && (mostrarFiltro ?
-            onOcultarFiltro(campo) :
-            onMostrarFiltro(campo));
+            onOcultarFiltro && onOcultarFiltro(campo) :
+            onMostrarFiltro && onMostrarFiltro(campo));
     }
     handlerClosePanel() {
         const { onOcultarFiltro, campo } = this.props;
