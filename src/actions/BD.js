@@ -308,3 +308,21 @@ export const nuevaFila = (tabla, cols) => ({
     tabla,
     cols
 });
+
+export const eliminarFila = (dataset, index) => (dispatch, getState) => {
+    debugger;
+    const
+        state = getState(),
+        tabla = state.bd[dataset],
+        fila = tabla[index];
+
+    tabla.splice(index, POS_TO_DELETE_SPLICE);
+
+    eliminar(dataset, fila.id)
+        .catch(_handlerError(dispatch));
+
+    dispatch(cargarBDSuccess({
+        ...state.bd,
+        [dataset]: tabla.slice()
+    }));
+};

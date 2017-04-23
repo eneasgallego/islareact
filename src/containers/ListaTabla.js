@@ -9,7 +9,7 @@ import {
     initFiltrosTabla
 } from '../actions/Tabla';
 
-import { nuevaFila } from '../actions/BD';
+import { nuevaFila, eliminarFila } from '../actions/BD';
 
 import { getInitialState } from '../reducers/Tabla';
 
@@ -41,6 +41,7 @@ class PanelLista extends Component {
         this.handlerCambiaOrden = this.handlerCambiaOrden.bind(this);
         this.handlerFiltrado = this.handlerFiltrado.bind(this);
         this.handlerLimpiarFiltro = this.handlerLimpiarFiltro.bind(this);
+        this.handlerEliminar = this.handlerEliminar.bind(this);
     }
     componentWillReceiveProps(nextProps) {
         const { dispatch, combosDataset } = this.props;
@@ -69,6 +70,11 @@ class PanelLista extends Component {
 
         dispatch(limpiarFiltroTabla(this.id, campo));
     }
+    handlerEliminar(index) {
+        const { dispatch } = this.props;
+
+        dispatch(eliminarFila(this.dataset, index));
+    }
 
     /* Render */
     render() {
@@ -88,6 +94,7 @@ class PanelLista extends Component {
                 filas={filas}
                 onClickNuevo={this.handlerNuevaFila}
                 eliminar
+                onEliminar={this.handlerEliminar}
                 filtros={filtros}
                 onFiltrado={this.handlerFiltrado}
                 onLimpiarFiltro={this.handlerLimpiarFiltro}
