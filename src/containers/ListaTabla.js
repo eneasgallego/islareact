@@ -48,11 +48,11 @@ class PanelLista extends Component {
         this.handlerEliminar = this.handlerEliminar.bind(this);
         this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
     }
-    componentWillReceiveProps(nextProps) {
-        const { dispatch, combosDataset } = this.props;
+    // componentWillReceiveProps(nextProps) {
+//        const { dispatch, combosDataset } = this.props;
 
-        combosDataset !== nextProps.combosDataset && dispatch(initFiltrosTabla(this.id, this.cols, nextProps.combosDataset));
-    }
+//        combosDataset !== nextProps.combosDataset && dispatch(initFiltrosTabla(this.id, this.cols, nextProps.combosDataset));
+//    }
 
     /* Handlers */
     handlerNuevaFila() {

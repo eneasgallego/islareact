@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { ID_INICIO_PEDIDOS } from '../actions/Tabla';
 
-import { cambiarVerPedido } from '../actions/App';
+import { cambiarVerPedido } from '../actions/app';
 
 import {
     cerrarPedido,

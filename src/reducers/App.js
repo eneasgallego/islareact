@@ -4,7 +4,7 @@ import {
     CAMBIAR_VER_PEDIDO,
     SET_DIALOGO,
     HANDLER_ERROR
-} from '../actions/App';
+} from '../actions/app';
 
 const options = {
     menu: [{

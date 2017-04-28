@@ -12,7 +12,7 @@ import { getVistaBD } from '../datos/utils';
 import {
     cambiarContenido,
     handlerError
-} from './App';
+} from './app';
 
 import {
     NO_NECESITA,

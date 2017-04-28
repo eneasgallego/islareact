@@ -7,7 +7,7 @@ import {
     cambiarContenido,
     dimensionar,
     setDialogo
-} from '../actions/App';
+} from '../actions/app';
 
 import { cargarBD } from '../actions/BD';
 
