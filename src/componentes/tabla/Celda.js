@@ -10,6 +10,8 @@ import FiltroTabla from './filtros/FiltroTabla';
 
 import Combo from '../ui/Combo';
 import TextField from '../ui/TextField';
+import CheckBox from '../ui/CheckBox';
+
 
 /* Private functions */
 const _getDefaultProps = () => ({
@@ -289,14 +291,13 @@ class Celda extends Component {
                     />
                 );
             } else if (tipo.tipo === 'bool') {
-                /* return (
+                return (
                     <CheckBox
                         valor={datos}
-                        onClick={this.onClickCheck}
-                        onBlur={this.onBlurField}
-                        onLoad={this.onLoadField}
+                        onChange={this.handlerChange}
+                        onBlur={this.handlerBlur}
                     />
-                ); */
+                );
             }
 
             return (
