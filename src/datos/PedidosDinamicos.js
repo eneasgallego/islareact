@@ -1,8 +1,10 @@
 import { getMapa } from './utils';
 
-import { NO_NECESITA, UP_PROFUNDIDAD, INIT_INDEX, NUMERO_DEFECTO, INIT_ID } from '../utils/constantes';
+import { NO_NECESITA, UP_PROFUNDIDAD, INIT_INDEX, NUMERO_DEFECTO } from '../utils/constantes';
 
-const TIPO_OTROS = 6;
+const
+    _INIT_ID = 1,
+    _TIPO_OTROS = 6;
 
 export default data => {
     const ret = [];
@@ -23,7 +25,7 @@ export default data => {
     };
 
     const generarId = () => {
-        let num = INIT_ID;
+        let num = _INIT_ID;
 
         while (ret.buscar('id',num) || data.pedidos.buscar('id',num)) {
             num++;
@@ -57,7 +59,7 @@ export default data => {
 
                     if (!pedido) {
                         pedido = {
-                            tipopedidos:        TIPO_OTROS,
+                            tipopedidos:        _TIPO_OTROS,
                             materialpedidos:    material.id,
                             procesadopedidos:   true,
                             cantidadpedidos:    NO_NECESITA,

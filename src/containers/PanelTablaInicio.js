@@ -8,20 +8,12 @@ import {
     initFiltrosTabla
 } from '../actions/Tabla';
 
-import { getInitialState } from '../reducers/Tabla';
-
 import PanelTabla from '../componentes/panel/PanelTabla';
 import { getPropTypesTabla } from '../utils/utils';
-
-/* Private functions */
-const _getDefaultProps = () => ({
-    ...getInitialState()
-});
 
 class PanelTablaInicio extends Component {
     /* Properties */
     static propTypes = getPropTypesTabla()
-    getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
@@ -35,11 +27,6 @@ class PanelTablaInicio extends Component {
         this.handlerFiltrado = this.handlerFiltrado.bind(this);
         this.handlerLimpiarFiltro = this.handlerLimpiarFiltro.bind(this);
     }
-    // componentWillReceiveProps(nextProps) {
-        // const { dispatch, combosDataset } = this.props;
-
-        // this.puedeFiltrar && combosDataset !== nextProps.combosDataset && dispatch(initFiltrosTabla(this.id, this.cols, nextProps.combosDataset));
-    // }
 
     /* Handlers */
     handlerClickAcciones(tag, ...args) {

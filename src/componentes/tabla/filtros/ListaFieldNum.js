@@ -5,8 +5,6 @@ import ListaField from './ListaField';
 import ListaItemFieldNum from './ListaItemFieldNum';
 
 /* Private functions */
-const _getDefaultProps = () => ({
-});
 const _getValor = (valor, tag) => valor && valor.buscar('tag', tag);
 const _estaSeleccionado = (valor, tag) => ~valor.indice('tag', tag);
 
@@ -21,9 +19,6 @@ const _renderLista = (lista, valor, onChangeNum) => lista.map((item, index) => (
                 valor={_getValor(valor, item.tag) || {}}
                 onChange={onChangeNum}
                 disabled={!_estaSeleccionado(valor, item.tag)}
-//                onClick={this.onClick}
-//                onBlur={this.onBlur}
-//                onKeyPress={this.onKeyPress}
         />
         )
 }));
@@ -35,7 +30,6 @@ class ListaFieldNum extends Component {
         lista:    PropTypes.array.isRequired,
         onChange: PropTypes.func.isRequired
     }
-    getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
@@ -61,7 +55,6 @@ class ListaFieldNum extends Component {
 
         return (
             <ListaField
-//                ref="listafield"
                 valor={valor || []}
                 lista={_renderLista(lista, valor, this.handlerChangeNum)}
                 onChange={this.handlerChange}

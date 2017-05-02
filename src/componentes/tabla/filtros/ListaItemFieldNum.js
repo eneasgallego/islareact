@@ -18,7 +18,7 @@ class ListaItemFieldNum extends Component {
         onChange: PropTypes.func.isRequired,
         disabled: PropTypes.bool
     }
-    getDefaultProps: _getDefaultProps
+    static defaultProps = _getDefaultProps()
 
     /* Lifecycle */
     componentWillMount() {

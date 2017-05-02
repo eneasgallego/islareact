@@ -1,21 +1,10 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
-import { emptyFunction } from '../../utils/utils';
-
 import {
     INIT_INDEX,
     ORDER_EQUAL, ORDER_UP, ORDER_DOWN
 } from '../../utils/constantes';
-
-/* Private functions */
-const _getDefaultProps = () => ({
-    onChange:   emptyFunction,
-    dataset:    [],
-    campoId:    '',
-    campoTexto: '',
-    onBlur:     emptyFunction
-});
 
 class Combo extends Component {
     /* Properties */
@@ -27,7 +16,6 @@ class Combo extends Component {
         campoTexto: PropTypes.string.isRequired,
         onBlur:     PropTypes.func
     }
-    getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
@@ -88,11 +76,10 @@ class Combo extends Component {
             <select
                 ref="combo"
                 defaultValue={valor}
-//                onClick={this.onClick}
                 onBlur={this.handlerBlur}
                 onChange={this.handlerChange}
             >
-			{this.renderOptions()}
+                {this.renderOptions()}
             </select>
         );
     }

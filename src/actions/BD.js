@@ -24,17 +24,17 @@ import {
 const _handlerError = dispatch => error => dispatch(handlerError(error));
 
 export const CARGAR_BD_START = 'CARGAR_BD_START';
-const cargarBDStart = () => ({
+const _cargarBDStart = () => ({
     type: CARGAR_BD_START
 });
 
 export const CARGAR_BD_SUCCESS = 'CARGAR_BD_SUCCESS';
-const cargarBDSuccess = data => ({
+const _cargarBDSuccess = data => ({
     type: CARGAR_BD_SUCCESS,
     data
 });
 
-const insertarBDSuccess = (tabla, newData, oldData) => (dispatch, getState) => {
+const _insertarBDSuccess = (tabla, newData, oldData) => (dispatch, getState) => {
     const
         state = getState(),
         filasTabla = state.bd[tabla],
@@ -43,14 +43,14 @@ const insertarBDSuccess = (tabla, newData, oldData) => (dispatch, getState) => {
     if (~index) {
         filasTabla[index] = newData;
 
-        dispatch(cargarBDSuccess({
+        dispatch(_cargarBDSuccess({
             ...state.bd,
             [tabla]: filasTabla.slice()
         }));
     }
 };
 
-export const insertarBD = (tabla, data) => (dispatch, getState) => {
+const _insertarBD = (tabla, data) => (dispatch, getState) => {
     const
         state = getState(),
         filasTabla = state.bd[tabla];
@@ -58,18 +58,18 @@ export const insertarBD = (tabla, data) => (dispatch, getState) => {
     filasTabla.unshift(data);
 
     insertar(tabla, data)
-        .then(json => dispatch(insertarBDSuccess(tabla, json, data)))
+        .then(json => dispatch(_insertarBDSuccess(tabla, json, data)))
         .catch(_handlerError(dispatch));
 };
 
 export const cargarBD = () => dispatch => {
-    dispatch(cargarBDStart());
+    dispatch(_cargarBDStart());
 
     ajax({
         metodo: 'get',
         url:    'http://localhost:3000/db'
     })
-        .then(json => dispatch(cargarBDSuccess(json)))
+        .then(json => dispatch(_cargarBDSuccess(json)))
         .catch(_handlerError(dispatch));
 };
 
@@ -90,7 +90,8 @@ export const recogerMaterial = idMaterial => (dispatch, getState) => {
     } else {
         _handlerError(dispatch)(new Error('No hay nada que recoger'));
     }
-    dispatch(cargarBDSuccess({
+
+    dispatch(_cargarBDSuccess({
         ...state.bd,
         materiales: materiales.slice()
     }));
@@ -111,7 +112,8 @@ export const recogerTodoMaterial = idMaterial => (dispatch, getState) => {
     } else {
         _handlerError(dispatch)(new Error('No hay nada que recoger'));
     }
-    dispatch(cargarBDSuccess({
+
+    dispatch(_cargarBDSuccess({
         ...state.bd,
         materiales: materiales.slice()
     }));
@@ -140,10 +142,9 @@ export const hacerMaterial = idMaterial => (dispatch, getState) => {
             for (let i = INIT_INDEX; i < materialesNecesita.length; i++) {
                 const
                     materialNecesita = materialesNecesita[i],
-                    dif = materialNecesita.stockmaterialesnecesita - materialNecesita.cantidadmateriales_necesita,
                     auxMaterial = materiales.buscar('id', materialNecesita.materialnecesitamateriales_necesita);
 
-                auxMaterial.stockmateriales = dif;
+                auxMaterial.stockmateriales = materialNecesita.stockmaterialesnecesita - materialNecesita.cantidadmateriales_necesita;
 
                 editar('materiales', auxMaterial, auxMaterial.id)
                     .catch(_handlerError(dispatch));
@@ -153,7 +154,7 @@ export const hacerMaterial = idMaterial => (dispatch, getState) => {
         _handlerError(dispatch)(new Error('Fábrica completa.'));
     }
 
-    dispatch(cargarBDSuccess({
+    dispatch(_cargarBDSuccess({
         ...state.bd,
         materiales: materiales.slice()
     }));
@@ -169,7 +170,7 @@ export const ganarMaterial = idMaterial => (dispatch, getState) => {
     editar('materiales', material, idMaterial)
         .catch(_handlerError(dispatch));
 
-    dispatch(cargarBDSuccess({
+    dispatch(_cargarBDSuccess({
         ...state.bd,
         materiales: materiales.slice()
     }));
@@ -189,7 +190,7 @@ export const venderMaterial = idMaterial => (dispatch, getState) => {
     editar('materiales', material, idMaterial)
         .catch(_handlerError(dispatch));
 
-    dispatch(cargarBDSuccess({
+    dispatch(_cargarBDSuccess({
         ...state.bd,
         materiales: materiales.slice()
     }));
@@ -224,7 +225,7 @@ export const cerrarPedido = idTipoPedido => (dispatch, getState) => {
             .catch(_handlerError(dispatch));
     }
 
-    dispatch(cargarBDSuccess({
+    dispatch(_cargarBDSuccess({
         ...state.bd,
         materiales: materiales.slice(),
         pedidos:    pedidos.slice()
@@ -241,9 +242,11 @@ export const procesarPedido = idPedido => (dispatch, getState) => {
         _handlerError(dispatch)(new Error('Ya está procesado'));
     } else {
         pedido.procesadopedidos = true;
+
         editar('pedidos', pedido, pedido.id)
             .catch(_handlerError(dispatch));
-        dispatch(cargarBDSuccess({
+
+        dispatch(_cargarBDSuccess({
             ...state.bd,
             pedidos: pedidos.slice()
         }));
@@ -265,7 +268,8 @@ export const procesarPedidos = idTipoPedido => (dispatch, getState) => {
             editar('pedidos', pedido, pedido.id)
                 .catch(_handlerError(dispatch));
         }
-        dispatch(cargarBDSuccess({
+
+        dispatch(_cargarBDSuccess({
             ...state.bd,
             pedidos: pedidos.slice()
         }));
@@ -281,7 +285,7 @@ export const crearNuevoPedido = nuevoPedido => dispatch => {
         if (tipoPedido) {
             if (filas.length) {
                 for (let i = INIT_INDEX; i < filas.length; i++) {
-                    dispatch(insertarBD('pedidos', {
+                    dispatch(_insertarBD('pedidos', {
                         ...filas[i],
                         tipopedidos:        tipoPedido.id,
                         profundidadpedidos: tipoPedido.profundidadtipos_pedido,
@@ -320,7 +324,7 @@ export const eliminarFila = (dataset, index) => (dispatch, getState) => {
     eliminar(dataset, fila.id)
         .catch(_handlerError(dispatch));
 
-    dispatch(cargarBDSuccess({
+    dispatch(_cargarBDSuccess({
         ...state.bd,
         [dataset]: tabla.slice()
     }));
@@ -336,14 +340,14 @@ export const cambiarValorTabla = (dataset, valor, campo, index) => (dispatch, ge
 
     if (fila.id === undefined) {
         insertar(dataset, fila)
-            .then(json => dispatch(insertarBDSuccess(dataset, json, fila)))
+            .then(json => dispatch(_insertarBDSuccess(dataset, json, fila)))
             .catch(_handlerError(dispatch));
     } else {
         editar(dataset, fila, fila.id)
             .catch(_handlerError(dispatch));
     }
 
-    dispatch(cargarBDSuccess({
+    dispatch(_cargarBDSuccess({
         ...state.bd,
         [dataset]: tabla.slice()
     }));

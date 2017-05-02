@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
-import { emptyFunction } from '../../../utils/utils';
-
 import CheckBox from '../../ui/CheckBox';
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    seleccionado: false,
-    tag:          '',
-    contenido:    null,
-    onChange:     emptyFunction
+    seleccionado: false
 });
 const _renderContenido = contenido => typeof contenido === 'function' ?
         contenido() :
@@ -24,7 +19,7 @@ class ListaItemField extends Component {
         contenido:    PropTypes.any.isRequired,
         onChange:     PropTypes.func.isRequired
     }
-    getDefaultProps: _getDefaultProps
+    static defaultProps = _getDefaultProps()
 
     /* Lifecycle */
     componentWillMount() {
@@ -52,10 +47,7 @@ class ListaItemField extends Component {
                     valor={seleccionado}
                     onChange={this.handlerChange}
                 />
-                <div
-                    className="contenido"
-//                    onClick={this.onClick}
-                >
+                <div className="contenido" >
                     {_renderContenido(contenido)}
                 </div>
             </li>

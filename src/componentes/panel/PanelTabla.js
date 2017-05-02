@@ -2,21 +2,14 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { PropTypes } from 'prop-types';
 
-import { renderStyleAlto, emptyFunction } from '../../utils/utils';
+import { renderStyleAlto } from '../../utils/utils';
 
 import Tabla from '../tabla/Tabla';
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    id:              '',
-    titulo:          '',
-    cols:            [],
-    filas:           [],
-    orden:           [],
-    claseFila:       emptyFunction,
-    onClickAcciones: emptyFunction,
-    velo:            false,
-    puedeFiltrar:    false
+    velo:         false,
+    puedeFiltrar: false
 });
 const _getInitialState = () => ({
     altoTabla: undefined
@@ -33,16 +26,16 @@ class PanelTabla extends Component {
         orden:           PropTypes.array.isRequired,
         claseFila:       PropTypes.func.isRequired,
         onClickAcciones: PropTypes.func.isRequired,
-        alto:            PropTypes.number,
         velo:            PropTypes.bool,
+        puedeFiltrar:    PropTypes.bool,
+        alto:            PropTypes.number,
         acciones:        PropTypes.array,
         onCambiaOrden:   PropTypes.func,
-        puedeFiltrar:    PropTypes.bool,
         onFiltrado:      PropTypes.func,
         onLimpiarFiltro: PropTypes.func,
         combosDataset:   PropTypes.object
     }
-    getDefaultProps: _getDefaultProps
+    static defaultProps = _getDefaultProps()
 
     /* Lifecycle */
     componentWillMount() {
@@ -109,11 +102,6 @@ class PanelTabla extends Component {
                     onFiltrado={onFiltrado}
                     onLimpiarFiltro={onLimpiarFiltro}
                     combosDataset={combosDataset}
-//        id_campo={this.props.id_campo}
-//        url={this.props.url}
-//        parseData={this.parseData}
-//        params={this.props.params}
-//        onResize={this.onResizeTabla}
                 />
             </section>
         );

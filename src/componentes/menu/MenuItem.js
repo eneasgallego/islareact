@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
-import { emptyFunction } from '../../utils/utils';
-
 import Boton from '../ui/Boton';
 import Menu from './Menu';
 
 /* Private functions */
-const _getDefaultProps = () => ({
-    texto:   '',
-    tag:     '',
-    onClick: emptyFunction
-});
 const _getInitialState = () => ({
     mostrarChildren: false
 });
@@ -36,7 +29,6 @@ class MenuItem extends Component {
         menu:    PropTypes.array,
         onClick: PropTypes.func.isRequired
     }
-    getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {

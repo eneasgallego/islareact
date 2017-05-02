@@ -94,54 +94,12 @@ class FiltroTabla extends Component {
                 onKeyPress={this.handlerKeyPress}
             />
         );
-
-/*
-        if (tipo === 'object') {
-            return (
-                <ListaFieldObj
-                    valor={valor || []}
-                    campo_texto={filtro.texto}
-                    campo_valor={filtro.id}
-                    lista={filtro.lista}
-                    onChange={this.onChangeLista}
-                    onMouseOver={this.onClick}
-                />
-            );
-        } else if (tipo === 'bool') {
-            return (
-                <ListaFieldBool
-                    valor={valor || []}
-                    onChange={this.onChangeLista}
-                />
-            );
-        } else if (tipo === 'int') {
-            return (
-                <ListaFieldNum
-                    valor={valor || []}
-                    onChange={this.onChangeLista}
-                />
-            );
-        } else {
-            return (
-                <TextField
-                    valor={valor}
-                    onClick={this.onClickField}
-                    onBlur={this.onBlurTextField}
-                    onKeyPress={this.onKeyPressText}
-                    onLoad={this.onLoadField}
-                />
-            );
-        }
-        */
     }
     render() {
         const { onClick } = this.props;
 
         return (
-            <PanelFlotante
-                onClick={onClick}
-                onClosePanel={this.onClosePanel}
-            >
+            <PanelFlotante onClick={onClick} >
                 {this.renderContenido()}
             </PanelFlotante>
         );

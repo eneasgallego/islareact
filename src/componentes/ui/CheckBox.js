@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
-import { emptyFunction } from '../../utils/utils';
-
 /* Private functions */
 const _getDefaultProps = () => ({
-    valor:    false,
-    onChange: emptyFunction
+    valor: false
 });
 
 class CheckBox extends Component {
@@ -15,7 +12,7 @@ class CheckBox extends Component {
         valor:    PropTypes.bool,
         onChange: PropTypes.func.isRequired
     }
-    getDefaultProps: _getDefaultProps
+    static defaultProps = _getDefaultProps()
 
     /* Lifecycle */
     componentWillMount() {
@@ -35,12 +32,9 @@ class CheckBox extends Component {
 
         return (
             <input
-//                ref="checkbox"
                 type="checkbox"
                 checked={valor}
                 onChange={this.handlerChange}
-//                onClick={this.onClick}
-//                onBlur={this.onBlur}
             />
         );
     }

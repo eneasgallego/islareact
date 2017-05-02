@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
-import { emptyFunction } from '../../utils/utils';
-
 import Tabla from './Tabla';
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    cols:           [],
-    filas:          [],
-    onClickNuevo:   emptyFunction,
-    combosDataset:  {},
-    eliminar:       false,
-    onCambiaEditar: emptyFunction,
-    onEliminar:     emptyFunction
+    combosDataset: {},
+    eliminar:      false
 });
 const _acciones = eliminar => eliminar ?
 [{
@@ -38,7 +31,7 @@ class ListaTabla extends Component {
         onLimpiarFiltro: PropTypes.func,
         filtros:         PropTypes.array
     }
-    getDefaultProps: _getDefaultProps
+    static defaultProps = _getDefaultProps()
 
     /* Lifecycle */
     componentWillMount() {
@@ -85,9 +78,6 @@ class ListaTabla extends Component {
                 filtros={filtros}
                 onFiltrado={onFiltrado}
                 onLimpiarFiltro={onLimpiarFiltro}
-//                id_campo={this.props.id_campo}
-//                url={this.props.url}
-//                onResizeFila={this.onResizeFila}
             />
         );
     }

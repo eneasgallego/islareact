@@ -2,16 +2,13 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { PropTypes } from 'prop-types';
 
-import { emptyFunction } from '../../utils/utils';
-import { HALF_DIVISION } from '../../utils/constantes';
-
 import Menu from '../menu/Menu';
+
+const _HALF_DIVISION = 2;
 
 /* Private functions */
 const _getDefaultProps = () => ({
-    titulo:        'Diálogo',
-    contenido:     'Inserte el contenido',
-    onClickCerrar: emptyFunction
+    contenido: 'Inserte el contenido'
 });
 const _renderCerrar = (puedeCerrar, onClickCerrar) => puedeCerrar ?
     <i className="icon icon-cancel" onClick={onClickCerrar}></i> :
@@ -35,7 +32,7 @@ class Dialogo extends Component {
         menu:          PropTypes.array,
         onClickMenu:   PropTypes.func
     }
-    getDefaultProps: _getDefaultProps
+    static defaultProps = _getDefaultProps()
 
     /* Lifecycle */
     componentWillMount() {
@@ -62,8 +59,8 @@ class Dialogo extends Component {
         const
             dom = ReactDOM.findDOMNode(this),
             contenedor = ReactDOM.findDOMNode(this.refs.contenedor),
-            left = (dom.offsetWidth - contenedor.offsetWidth) / HALF_DIVISION,
-            top = (dom.offsetHeight - contenedor.offsetHeight) / HALF_DIVISION;
+            left = (dom.offsetWidth - contenedor.offsetWidth) / _HALF_DIVISION,
+            top = (dom.offsetHeight - contenedor.offsetHeight) / _HALF_DIVISION;
 
         this.setState({
             left,

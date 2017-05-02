@@ -15,16 +15,9 @@ import {
     cambiarValorTabla
 } from '../actions/BD';
 
-import { getInitialState } from '../reducers/Tabla';
-
 import ListaTabla from '../componentes/tabla/ListaTabla';
-import { getPropTypesTabla } from '../utils/utils';
 
-/* Private functions */
-const _getDefaultProps = () => ({
-    ...getInitialState(),
-    filas: []
-});
+import { getPropTypesTabla } from '../utils/utils';
 
 class PanelLista extends Component {
     /* Properties */
@@ -32,7 +25,6 @@ class PanelLista extends Component {
         ...getPropTypesTabla(),
         orden: PropTypes.array.isRequired
     }
-    getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
@@ -48,11 +40,6 @@ class PanelLista extends Component {
         this.handlerEliminar = this.handlerEliminar.bind(this);
         this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
     }
-    // componentWillReceiveProps(nextProps) {
-//        const { dispatch, combosDataset } = this.props;
-
-//        combosDataset !== nextProps.combosDataset && dispatch(initFiltrosTabla(this.id, this.cols, nextProps.combosDataset));
-//    }
 
     /* Handlers */
     handlerNuevaFila() {
@@ -93,9 +80,6 @@ class PanelLista extends Component {
             filtros,
             orden,
             combosDataset
-//            alto,
-//            cargando,
-//            titulo,
         } = this.props;
 
         return (
@@ -113,14 +97,6 @@ class PanelLista extends Component {
                 onCambiaOrden={this.handlerCambiaOrden}
                 onCambiaEditar={this.handlerCambiaEditar}
                 combosDataset={combosDataset}
-//                id_campo={this.props.config[this.state.contenido].id_campo}
-//                url_editar={this.props.config[this.state.contenido].url_editar}
-//                url_crear={this.props.config[this.state.contenido].url_crear}
-//                url={this.props.config[this.state.contenido].url}
-//                eliminar={this.props.config[this.state.contenido].eliminar}
-//                key={this.state.contenido}
-//                ref={this.state.contenido}
-//                setDialogo={this.setDialogo}
             />
         );
 

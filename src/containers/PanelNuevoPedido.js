@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { parseCols } from '../utils/utils';
 
 import {
-    initState,
     cambiarTipoNuevoPedido,
     nuevaFilaNuevoPedido,
     cambiarValorTablaNuevoPedido,
@@ -22,10 +21,6 @@ import Combo from '../componentes/ui/Combo';
 import Boton from '../componentes/ui/Boton';
 
 /* Private functions */
-const _getDefaultProps = () => ({
-    ...initState(),
-    combosDataset: {}
-});
 const _getIdTipoPedido = nuevoPedido => nuevoPedido && nuevoPedido.tipoPedido && nuevoPedido.tipoPedido.idTipoPedido;
 const _getCols = () => parseCols([{
     texto: 'MATERIAL',
@@ -48,7 +43,6 @@ class PanelNuevoPedido extends Component {
         combosDataset: PropTypes.object.isRequired,
         nuevoPedido:   PropTypes.object.isRequired
     }
-    getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {
@@ -121,13 +115,6 @@ class PanelNuevoPedido extends Component {
                 eliminar
                 onCambiaEditar={this.handlerCambiaEditar}
                 onEliminar={this.handlerEliminar}
-//                id_campo={this.props.config.nuevo_pedido.tabla.id_campo}
-//                url={this.props.config.nuevo_pedido.tabla.url}
-//                eliminar={this.props.config.nuevo_pedido.tabla.eliminar}
-//                setDialogo={this.setDialogo}
-//                onResizeFila={this.onResizeFilaNuevoPedido}
-//                onLoad={this.dimensionar}
-//                persistir={false}
             />
         ] :
             null;
@@ -137,7 +124,6 @@ class PanelNuevoPedido extends Component {
             <Panel
                 ref="panel_nuevo_pedido"
                 className="panel_nuevo_pedido"
-//                dimensionar={this.dimensionarNuevoPedido}
             >
                 {this.renderContenidoNuevoPedido()}
             </Panel>

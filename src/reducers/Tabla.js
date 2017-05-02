@@ -9,56 +9,58 @@ import {
 import {
     POS_TO_DELETE_SPLICE, INIT_INDEX,
     ORDER_DOWN, ORDER_UP, ORDER_EQUAL,
-    RADIX, NUMERO_DEFECTO
+    NUMERO_DEFECTO
 } from '../utils/constantes';
 
-const _INDEX_TODOS = 0;
-const _INDEX_NINGUNO = 1;
-const _listaFiltroNum = [{
-    texto:      'mayor que',
-    tag:        'mayor',
-    titulo:     '>',
-    compatible: ['menor'],
-    filtrar(a, b) {
-        return a > b;
-    }
-},{
-    texto:      'menor que',
-    tag:        'menor',
-    titulo:     '<',
-    compatible: ['mayor'],
-    filtrar(a, b) {
-        return a < b;
-    }
-},{
-    texto:  'igual que',
-    tag:    'igual',
-    titulo: '=',
-    filtrar(a, b) {
-        return a === b;
-    }
-},{
-    texto:  'distinto que',
-    tag:    'distinto',
-    titulo: '!=',
-    filtrar(a, b) {
-        return a !== b;
-    }
-}];
-const _listaFiltroBool = [{
-    contenido: 'Sí',
-    tag:       'si',
-    valor:     true
-},{
-    contenido: 'No',
-    tag:       'no',
-    valor:     false
-}];
+const
+    _INDEX_TODOS = 0,
+    _INDEX_NINGUNO = 1,
+    _RADIX = 10,
+    _listaFiltroNum = [{
+        texto:      'mayor que',
+        tag:        'mayor',
+        titulo:     '>',
+        compatible: ['menor'],
+        filtrar(a, b) {
+            return a > b;
+        }
+    },{
+        texto:      'menor que',
+        tag:        'menor',
+        titulo:     '<',
+        compatible: ['mayor'],
+        filtrar(a, b) {
+            return a < b;
+        }
+    },{
+        texto:  'igual que',
+        tag:    'igual',
+        titulo: '=',
+        filtrar(a, b) {
+            return a === b;
+        }
+    },{
+        texto:  'distinto que',
+        tag:    'distinto',
+        titulo: '!=',
+        filtrar(a, b) {
+            return a !== b;
+        }
+    }],
+    _listaFiltroBool = [{
+        contenido: 'Sí',
+        tag:       'si',
+        valor:     true
+    },{
+        contenido: 'No',
+        tag:       'no',
+        valor:     false
+    }];
 
 const _filtrarObj = (valor, valorFiltrar) => valor.some(item => valorFiltrar === item.valor);
 const _filtrarNum = (valor, item) => valor.every(itemValor => _listaFiltroNum.buscar('tag', itemValor.tag).filtrar(item, itemValor.valor));
 
-export const modificarValorFiltroObj = (valor, itemLista, itemValor, insertar) => {
+const _modificarValorFiltroObj = (valor, itemLista, itemValor, insertar) => {
     if (insertar) {
         const _itemValor = itemValor || {};
 
@@ -114,7 +116,7 @@ const _setOrdenTabla = (state, action, idTabla) => _checkTabla(state, action, id
 const _crearItemValorFiltroObj = itemLista => ({
     texto: itemLista.contenido,
     tag:   itemLista.tag,
-    valor: parseInt(itemLista.tag, RADIX)
+    valor: parseInt(itemLista.tag, _RADIX)
 });
 const _crearItemValorFiltroBool = itemLista => ({
     texto: itemLista.contenido,
@@ -133,7 +135,7 @@ const _filtrarTablaObj = (filtro, newValor) => {
     if (seleccionado && (tag === 'todos' || tag === 'ninguno')) {
         if (tag === 'todos') {
             for (let i = INIT_INDEX; i < lista.length; i++) {
-                !isNaN(lista[i].tag) && modificarValorFiltroObj(_valor, _crearItemValorFiltroObj(lista[i]), _valor.buscar('tag', lista[i].tag), true);
+                !isNaN(lista[i].tag) && _modificarValorFiltroObj(_valor, _crearItemValorFiltroObj(lista[i]), _valor.buscar('tag', lista[i].tag), true);
             }
         } else {
             _valor.splice(INIT_INDEX, _valor.length);
@@ -141,9 +143,9 @@ const _filtrarTablaObj = (filtro, newValor) => {
     } else {
         const _itemLista = lista.buscar('tag', tag);
 
-        modificarValorFiltroObj(_valor, lista[_INDEX_TODOS], _valor.buscar('tag', 'todos'), false);
-        modificarValorFiltroObj(_valor, lista[_INDEX_NINGUNO], _valor.buscar('tag', 'ninguno'), false);
-        modificarValorFiltroObj(_valor, _crearItemValorFiltroObj(_itemLista), _valor.buscar('tag', tag), seleccionado);
+        _modificarValorFiltroObj(_valor, lista[_INDEX_TODOS], _valor.buscar('tag', 'todos'), false);
+        _modificarValorFiltroObj(_valor, lista[_INDEX_NINGUNO], _valor.buscar('tag', 'ninguno'), false);
+        _modificarValorFiltroObj(_valor, _crearItemValorFiltroObj(_itemLista), _valor.buscar('tag', tag), seleccionado);
     }
 
     _valor.filtrar = _filtrarObj.bind(_valor, _valor);
@@ -168,7 +170,7 @@ const _filtrarTablaBool = (filtro, newValor) => {
         _valor = valor || [],
         _itemLista = lista.buscar('tag', tag);
 
-    modificarValorFiltroObj(_valor, _crearItemValorFiltroBool(_itemLista), _valor.buscar('tag', tag), seleccionado);
+    _modificarValorFiltroObj(_valor, _crearItemValorFiltroBool(_itemLista), _valor.buscar('tag', tag), seleccionado);
 
     _valor.filtrar = _filtrarObj.bind(_valor, _valor);
 

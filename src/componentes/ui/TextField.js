@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
-import { emptyFunction } from '../../utils/utils';
-
 /* Private functions */
 const _getDefaultProps = () => ({
-    onKeyPress: emptyFunction,
-    disabled:   false
+    disabled: false
 });
 
 class TextField extends Component {
@@ -17,7 +14,7 @@ class TextField extends Component {
         onKeyPress: PropTypes.func,
         disabled:   PropTypes.bool
     }
-    getDefaultProps: _getDefaultProps
+    static defaultProps = _getDefaultProps()
 
     /* Lifecycle */
     componentWillMount() {
@@ -50,7 +47,7 @@ class TextField extends Component {
     handlerKeyPress(e) {
         const { onKeyPress } = this.props;
 
-        onKeyPress(e.currentTarget.value, typeof e.which === 'number' ?
+        onKeyPress && onKeyPress(e.currentTarget.value, typeof e.which === 'number' ?
                 e.which :
                 e.keyCode);
     }
@@ -67,8 +64,6 @@ class TextField extends Component {
                 onBlur={this.handlerBlur}
                 onKeyDown={this.handlerKeyPress}
                 disabled={disabled}
-//                onChange={this.handlerChange}
-//                onClick={this.onClick}
             />
         );
     }

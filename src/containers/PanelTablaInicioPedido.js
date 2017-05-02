@@ -9,16 +9,9 @@ import {
     procesarPedido
 } from '../actions/BD';
 
-import { getInitialState } from '../reducers/Tabla';
-
 import { parseCols } from '../utils/utils';
 
 import getVistaPedido from '../datos/VistaPedido';
-
-// import { PROCESADO_PEDIDO, PROCESADO_PEDIDO_ALGUNO} from '../utils/constantes';
-
-/* Private functions */
-const _getDefaultProps = getInitialState;
 
 const _getCols = () => parseCols([{
     texto: 'MATERIAL',

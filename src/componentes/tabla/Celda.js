@@ -19,6 +19,10 @@ const _getDefaultProps = () => ({
     mostrarFiltro: false,
     datos:         ''
 });
+const _getInitState = () => ({
+    editar:              false,
+    mostrarFiltrosCelda: false
+});
 
 const _getValorDataset = (dataset, tipo, datos) => dataset && (dataset.buscar(tipo.id, datos) || {})[tipo.texto];
 const _parseValor = (valor, tipo) => {
@@ -82,13 +86,11 @@ class Celda extends Component {
         onFiltrado:       PropTypes.func,
         onLimpiarFiltro:  PropTypes.func
     }
-    getDefaultProps: _getDefaultProps
+    static defaultProps = _getDefaultProps()
+
     /* Lifecycle */
     componentWillMount() {
-        this.setState({
-            editar:              false,
-            mostrarFiltrosCelda: false
-        });
+        this.setState(_getInitState());
 
         this.handlerResize = this.handlerResize.bind(this);
         this.handlerClick = this.handlerClick.bind(this);
@@ -285,9 +287,7 @@ class Celda extends Component {
                         onChange={this.handlerChange}
                         campoId={tipo.id}
                         campoTexto={tipo.texto}
-//                        onClick={this.onClickField}
                         onBlur={this.handlerBlur}
-//                        onLoad={this.onLoadField}
                     />
                 );
             } else if (tipo.tipo === 'bool') {
@@ -305,7 +305,6 @@ class Celda extends Component {
                         valor={datos}
                         onBlur={this.handlerChange}
                         onKeyPress={this.handlerKeyPress}
-//                        onClick={this.onClickField}
                     />
             );
 

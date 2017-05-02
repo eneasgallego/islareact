@@ -3,31 +3,25 @@ import ReactDOM from 'react-dom';
 import { PropTypes } from 'prop-types';
 
 import {
-    INIT_PROFUNDIDAD, UP_PROFUNDIDAD,
+    UP_PROFUNDIDAD,
     ORDER_UP, ORDER_DOWN,
     INIT_INDEX
 } from '../../utils/constantes';
 
-import { renderStyleAlto, emptyFunction } from '../../utils/utils';
+import { renderStyleAlto } from '../../utils/utils';
 
 import Menu from '../menu/Menu';
 import Fila from './Fila';
 
+const _INIT_PROFUNDIDAD = 0;
+
 /* Private functions */
 const _getDefaultProps = () => ({
-    guardar:         false,
-    alto:            undefined,
-    cols:            [],
-    filas:           [],
-    orden:           [],
-    velo:            false,
-    claseFila:       emptyFunction,
-    onClickAcciones: emptyFunction,
-    onClickNuevo:    emptyFunction,
-    combosDataset:   {},
-    onCambiaEditar:  emptyFunction,
-    puedeFiltrar:    false,
-    campoId:         ''
+    guardar:      false,
+    orden:        [],
+    velo:         false,
+    puedeFiltrar: false,
+    campoId:      ''
 });
 const _getInitialState = () => ({
     altoTabla: undefined,
@@ -61,10 +55,10 @@ const _getValorOrdenar = (campo, datos) => isNaN(_getCalcOrdenar(campo, datos)) 
     datos[campo] :
     _getCalcOrdenar(campo, datos);
 
-const _ordenarFila = (params, a, b, prof = INIT_PROFUNDIDAD) => {
+const _ordenarFila = (params, a, b, prof = _INIT_PROFUNDIDAD) => {
     const
         { orden, campoId } = params,
-        _orden = orden && orden[prof];
+        _orden = orden[prof];
 
     if (_orden) {
         const
@@ -156,7 +150,7 @@ class Tabla extends Component {
         onFiltrado:      PropTypes.func,
         onLimpiarFiltro: PropTypes.func
     }
-    getDefaultProps: _getDefaultProps
+    static defaultProps = _getDefaultProps()
 
     /* Lifecycle */
     componentWillMount() {
@@ -180,7 +174,7 @@ class Tabla extends Component {
     handlerClickMenu(tag) {
         const { onClickNuevo } = this.props;
 
-        tag === 'nuevo' && onClickNuevo();
+        onClickNuevo && tag === 'nuevo' && onClickNuevo();
     }
     handlerCambiaEditar(valor, campo, datos) {
         const {
@@ -216,7 +210,7 @@ class Tabla extends Component {
         } = this.props,
             { anchos } = this.state,
             filasFiltradas = filas.filter(_filtrar.bind(null, filtros)),
-            filasOrdenadas = orden && orden.length ?
+            filasOrdenadas = orden.length ?
                 filasFiltradas.sort(_ordenarFila.bind(null, {orden, campoId})) :
                 filasFiltradas,
             _filas = filasOrdenadas.map((fila, index) => (
@@ -231,12 +225,6 @@ class Tabla extends Component {
                     onResizeCelda={this.handlerResizeCelda}
                     combosDataset={combosDataset}
                     onCambiaEditar={this.handlerCambiaEditar}
-                    //                    guardar={this.guardar}
-                    //                    id_campo={this.props.id_campo}
-                    //                    onResize={this.onResizeFila}
-                    //                    onClickCelda={this.onClickCelda}
-                    //                    onChangeValor={this.onChangeValor}
-                    //                    combos_dataset={this.state.combos_dataset}
                 />
             ));
 
@@ -282,10 +270,6 @@ class Tabla extends Component {
                             filtros={filtros}
                             onFiltrado={onFiltrado}
                             onLimpiarFiltro={onLimpiarFiltro}
-    //                    ref={this.refFilas}
-    //                    onResize={this.onResizeFila}
-    //                    onChangeDesc={this.ordenar}
-    //                    combos_dataset={this.state.combos_dataset}
                         />
                     </thead>
                     <tbody style={renderStyleAlto(altoBody)}>

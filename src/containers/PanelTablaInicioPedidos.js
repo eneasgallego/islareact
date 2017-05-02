@@ -10,8 +10,6 @@ import {
     procesarPedidos
 } from '../actions/BD';
 
-import { getInitialState } from '../reducers/Tabla';
-
 import { parseCols } from '../utils/utils';
 
 import getVistaPedidos from '../datos/VistaPedidos';
@@ -20,9 +18,6 @@ import { PROCESADO_PEDIDO, PROCESADO_PEDIDO_ALGUNO} from '../utils/constantes';
 
 /* Constanst */
 const _ID = ID_INICIO_PEDIDOS;
-
-/* Private functions */
-const _getDefaultProps = getInitialState;
 
 const _getCols = () => parseCols([{
     texto: 'PEDIDO',

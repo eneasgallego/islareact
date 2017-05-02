@@ -3,10 +3,6 @@ import { PropTypes } from 'prop-types';
 
 import Panel from './Panel';
 
-/* Private functions */
-const _getDefaultProps = () => ({
-});
-
 class PanelFlotante extends Component {
     /* Properties */
     static propTypes = {
@@ -14,7 +10,6 @@ class PanelFlotante extends Component {
         onMouseOver: PropTypes.func,
         onMouseOut:  PropTypes.func
     }
-    getDefaultProps: _getDefaultProps
 
     /* Render */
     render() {

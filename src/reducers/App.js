@@ -6,37 +6,35 @@ import {
     HANDLER_ERROR
 } from '../actions/app';
 
-const options = {
-    menu: [{
-        texto: 'Inicio',
-        tag:   'inicio'
+const _menu = [{
+    texto: 'Inicio',
+    tag:   'inicio'
+},{
+    texto: 'Excedente',
+    tag:   'excedente'
+},{
+    texto: 'Nuevo Pedido',
+    tag:   'nuevo_pedido'
+},{
+    texto: 'Admin',
+    tag:   'admin',
+    menu:  [{
+        texto: 'Fabricas',
+        tag:   'fabricas'
     },{
-        texto: 'Excedente',
-        tag:   'excedente'
+        texto: 'Materiales',
+        tag:   'materiales'
     },{
-        texto: 'Nuevo Pedido',
-        tag:   'nuevo_pedido'
+        texto: 'Materiales Necesita',
+        tag:   'materiales_necesita'
     },{
-        texto: 'Admin',
-        tag:   'admin',
-        menu:  [{
-            texto: 'Fabricas',
-            tag:   'fabricas'
-        },{
-            texto: 'Materiales',
-            tag:   'materiales'
-        },{
-            texto: 'Materiales Necesita',
-            tag:   'materiales_necesita'
-        },{
-            texto: 'Tipos Pedido',
-            tag:   'tipos_pedido'
-        },{
-            texto: 'Pedidos',
-            tag:   'pedidos'
-        }]
+        texto: 'Tipos Pedido',
+        tag:   'tipos_pedido'
+    },{
+        texto: 'Pedidos',
+        tag:   'pedidos'
     }]
-};
+}];
 
 const _dimensionar = menu => window.innerHeight - menu.offsetHeight;
 const _setDialogoError = error => ({
@@ -46,7 +44,7 @@ const _setDialogoError = error => ({
 });
 
 export default (state = {
-    menu:      options.menu,
+    menu:      _menu,
     contenido: 'inicio'
 }, action = {}) => {
     switch (action.type) {

@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
-/* Private functions */
-const _getDefaultProps = () => ({
-});
-
 class Panel extends Component {
     /* Properties */
     static propTypes = {
@@ -13,7 +9,6 @@ class Panel extends Component {
         onMouseOver: PropTypes.func,
         onMouseOut:  PropTypes.func
     }
-    getDefaultProps: _getDefaultProps
 
     /* Render */
     render() {

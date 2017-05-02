@@ -16,6 +16,9 @@ const _getDefaultProps = () => ({
     orden:         [],
     combosDataset: {}
 });
+const _getInitState = () => ({
+    mostrarFiltro: ''
+});
 const _claseFila = (header, claseFila, datos) => `${header ?
     'header' :
     ''} ${claseFila ?
@@ -67,16 +70,16 @@ class Fila extends Component {
         onFiltrado:      PropTypes.func,
         onLimpiarFiltro: PropTypes.func
     }
-    getDefaultProps: _getDefaultProps
+    static defaultProps = _getDefaultProps()
 
     /* Lifecycle */
     componentWillMount() {
+        this.setState(_getInitState());
+
         this.handlerAcciones = this.handlerAcciones.bind(this);
         this.handlerCambiaEditar = this.handlerCambiaEditar.bind(this);
         this.handlerMostrarFiltro = this.handlerMostrarFiltro.bind(this);
         this.handlerOcultarFiltro = this.handlerOcultarFiltro.bind(this);
-
-        this.setState({mostrarFiltro: ''});
     }
 
     /* Handlers */
@@ -146,16 +149,9 @@ class Fila extends Component {
                     onOcultarFiltro={this.handlerOcultarFiltro}
                     onFiltrado={onFiltrado}
                     onLimpiarFiltro={onLimpiarFiltro}
-//                    guardar={this.guardar}
-//                    onChangeValor={this.onChangeValor}
-//                    onChangeDesc={this.onChangeDesc}
-//                    combos_dataset={this.props.combos_dataset}
-//                    orden_desc={this.orden(col.campo) && this.props.orden.desc}
-//                    onFiltroFijado={this.onFiltroFijado}
-            />
+                />
             );
         }).concatenar(_renderAcciones(acciones, cols, header, this.handlerAcciones));
-
     }
 
     /* Handlers */

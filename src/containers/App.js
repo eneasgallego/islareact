@@ -16,7 +16,6 @@ import {
     ID_INICIO_PEDIDOS,
     ID_INICIO_NECESITA,
     ID_INICIO_PEDIDO
-//    ID_EXCEDENTE
 } from '../actions/Tabla';
 
 import PanelTablaInicioMateriales from './PanelTablaInicioMateriales';
@@ -35,9 +34,6 @@ import Menu from '../componentes/menu/Menu';
 import Dialogo from '../componentes/ui/Dialogo';
 
 /* Private functions */
-const _getDefaultProps = () => ({
-    menu: []
-});
 const _renderStyle = alto => alto ?
     {height: `${alto}px`} :
     {};
@@ -55,7 +51,6 @@ const _renderInicio = (alto, verPedido) => [
         []);
 const _renderExcedente = alto => (
         <PanelExcedente
-//            key={ID_EXCEDENTE}
             alto={alto}
         />
     );
@@ -82,18 +77,6 @@ const _renderContenido = (contenido, alto, verPedido) => contenido === 'inicio' 
         contenido === 'nuevo_pedido' ?
             _renderNuevoPedido() :
     _renderListaTabla(contenido);
-    /* (
-     <ListaTabla	id_campo={this.props.config[contenido].id_campo}
-     url_editar={this.props.config[contenido].url_editar}
-     url_crear={this.props.config[contenido].url_crear}
-     url={this.props.config[contenido].url}
-     cols={this.props.config[contenido].cols}
-     eliminar={this.props.config[contenido].eliminar}
-     key={contenido}
-     ref={contenido}
-     setDialogo={this.setDialogo}
-     />
-     ); */
 const _renderDialogo = (dialogo, handlerDialogo) => dialogo ?
         <Dialogo
             titulo={dialogo.titulo}
@@ -114,7 +97,6 @@ class App extends Component {
         verPedido: PropTypes.object,
         dialogo:   PropTypes.object
     }
-    getDefaultProps: _getDefaultProps
 
     /* Lifecycle */
     componentWillMount() {

@@ -8,8 +8,6 @@ import {
     recogerTodoMaterial
 } from '../actions/BD';
 
-import { getInitialState } from '../reducers/Tabla';
-
 import { parseCols, getClaseFilaMateriales } from '../utils/utils';
 
 import getVistaNecesita from '../datos/VistaNecesita';
@@ -20,7 +18,6 @@ import { NO_NECESITA } from '../utils/constantes';
 const _ID = ID_INICIO_NECESITA;
 
 /* Private functions */
-const _getDefaultProps = getInitialState;
 const _parseData = data => getVistaNecesita(data,item => item.stockmateriales < item.cantidadpedidos, true).filter(item => item.haciendomateriales > NO_NECESITA);
 const _getCols = () => parseCols([{
     texto: 'PROF',
