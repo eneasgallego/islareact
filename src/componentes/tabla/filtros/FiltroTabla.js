@@ -8,7 +8,7 @@ import {
 import PanelFlotante from '../../panel/PanelFlotante';
 import TextField from '../../ui/TextField';
 import ListaFieldNum from './ListaFieldNum';
-import ListaFieldObj from './ListaFieldObj';
+import ListaField from './ListaField';
 
 /* Private functions */
 const _getDefaultProps = () => ({
@@ -28,6 +28,7 @@ class FiltroTabla extends Component {
     /* Lifecycle */
     componentWillMount() {
         this.handlerKeyPress = this.handlerKeyPress.bind(this);
+        this.handlerChangeListaNum = this.handlerChangeListaNum.bind(this);
         this.handlerChangeLista = this.handlerChangeLista.bind(this);
     }
 
@@ -39,8 +40,11 @@ class FiltroTabla extends Component {
             this.filtrar(valor);
         }
     }
-    handlerChangeLista(valor) {
+    handlerChangeListaNum(valor) {
         this.filtrar(valor);
+    }
+    handlerChangeLista(seleccionado, tag) {
+        this.filtrar({seleccionado, tag});
     }
 
     /* Methods */
@@ -71,16 +75,14 @@ class FiltroTabla extends Component {
                 <ListaFieldNum
                     valor={valor}
                     lista={filtro.lista}
-                    onChange={this.handlerChangeLista}
+                    onChange={this.handlerChangeListaNum}
                 />
             );
         } else if (tipo === 'object') {
             return (
-                <ListaFieldObj
+                <ListaField
                     lista={filtro.lista}
-                    valor={valor}
-                    campoTexto={filtro.texto}
-                    campoId={filtro.id}
+                    valor={valor || []}
                     onChange={this.handlerChangeLista}
                 />
             );
