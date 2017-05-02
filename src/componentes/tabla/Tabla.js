@@ -102,13 +102,11 @@ const _filtrar = (filtros, fila) => filtros ?
             if (valor) {
                 if (tipo === 'string') {
                     return ~(`${valorFila}`.toUpperCase()).indexOf(`${valor}`.toUpperCase());
+                } else if (tipo === 'object' || tipo === 'int') {
+                    return valor.filtrar(valorFila);
+                } else if (tipo === 'bool') {
+                    return valor.filtrar(!!valorFila);
                 }
-                if (tipo === 'object' || tipo === 'int') {
-                    const valFiltrar = valor.filtrar(valorFila);
-
-                    return valFiltrar;
-                }
-
             }
 
             return true;

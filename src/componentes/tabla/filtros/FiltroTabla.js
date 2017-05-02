@@ -78,7 +78,7 @@ class FiltroTabla extends Component {
                     onChange={this.handlerChangeListaNum}
                 />
             );
-        } else if (tipo === 'object') {
+        } else if (tipo === 'object' || tipo === 'bool') {
             return (
                 <ListaField
                     lista={filtro.lista}

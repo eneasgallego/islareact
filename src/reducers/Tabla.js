@@ -45,6 +45,15 @@ const _listaFiltroNum = [{
         return a !== b;
     }
 }];
+const _listaFiltroBool = [{
+    contenido: 'Sí',
+    tag:       'si',
+    valor:     true
+},{
+    contenido: 'No',
+    tag:       'no',
+    valor:     false
+}];
 
 const _filtrarObj = (valor, valorFiltrar) => valor.some(item => valorFiltrar === item.valor);
 const _filtrarNum = (valor, item) => valor.every(itemValor => _listaFiltroNum.buscar('tag', itemValor.tag).filtrar(item, itemValor.valor));
@@ -107,6 +116,11 @@ const _crearItemValorFiltroObj = itemLista => ({
     tag:   itemLista.tag,
     valor: parseInt(itemLista.tag, RADIX)
 });
+const _crearItemValorFiltroBool = itemLista => ({
+    texto: itemLista.contenido,
+    tag:   itemLista.tag,
+    valor: itemLista.valor
+});
 const _filtrarTablaObj = (filtro, newValor) => {
     const
         {
@@ -131,6 +145,30 @@ const _filtrarTablaObj = (filtro, newValor) => {
         modificarValorFiltroObj(_valor, lista[_INDEX_NINGUNO], _valor.buscar('tag', 'ninguno'), false);
         modificarValorFiltroObj(_valor, _crearItemValorFiltroObj(_itemLista), _valor.buscar('tag', tag), seleccionado);
     }
+
+    _valor.filtrar = _filtrarObj.bind(_valor, _valor);
+
+    return _valor;
+};
+const _filtrarTablaBool = (filtro, newValor) => {
+    if (newValor instanceof Array) {
+        for (let i = INIT_INDEX; i < newValor.length; i++) {
+            filtro.valor = _filtrarTablaBool(filtro, newValor[i]);
+        }
+
+        return filtro.valor;
+    }
+
+    const
+        {
+            valor,
+            lista
+        } = filtro,
+        { seleccionado, tag } = newValor,
+        _valor = valor || [],
+        _itemLista = lista.buscar('tag', tag);
+
+    modificarValorFiltroObj(_valor, _crearItemValorFiltroBool(_itemLista), _valor.buscar('tag', tag), seleccionado);
 
     _valor.filtrar = _filtrarObj.bind(_valor, _valor);
 
@@ -205,6 +243,8 @@ const _filtrarTabla = (state, action, idTabla) => _checkTabla(state, action, idT
         _filtro.valor = _filtrarTablaObj(_filtro, action.valor);
     } else if (tipo.tipo === 'int') {
         _filtro.valor = _filtrarTablaNum(_filtro, action.valor);
+    } else if (tipo.tipo === 'bool') {
+        _filtro.valor = _filtrarTablaBool(_filtro, action.valor);
     }
 
     filtros[index] = _filtro;
@@ -269,6 +309,12 @@ const _initFiltrosTabla = (state, action, idTabla) => _checkTabla(state, action,
         } else if (tipo === 'int') {
             _filtro.lista = _listaFiltroNum;
             _filtro.valor = _filtrarTablaNum(_filtro, { seleccionado: false });
+        } else if (tipo === 'bool') {
+            _filtro.lista = _listaFiltroBool;
+            _filtro.valor = _filtrarTablaBool(_filtro, _listaFiltroBool.map(({ tag }) => ({
+                seleccionado: true,
+                tag
+            })));
         }
 
         return _filtro;
