@@ -155,10 +155,10 @@
     },
     {
       "nombremateriales": "Tablas",
-      "fabricamateriales": 2,
-      "hacemateriales": 1,
-      "stockmateriales": 3,
-      "haciendomateriales": 3,
+      "fabricamateriales": "2",
+      "hacemateriales": "1",
+      "stockmateriales": "6",
+      "haciendomateriales": "0",
       "id": 13
     },
     {
@@ -315,10 +315,10 @@
     },
     {
       "nombremateriales": "Armario",
-      "fabricamateriales": 5,
-      "hacemateriales": 1,
-      "stockmateriales": 3,
-      "haciendomateriales": 0,
+      "fabricamateriales": "5",
+      "hacemateriales": "1",
+      "stockmateriales": "1",
+      "haciendomateriales": "0",
       "id": 33
     },
     {
@@ -587,10 +587,10 @@
     },
     {
       "nombremateriales": "Bonsai japones",
-      "fabricamateriales": 11,
-      "hacemateriales": 1,
-      "stockmateriales": 2,
-      "haciendomateriales": 0,
+      "fabricamateriales": "11",
+      "hacemateriales": "1",
+      "stockmateriales": "3",
+      "haciendomateriales": "0",
       "id": 67
     },
     {
@@ -1454,11 +1454,11 @@
       "id": 72
     },
     {
-      "materialpedidos": 14,
-      "cantidadpedidos": 2,
-      "tipopedidos": 5,
-      "profundidadpedidos": 0,
-      "procesadopedidos": false,
+      "materialpedidos": "14",
+      "cantidadpedidos": "2",
+      "tipopedidos": "5",
+      "profundidadpedidos": "0",
+      "procesadopedidos": "true",
       "id": 79
     },
     {
@@ -1470,11 +1470,11 @@
       "id": 80
     },
     {
-      "materialpedidos": 49,
-      "cantidadpedidos": 2,
-      "tipopedidos": 5,
-      "profundidadpedidos": 0,
-      "procesadopedidos": false,
+      "materialpedidos": "49",
+      "cantidadpedidos": "2",
+      "tipopedidos": "5",
+      "profundidadpedidos": "0",
+      "procesadopedidos": "true",
       "id": 81
     },
     {
@@ -1486,11 +1486,11 @@
       "id": 82
     },
     {
-      "materialpedidos": 24,
-      "cantidadpedidos": 2,
-      "tipopedidos": 5,
-      "profundidadpedidos": 0,
-      "procesadopedidos": false,
+      "materialpedidos": "24",
+      "cantidadpedidos": "2",
+      "tipopedidos": "5",
+      "profundidadpedidos": "0",
+      "procesadopedidos": "true",
       "id": 83
     },
     {
@@ -1588,14 +1588,6 @@
       "profundidadpedidos": 10,
       "procesadopedidos": true,
       "id": 101
-    },
-    {
-      "materialpedidos": 33,
-      "cantidadpedidos": 2,
-      "tipopedidos": 18,
-      "profundidadpedidos": 10,
-      "procesadopedidos": true,
-      "id": 102
     },
     {
       "materialpedidos": 31,
