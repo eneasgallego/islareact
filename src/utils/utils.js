@@ -213,13 +213,13 @@ export const renderStyleAlto = alto => alto ?
     {};
 export const getClaseFilaMateriales = datos => datos.stockmateriales >= datos.cantidadpedidos ?
         'bueno' :
-    datos.stockmateriales + datos.haciendomateriales >= datos.cantidadpedidos ?
-        'medio' :
-    datos.haciendofabricas < datos.maximofabricas ?
-        datos.faltanecesita ?
-            'malo' :
-            'nulo' :
-        '';
+        datos.stockmateriales + datos.haciendomateriales >= datos.cantidadpedidos ?
+            'medio' :
+            datos.haciendofabricas < datos.maximofabricas ?
+                datos.faltanecesita ?
+                    'malo' :
+                    'nulo' :
+                '';
 export const getPropTypesTabla = () => ({
     filas:         PropTypes.array.isRequired,
     filtros:       PropTypes.array.isRequired,

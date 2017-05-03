@@ -45,6 +45,7 @@ export default (data,calcularProfundidad,sinpedidos) => {
                     faltamateriales:    NUMERO_DEFECTO,
                     profundidadpedidos: undefined
                 };
+
                 ret.push(obj);
                 map[material.id] = obj;
             }

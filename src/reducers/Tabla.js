@@ -9,13 +9,13 @@ import {
 import {
     POS_TO_DELETE_SPLICE, INIT_INDEX,
     ORDER_DOWN, ORDER_UP, ORDER_EQUAL,
-    NUMERO_DEFECTO
+    NUMERO_DEFECTO,
+    RADIX
 } from '../utils/constantes';
 
 const
     _INDEX_TODOS = 0,
     _INDEX_NINGUNO = 1,
-    _RADIX = 10,
     _listaFiltroNum = [{
         texto:      'mayor que',
         tag:        'mayor',
@@ -116,7 +116,7 @@ const _setOrdenTabla = (state, action, idTabla) => _checkTabla(state, action, id
 const _crearItemValorFiltroObj = itemLista => ({
     texto: itemLista.contenido,
     tag:   itemLista.tag,
-    valor: parseInt(itemLista.tag, _RADIX)
+    valor: parseInt(itemLista.tag, RADIX)
 });
 const _crearItemValorFiltroBool = itemLista => ({
     texto: itemLista.contenido,

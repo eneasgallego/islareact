@@ -1,6 +1,6 @@
 import { getMapa } from './utils';
 
-import { INIT_INDEX, NUMERO_DEFECTO } from '../utils/constantes';
+import { INIT_INDEX, NUMERO_DEFECTO, RADIX } from '../utils/constantes';
 
 export default data => {
     const ret = [];
@@ -27,7 +27,7 @@ export default data => {
             ret.push(obj);
         }
 
-        obj.haciendomateriales += material.haciendomateriales;
+        obj.haciendomateriales += parseInt(material.haciendomateriales, RADIX);
 
         map[id] = obj;
     }
