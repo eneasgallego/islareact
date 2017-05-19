@@ -23,7 +23,7 @@ class FiltroTabla extends Component {
         onLimpiarFiltro: PropTypes.func,
         valor:           PropTypes.any
     }
-    getDefaultProps: _getDefaultProps
+    static defaultProps = _getDefaultProps()
 
     /* Lifecycle */
     componentWillMount() {

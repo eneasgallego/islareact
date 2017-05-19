@@ -9,7 +9,7 @@ class Componente extends Component {
     /* Properties */
     static propTypes = {
     }
-    getDefaultProps: _getDefaultProps
+    static defaultProps = _getDefaultProps()
 
     /* Render */
     render() {

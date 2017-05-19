@@ -50,10 +50,10 @@ const _getCols = () => parseCols([{
     }
 }]);
 const _getOrden = () => [{
-    campo: 'excedentemateriales',
+    campo: 'excedentematerialesprocesados',
     desc:  true
 },{
-    campo: 'excedentematerialesprocesados',
+    campo: 'excedentemateriales',
     desc:  true
 },{
     campo: 'stockmateriales',
